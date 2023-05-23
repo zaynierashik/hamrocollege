@@ -1,0 +1,1 @@
+For authentication view: CREATE OR REPLACE VIEW authentication AS SELECT name, email, password, role FROM admin_data UNION SELECT name, email, password, role FROM institution_data UNION SELECT name, email, password, role FROM user_data;

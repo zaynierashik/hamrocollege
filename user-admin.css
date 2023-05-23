@@ -1,0 +1,490 @@
+@import url(homepage.css);
+
+/* User-Admin-Institution Panel*/
+
+.course-title {
+    position: relative;
+    margin-top: -70vh;
+    color: white;
+}
+
+.college-address{
+    padding-top: 1vh;
+    font-size: 0.87rem;
+}
+
+.college-title {
+    position: relative;
+    margin-top: 20.5vh;
+}
+
+.college-grid-container img{
+    padding-top: 2.5vh;
+}
+
+.college-name{
+    padding-top: 2.5vh;
+}
+
+.navbar ul{
+    right: 7.15vw;
+    font-size: 0.87rem;
+}
+
+.scroll-to-section{
+    text-decoration: none;
+    color: black;
+    margin-left: 2.25vw;
+}
+
+.admin-shape-one{
+    margin-top: -25vh;
+    width: 28.7%;
+}
+
+.nav ul{
+    position: absolute;
+    display: flex;
+    list-style: none;
+    margin-top: 15vh;
+    margin-left: 7vw;
+    font-size: 0.87rem;
+}
+
+.nav-section{
+    text-decoration: none;
+    color: white;
+    margin-right: 2.25vw;
+    position: relative;
+}
+  
+.nav-section::after, .active::after{
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 0.25vh;
+    border-radius: 25px;
+    background-color: white;
+    transform: scaleX(0);
+    transform-origin: bottom left;
+    transition: transform 0.3s ease-in-out;
+}
+  
+.nav-section:hover::after, .active::after{
+    transform: scaleX(1);
+}
+  
+.logout{
+    transition: transform 0.35s;
+}
+
+.logout:hover{
+    transform: scale(1.05);
+}
+
+#toggleButton{
+    position: relative;
+    top: 49.5vh;
+    left: 61vw;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 999;
+}
+
+.course-form, .manage-course-form, .college-form, .manage-college-form{
+    position: relative;
+    margin-top: -20vh;
+    margin-bottom: 35vh;
+    left: 10.80vw;
+    width: 77.5%;
+    padding: 100px 33px 25px 33px;
+    border-radius: 30px;
+    box-shadow: 0px 0px 7px 0px rgba(163, 158, 163, 1);
+}
+
+.manage-course-form, .manage-college-form{
+    margin-bottom: 7vh;
+}
+
+.add-course-title, .update-course-title, .add-college-title, .update-college-title{
+    position: relative;
+    margin-top: -8.7vh;
+    margin-bottom: 2vh;
+    font-weight: 500;
+    font-size: 1.7rem;
+    color: #082465;
+}
+
+.manage-college-form #phone, .manage-college-form #email, .manage-college-form #address{
+    width: 32.61%;
+}
+
+.manage-college-form #website{
+    width: 32.61%;
+    margin-right: 0;
+}
+
+.input-container input, textarea{
+    padding: 1rem;
+    margin-right: 0.5vw;
+    margin-bottom: 1.77vh;
+    border: none;
+    border-radius: 15px;
+    background-color: #e6e9ef;
+}
+
+.input-container select{
+    padding: 1rem 0rem 1rem 0.77rem;
+    margin-right: 0.5vw;
+    margin-bottom: 1.77vh;
+    border: none;
+    border-radius: 15px;
+    background-color: #e6e9ef;
+    width: 9.15%;
+}
+
+.input-container .id{
+    width: 9.15%;
+}
+
+.input-container .abbreviation{
+    width: 11.11%;
+}
+
+.input-container .title{
+    width: 77.57%;
+    margin-right: 0;
+}
+
+.input-container .collegeId, .input-container .affiliation{
+    width: 11.11%;
+}
+
+.input-container .collegename{
+    width: 75.55%;
+    margin-right: 0;
+}
+
+.input-container #logo{
+    width: 66.3%;
+    margin-right: 0;
+}
+
+textarea{
+    width: 100%;
+    resize: none;
+    margin-bottom: 1.15vh;
+}
+
+.submit{
+    margin-top: 2vh;
+}
+
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.table-head-id{
+    padding: 1vh 1vw;
+    width: 2%;
+    font-weight: 500;
+    text-align: center;
+}
+
+.table-head{
+    text-align: left;
+    padding: 1vh 1vw;
+    font-weight: 500;
+}
+
+.table-SN{
+    text-align: center;
+    padding: 1vh 1vw;
+    vertical-align: top;
+}
+
+.table-body, .table-phone, .table-title{
+    text-align: left;
+    padding: 1vh 1vw;
+    width: 20%;
+    vertical-align: top;
+}
+
+.table-phone, .table-title{
+    width: 13%;
+}
+
+/* Admin Dashboard */
+
+.count-grid-container{
+    position: relative;
+    top: -27.27vh;
+    left: 9.55vw;
+    width: 10%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(5vw, 1fr));
+    grid-gap: 1vw;
+}
+
+.count-grid-item{
+    /* background-color: white; */
+    color: #082465;
+    text-decoration: none;
+    font-size: 0.87rem;
+    border-radius: 30px;
+    text-align: center;
+    padding: 2.05vh 1vw;
+    box-shadow: 0px 0px 5px 0px rgba(163, 158, 163, 1);
+    cursor: pointer;
+}
+
+.count-grid-item i{
+    font-size: 1rem;
+    padding-bottom: 2vh;
+}
+
+.register-form{
+    position: relative;
+    margin-top: -99.45vh;
+    left: 32.5vw;
+    width: 35%;
+    padding: 50px 25px;
+    border-radius: 30px;
+    background-color: white;
+    box-shadow: 0px 0px 7px 0px rgba(163, 158, 163, 1);
+}
+
+.manage-detail-table{
+    position: relative;
+    margin: -99.45vh 0vw 0vh 22.87vw;
+    width: 60%;
+    padding: 1.5vh 2.5vh 3.7vh 2.5vh;
+    border-radius: 30px;
+    background-color: white;
+    box-shadow: 0px 0px 7px 0px rgba(163, 158, 163, 1);
+}
+
+.fa-trash-can{
+    position: relative;
+    font-size: 1.15rem;
+    cursor: pointer;
+    left: 55.65vw;
+    top: 4.1vh;
+}
+
+.manage-detail-table table{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.manage-college-table{
+    position: relative;
+    margin: -99.45vh 0vw 0vh 22.87vw;
+    width: 69.69%;
+    padding: 1.5vh 2.5vh 3.7vh 2.5vh;
+    border-radius: 30px;
+    background-color: white;
+    box-shadow: 0px 0px 7px 0px rgba(163, 158, 163, 1);
+}
+
+.manage-college-table table{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.manage-college-table .table-name{
+    text-align: left;
+    padding: 1vh 1vw;
+    width: 30%;
+    vertical-align: top;
+}
+
+.manage-college-table .table-phone{
+    text-align: left;
+    padding: 1vh 1vw;
+    width: 23%;
+    vertical-align: top;
+}
+
+.manage-college-table .table-email{
+    text-align: left;
+    padding: 1vh 1vw;
+    width: 1%;
+    vertical-align: top;
+}
+  
+/* User Dashboard */
+
+.account-shape-one{
+    margin-top: -25vh;
+    width: 28.7%;
+}
+
+.account-form{
+    position: relative;
+    margin-top: -27.5vh;
+    left: 69.80vw;
+    width: 23%;
+    padding: 15px 20px 20px 20px;
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: 0px 0px 7px 0px rgba(163, 158, 163, 1);
+}
+
+.manage-title{
+    padding-bottom: 1vh;
+    /* text-align: center; */
+    font-weight: 500;
+    font-size: 1.7rem;
+    color: #082465;
+}
+
+.account-form .input-container{
+    margin-bottom: 3vh;
+}
+
+.account-form .checkbox{
+    margin-top: -3.5vh;
+}
+
+.account-form .show{
+    margin-top: -3.9vh;
+}
+
+.account-form .submit{
+    width: 80.80%;
+}
+
+.fa-trash{
+    position: relative;
+    cursor: pointer;
+    left: 88.30vw;
+    top: 27.7vh;
+    padding: 1.87vh 1.91vh;
+    z-index: 999;
+    font-size: 1.25rem;
+    border: 1.7px solid #082465;
+    border-radius: 15px;
+    transition: ease-in-out 0.35s;
+}
+
+.fa-trash:hover{
+    transform: scale(1.07);
+}
+
+.manage-admission-table{
+    position: relative;
+    margin: -57.85vh 0vw 0vh 7vw;
+    width: 55%;
+    padding: 1.5vh 2.5vh 3.7vh 2.5vh;
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: 0px 0px 7px 0px rgba(163, 158, 163, 1);
+}
+
+.manage-admission-table table{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.manage-admission-table .table-head-id{
+    text-align: center;
+    padding: 1vh 1vw;
+    width: 0.25%;
+    vertical-align: top;
+}
+
+.manage-admission-table .table-body{
+    text-align: left;
+    padding: 1vh 1vw;
+    width: 50%;
+    vertical-align: top;
+}
+
+.admission-title{
+    margin: -153.5vh 0vw 0vh 56.87vw;
+    font-weight: 500;
+    font-size: 1.7rem;
+    color: #082465;
+}
+
+.feedback-title{
+    margin: 83vh 0vw 0vh 7vw;
+    font-weight: 500;
+    font-size: 1.7rem;
+    color: #082465;
+}
+
+.interested-form, .feedback-form{
+    position: relative;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    left: 57.15vw;
+    width: 35%;
+    padding: 20px 15px;
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: 0px 0px 7px 0px rgba(163, 158, 163, 1);
+}
+
+.feedback-form{
+    left: 7vw;
+    width: 47.7%;
+}
+
+.interested-form #username{
+    width: 48.75%;
+}
+
+.interested-form #phone{
+    width: 48.75%;
+    margin-right: 0;
+}
+
+.interested-form select{
+    width: 100%;
+}
+
+.image-board, .image-board-one{
+    position: relative;
+    margin: 10.5vh 0vw 0vh 7vw;
+    width: 47.7%;
+}
+
+.image-board-one{
+    margin: 0.5vh 0vw 0vh 7vw;
+}
+
+.slider{
+    position: relative;
+    margin: 0vh 0vw 0vh 7vw;
+    width: 47.7%;
+}
+
+.carousel img{
+    width: 100%;
+}
+
+/* Institution */
+
+.manage-interested-table{
+    position: relative;
+    margin: -20.7vh 0vw 0vh 8.8vw;
+    width: 82.35%;
+    padding: 3vh 2.5vh 3.7vh 2.5vh;
+    border-radius: 30px;
+    box-shadow: 0px 0px 7px 0px rgba(163, 158, 163, 1);
+}
+
+.manage-interested-table button{
+    border: none;
+    background-color: transparent;
+}
+
+.manage-interested-table table{
+    border-collapse: collapse;
+    width: 100%;
+}

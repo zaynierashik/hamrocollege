@@ -1,0 +1,520 @@
+/* Main Page */
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Poppins, sans-serif;
+}
+
+html{
+    background-image: url(Images/background.jpg);
+    scroll-behavior: smooth;
+}
+
+.website-logo{
+    position: absolute;
+    margin-top: 3.5vh;
+    margin-left: 7vw;
+    width: 12.7%;
+}
+
+.navbar ul{
+    position: absolute;
+    display: flex;
+    list-style: none;
+    margin-top: 5vh;
+    margin-left: 77.67vw;
+    font-size: 1rem;
+}
+
+.search-box{
+    position: absolute;
+    top: 4vh;
+    right: 23.7vw;
+    height: 5.5vh;
+    width: 25vw;
+    padding-left: 1.1vw;
+    border-radius: 30px;
+    background-color: white;
+    color: black;
+    outline: none;
+}
+
+.fa-magnifying-glass{
+    position: absolute;
+    top: 5.7vh;
+    right: 25vw;
+    color: black;
+    cursor: pointer;
+}
+
+.scroll-to-section{
+    text-decoration: none;
+    color: black;
+}
+
+.login-button{
+    position: relative;
+    top: -1vh;
+    left: 2.5vw;
+    background-color: #082465;
+    border-radius: 30px;
+    height: 5.5vh;
+    width: 7vw;
+    color: white;
+    border: none;
+    font-size: 1rem;
+    padding: 1vh 1vw;
+    cursor: pointer;
+    transition: transform 0.35s;
+}
+
+.login-button:hover{
+    transform: scale(1.1);
+}
+
+.shape-one{
+    margin-top: -25vh;
+    width: 47%;
+}
+
+.explore{
+    position: absolute;
+    top: 30vh;
+    left: 6.77vw;
+    font-size: 3rem;
+    color: white;
+}
+
+.explore-text{
+    position: absolute;
+    top: 40vh;
+    left: 7vw;
+    font-size: 1rem;
+    color: white;
+}
+
+.icon-one{
+    position: absolute;
+    margin-top: 30vh;
+    margin-left: 15vw;
+    width: 27%;
+}
+
+.top{
+    position: fixed;
+    bottom: 1.77vh;
+    right: 1.7vw;
+    z-index: 999;
+}
+
+.hidden{
+    display: none;
+}
+
+/* Search */
+
+.search-shape-one{
+    margin-top: -25vh;
+    width: 25%;
+}
+
+.search-box-search{
+    position: absolute;
+    top: 4vh;
+    right: 7vw;
+    height: 5.5vh;
+    width: 35vw;
+    padding-left: 1.1vw;
+    border-radius: 30px;
+    background-color: white;
+    color: black;
+    outline: none;
+}
+
+.search-icon{
+    position: absolute;
+    top: 5.7vh;
+    right: 8.3vw;
+    color: black;
+    cursor: pointer;
+}
+
+.result{
+    position: absolute;
+    top: 22vh;
+    right: 7vw;
+    font-weight: 500;
+    font-size: 1.7rem;
+    color: #082465;
+}
+
+.search-grid-container{
+    margin-top: -7vh;
+    margin-left: 7vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
+    grid-gap: 1vw;
+    width: 85.97vw;
+}
+
+.search-grid-item{
+    background-color: white;
+    color: #082465;
+    text-decoration: none;
+    font-size: 1rem;
+    border-radius: 15px;
+    text-align: center;
+    padding: 1vw;
+    margin: 0vh 0vw 0.7vh 0vw;
+    box-shadow: 0px 0px 5px 0px rgba(163, 158, 163, 1);
+}
+
+.college-logo{
+    position: relative;
+    right: 0.5vw;
+    width: 7%;
+}
+
+/* Courses */
+
+.course-title{
+    margin-top: 10vh;
+    margin-left: 7vw;
+    font-weight: 500;
+    font-size: 1.7rem;
+    color: #082465;
+}
+
+.course-grid-container{
+    margin-top: 5vh;
+    margin-left: 7vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
+    grid-gap: 1vw;
+    width: 84.77vw;
+}
+
+.course-grid-item{
+    background-color: white;
+    color: #082465;
+    text-decoration: none;
+    font-size: 1rem;
+    border-radius: 15px;
+    text-align: center;
+    padding: 1vw;
+    box-shadow: 0px 0px 5px 0px rgba(163, 158, 163, 1);
+}
+
+.fa-chevron-right{
+    position: relative;
+    top: 0.25vh;
+    left: 0.25vw;
+}
+
+/* Colleges */
+
+.college-title{
+    margin-top: 10vh;
+    margin-left: 7vw;
+    font-weight: 500;
+    font-size: 1.7rem;
+    color: #082465;
+}
+
+.college-grid-container{
+    margin-top: 5vh;
+    margin-left: 7vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
+    grid-gap: 1vw;
+    width: 84.77vw;
+}
+
+.college-grid-item{
+    background-color: white;
+    color: #082465;
+    text-decoration: none;
+    font-size: 1rem;
+    border-radius: 15px;
+    text-align: center;
+    padding: 1vw;
+    box-shadow: 0px 0px 5px 0px rgba(163, 158, 163, 1);
+}
+
+.college-address{
+    padding-top: 1vh;
+    font-size: 0.87rem;
+}
+
+.college-title {
+    position: relative;
+    margin-top: 20.5vh;
+}
+
+.college-grid-container img{
+    padding-top: 2.5vh;
+}
+
+.college-name{
+    padding-top: 2.5vh;
+}
+
+.explore-more{
+    padding: 13.25vh 2.5vh;
+}
+
+.search-address{
+    padding-top: 1vh;
+    font-size: 0.87rem;
+}
+
+.search-grid-container img{
+    padding-top: 2.5vh;
+}
+
+.search-name{
+    padding-top: 2.5vh;
+}
+
+.shape-two{
+    position: absolute;
+    margin-top: -15vh;
+    margin-left: 86.55vw;
+    width: 12.5%;
+    z-index: -999;
+}
+
+/* Links */
+
+.link-title{
+    margin: 10vh 0vw 0vh 7vw;
+    font-weight: 500;
+    font-size: 1.7rem;
+    color: #082465;
+}
+
+.link-grid-container{
+    margin: 5vh 0vw 7vh 7vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(1vw, 1fr));
+    grid-gap: 1vw;
+    width: 84.795vw;
+    text-align: center;
+}
+
+.link-grid-item{
+    background-color: white;
+    color: #082465;
+    border-radius: 15px;
+    padding: 0.15vw;
+    box-shadow: 0px 0px 5px 0px rgba(163, 158, 163, 1);
+    width: 100%;
+}
+
+.link-grid-container a{
+    text-decoration: none;
+    color: #082465;
+}
+
+/* Register & Login */
+
+.register-website-logo{
+    margin-top: 3.5vh;
+    margin-left: 7vw;
+    width: 12.7%;
+}
+
+.register-form{
+    position: relative;
+    margin-top: 7vh;
+    left: 32.5vw;
+    width: 35%;
+    padding: 50px 25px;
+    border-radius: 30px;
+    background-color: white;
+    box-shadow: 0px 0px 7px 0px rgba(163, 158, 163, 1);
+}
+
+.register .input-container select{
+    width: 100%;
+    padding: 1rem 0.1rem 1rem 0.77rem;
+    margin-bottom: 25px;
+    border: none;
+    border-radius: 15px;
+    background-color: #e6e9ef;
+    outline: none;
+}
+
+.register .input-container select::placeholder{
+    color: #e6e9ef;
+}
+
+.register .input-container input{
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 25px;
+    border: none;
+    border-radius: 15px;
+    background-color: #e6e9ef;
+    outline: none;
+}
+
+.checkbox{
+    position: absolute;
+    margin-top: -1.37vh;
+}
+
+.show{
+    position: absolute;
+    margin-top: -1.7vh;
+    margin-left: 1.27vw;
+    color: black;
+    font-size: 0.77rem;
+}
+
+.register .submit{
+    width: 100%;
+    padding: 0.67rem;
+    margin-top: 5vh;
+    border: none;
+    border-radius: 15px;
+    background-color: #082465;
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: ease-in-out 0.35s;
+}
+
+.submit:hover{
+    transform: scale(1.015);
+}
+
+.manage{
+    position: absolute;
+    margin: 2.2vh 0 0 4.95vw;
+    color: #696969;
+    font-size: 0.87rem;
+    font-weight: 500;
+}
+
+.manage a{
+    text-decoration: none;
+    color: #082465;
+    font-weight: bold;
+    transition: ease-in-out 0.35s;
+}
+
+.account{
+    position: absolute;
+    margin: 2.2vh 0 0 8.5vw;
+    color: #696969;
+    font-size: 0.87rem;
+    font-weight: 500;
+}
+
+.account a{
+    text-decoration: none;
+    color: #082465;
+    font-weight: bold;
+    transition: ease-in-out 0.35s;
+}
+
+.manage a:hover, .account a:hover{
+    color: #cc0000;
+}
+
+
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.modal{
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.login-form{
+    background-image: url(Images/background.jpg);
+    position: relative;
+    margin-top: 26.5vh;
+    left: 32.17vw;
+    width: 35%;
+    height: 45.7vh;
+    padding: 50px;
+    border-radius: 30px;
+}
+
+.input-container input{
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 25px;
+    border: none;
+    border-radius: 15px;
+    background-color: #e6e9ef;
+    outline: none;
+}
+
+.submit{
+    width: 100%;
+    padding: 0.67rem;
+    margin-top: 5vh;
+    border: none;
+    border-radius: 15px;
+    background-color: #082465;
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: ease-in-out 0.35s;
+}
+
+.submit:hover{
+    transform: scale(1.015);
+}
+
+.fa-xmark{
+    position: relative;
+    top: -37vh;
+    left: 29vw;
+    cursor: pointer;
+}
+
+/* Footer */
+
+.contact-box{
+    width: 100%;
+    height: 8vh;
+    color: black;
+    border-radius: 15px 15px 0px 0px;
+}
+
+.contact-box li{
+    position: relative;
+    display: inline-block;
+    list-style-type: none;
+    padding-right: 2.5vw;
+    left: 45vw;
+    font-size: 0.85rem;
+}
+
+.contact-box .fa-solid{
+    padding-right: 0.5vw;
+}
+
+.copyright{
+    position: relative;
+    top: 3vh;
+    margin-left: 5vw;
+    font-size: 0.85rem;
+}
