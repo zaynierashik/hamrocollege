@@ -98,7 +98,7 @@
         <form action="" method="POST" class="register-form">
             <div class="input-container">
                 <input type="text" name="name" id="name" placeholder="Institution name" required>
-                <input type="number" name="phone" id="phone" placeholder="Phone number" required>
+                <input type="text" name="phone" id="phone" placeholder="Phone number" required>
                 <input type="email" name="email" id="email" placeholder="Email address" required>
                 <input type="password" name="password" id="orgPassword" placeholder="Password" pattern="(?=.*\d)(?=.*[a-z]).{7,}" title="Must contain at least one number and one lowercase letter, and at least 7 or more characters" required>
             </div>

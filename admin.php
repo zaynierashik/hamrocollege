@@ -224,23 +224,6 @@
         </table>
     </div>
 
-    <!-- Admin Registration -->
-
-    <div class="register" id="register" style="display: none;">
-        <form action="" method="POST" class="register-form">
-            <div class="input-container">
-                <input type="text" name="name" id="name" placeholder="Name" required>
-                <input type="number" name="phone" id="phone" placeholder="Phone number" required>
-                <input type="email" name="email" id="email" placeholder="Email address" required>
-                <input type="password" name="password" id="password" placeholder="Password" pattern="(?=.*\d)(?=.*[a-z]).{7,}" title="Must contain at least one number and one lowercase letter, and at least 7 or more characters" required>
-            </div>
-            
-            <input type="checkbox" class="checkbox" onclick="showPassword()">
-            <div class="show">Show Password</div>
-            <input type="submit" class="submit" name="register-submit" id="register-submit" value="Register">
-        </form>
-    </div>
-
     <!-- Feedback -->
 
     <div class="manage-detail-table" id="manage-feedback-table" style="display: none;">
