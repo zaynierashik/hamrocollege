@@ -156,8 +156,8 @@
     <a href="https://kathford.edu.np/" target="_blank">
         <img src="Images/kathfordImg.jpg" alt="Kathford" class="image-board"></a>
 
-    <a href="https://heraldcollege.edu.np/" target="_blank">
-        <img src="Images/heraldImg.png" alt="Herald" class="image-board-one"></a>
+    <!-- <a href="https://heraldcollege.edu.np/" target="_blank">
+        <img src="Images/heraldImg.png" alt="Herald" class="image-board-one"></a> -->
 
     <div class="slider">
         <a href="#" id="carouselLink" target="_blank">
@@ -210,9 +210,22 @@
         </form>
     </div>
 
+    <!-- Category -->
+
+    <div id="affiliation-category">
+        <p class="affiliation-category-title">AFFILIATION</p>
+        <div class="category-grid-container">
+        <a href="category.php?affiliation=TU" class="category-grid-item"><img src="Images/tu-logo.png" class="board-logo"><br><br>Tribhuvan University</a>
+<a href="category.php?affiliation=KU" class="category-grid-item"><img src="Images/ku-logo.png" class="board-logo"><br><br>Kathmandu University</a>
+<a href="category.php?affiliation=PU" class="category-grid-item"><img src="Images/pu-logo.png" class="board-logo"><br><br>Purbanchal University</a>
+<a href="category.php?affiliation=International" class="category-grid-item"><img src="Images/international-logo.jpg" class="board-logo international"><br><br>International</a>
+
+        </div>
+    </div>
+
     <!-- Feedback -->
 
-    <div class="feedback" id="feedback">
+    <!-- <div class="feedback" id="feedback">
         <p class="feedback-title">FEEDBACK</p>
         <form action="" method="post" class="feedback-form">
             <div class="input-container">
@@ -226,11 +239,11 @@
             <textarea class="textarea" name="feedback" id="textarea" cols="60" rows="6" placeholder="Give us some feedback ..."></textarea>
             <input type="submit" class="submit" name="submit" id="submit" value="Submit">
         </form>
-    </div>
+    </div> -->
 
     <!-- Footer -->
 
-    <div class="contact-box">
+    <!-- <div class="contact-box">
         <p class="copyright">Copyright @2023 Hamro College.</p>
         <ul>
             <li><i class="fa-solid fa-building" style="color: black;"></i>Hamro College Pvt. Ltd.</li>
@@ -238,7 +251,7 @@
             <li><i class="fa-solid fa-phone" style="color: black;"></i>+977 98XXXXXXXX</li>
             <li><i class="fa-solid fa-envelope" style="color: black;"></i>info@hamrocollege.com</li>
         </ul>
-    </div>
+    </div> -->
 
     <script src="script.js"></script>
     <script>
@@ -259,6 +272,13 @@
         }
         changeImage();
         setInterval(changeImage, 1700);
+    </script>
+
+    <script>
+        function showAffiliatedColleges(affiliation) {
+        // Pass the selected affiliation as a URL parameter to category.php
+        window.location.href = "category.php?affiliation=" + affiliation;
+    }
     </script>
 
 </body>

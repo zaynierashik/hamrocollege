@@ -75,11 +75,6 @@
             Total college: <?php echo $collegeCount ?>
         </p>
 
-        <p class="count-grid-item" onclick="showManageTable('register')">
-            <i class="fa-solid fa-user-plus fa-lg" style="color: #000000;"></i><br>
-            Add Admin
-        </p>
-
         <p class="count-grid-item" onclick="showManageTable('feedback')">
             <i class="fa-solid fa-message fa-lg" style="color: #000000;"></i><br>
             View Feedback
