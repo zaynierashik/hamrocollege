@@ -77,9 +77,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="Favicon/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
 </head>
-
 <body>
-
     <!-- Main Page -->
 
     <a href="user.php"><img src="Images/websitelogo.png" alt="Website Logo" class="website-logo"></a>
@@ -215,17 +213,29 @@
     <div id="affiliation-category">
         <p class="affiliation-category-title">AFFILIATION</p>
         <div class="category-grid-container">
-        <a href="category.php?affiliation=TU" class="category-grid-item"><img src="Images/tu-logo.png" class="board-logo"><br><br>Tribhuvan University</a>
-<a href="category.php?affiliation=KU" class="category-grid-item"><img src="Images/ku-logo.png" class="board-logo"><br><br>Kathmandu University</a>
-<a href="category.php?affiliation=PU" class="category-grid-item"><img src="Images/pu-logo.png" class="board-logo"><br><br>Purbanchal University</a>
-<a href="category.php?affiliation=International" class="category-grid-item"><img src="Images/international-logo.jpg" class="board-logo international"><br><br>International</a>
+            <a href="category.php?affiliation=TU" class="category-grid-item"><img src="Images/tu-logo.png" class="board-logo"><br><br>Tribhuvan University</a>
+            <a href="category.php?affiliation=KU" class="category-grid-item"><img src="Images/ku-logo.png" class="board-logo"><br><br>Kathmandu University</a>
+            <a href="category.php?affiliation=PU" class="category-grid-item"><img src="Images/pu-logo.png" class="board-logo"><br><br>Pokhara University</a>
+            <a href="category.php?affiliation=International" class="category-grid-item"><img src="Images/international-logo.jpg" class="board-logo international"><br><br>International</a>
+        </div>
+    </div>
 
+    <div id="affiliation-category">
+        <p class="course-affiliation-category-title">FIELDS OF STUDY</p>
+        <div class="course-category-grid-container">
+            <a href="category.php?field=Computer and Information Technology" class="category-grid-item"><br><br>Computer and Information Technology</a>
+            <a href="category.php?field=Engineering" class="category-grid-item"><br><br>Engineering</a>
+            <a href="category.php?field=Management" class="category-grid-item"><br><br>Management</a>
+            <a href="category.php?field=Science and Technology" class="category-grid-item"><br><br>Science and Technology</a>
+            <a href="category.php?field=Humanities and Social Sciences" class="category-grid-item"><br><br>Humanities and Social Sciences</a>
+            <a href="category.php?field=Agriculture, Forestry and Animal Sciences" class="category-grid-item"><br><br>Agriculture, Forestry and Animal Sciences</a>
+            <a href="category.php?field=Economics" class="category-grid-item"><br><br>Economics</a>
         </div>
     </div>
 
     <!-- Feedback -->
 
-    <!-- <div class="feedback" id="feedback">
+    <div class="feedback" id="feedback">
         <p class="feedback-title">FEEDBACK</p>
         <form action="" method="post" class="feedback-form">
             <div class="input-container">
@@ -239,11 +249,11 @@
             <textarea class="textarea" name="feedback" id="textarea" cols="60" rows="6" placeholder="Give us some feedback ..."></textarea>
             <input type="submit" class="submit" name="submit" id="submit" value="Submit">
         </form>
-    </div> -->
+    </div>
 
     <!-- Footer -->
 
-    <!-- <div class="contact-box">
+    <div class="contact-box">
         <p class="copyright">Copyright @2023 Hamro College.</p>
         <ul>
             <li><i class="fa-solid fa-building" style="color: black;"></i>Hamro College Pvt. Ltd.</li>
@@ -251,7 +261,7 @@
             <li><i class="fa-solid fa-phone" style="color: black;"></i>+977 98XXXXXXXX</li>
             <li><i class="fa-solid fa-envelope" style="color: black;"></i>info@hamrocollege.com</li>
         </ul>
-    </div> -->
+    </div>
 
     <script src="script.js"></script>
     <script>
@@ -276,10 +286,12 @@
 
     <script>
         function showAffiliatedColleges(affiliation) {
-        // Pass the selected affiliation as a URL parameter to category.php
-        window.location.href = "category.php?affiliation=" + affiliation;
-    }
+            window.location.href = "category.php?affiliation=" + affiliation;
+        }
+        
+        function showAffiliatedCourses(field) {
+            window.location.href = "category.php?field=" + field;
+        }
     </script>
-
 </body>
 </html>

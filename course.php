@@ -9,27 +9,28 @@
     // Add Courses
 
     if(isset($_POST['submit'])){
-        $courseId = $_POST['courseId'];
+        $affiliation = $_POST['affiliation'];
+        $field = $_POST['field'];
         $title = $_POST['title'];
         $abbreviation = $_POST['abbreviation'];
         $content = nl2br($_POST['content']);
         $eligibility = nl2br($_POST['eligibility']);
         $job = nl2br($_POST['job']);
 
-        $sql = "SELECT * FROM course_data WHERE courseId = ? && title = ?";
+        $sql = "SELECT * FROM course_data WHERE affiliation = ? && title = ?";
         $stmt = $conn->prepare($sql);
-        $stmt ->execute([$courseId, $title]);
+        $stmt ->execute([$affiliation, $title]);
         $result = $stmt->fetch();
 
         if($result){
             echo '<script> alert("Course already exists in database.") </script>';
         }else{
-            if(empty($_POST['courseId']) || empty($_POST['title']) || empty($_POST['abbreviation']) || empty($_POST['content']) || empty($_POST['eligibility']) || empty($_POST['job'])){
+            if(empty($_POST['affiliation']) || empty($_POST['field']) || empty($_POST['title']) || empty($_POST['abbreviation']) || empty($_POST['content']) || empty($_POST['eligibility']) || empty($_POST['job'])){
                 echo '<script> alert("Please fill all the fields."); window.location.href = "course.php"; </script>';
             }else{
-                $sql = "INSERT INTO course_data (courseId, title, abbreviation, content, eligibility, job) VALUES (?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO course_data (affiliation, field, title, abbreviation, content, eligibility, job) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 $stmt = $conn->prepare($sql);
-                $stmt ->execute([$courseId, $title, $abbreviation, $content, $eligibility, $job]);
+                $stmt ->execute([$affiliation, $field, $title, $abbreviation, $content, $eligibility, $job]);
                 echo '<script> alert("Course added successfully."); window.location.href = "course.php"; </script>';
             }
         }
@@ -130,9 +131,28 @@
         <form action="" method="POST" class="course-form">
             <p class="add-course-title">ADD COURSES</p>
             <div class="input-container">
-                <input type="number" class="id" name="courseId" id="courseId" placeholder="Course ID">
-                <input type="text" class="abbreviation" name="abbreviation" id="abbreviation" placeholder="Abbreviation">
-                <input type="text" class="title" name="title" id="title" placeholder="Course Title">
+
+                <select class="affiliation" name="affiliation">
+                    <option value="">Affiliation</option>
+                    <option value="TU">TU</option>
+                    <option value="KU">KU</option>
+                    <option value="PU">PU</option>
+                    <option value="International">International</option>
+                </select>
+
+                <select class="field" name="field">
+                    <option value="">Field of Study</option>
+                    <option value="Computer and Information Technology">Computer and Information Technology</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Management">Management</option>
+                    <option value="Science and Technology">Science and Technology</option>
+                    <option value="Humanities and Social Sciences">Humanities and Social Sciences</option>
+                    <option value="Agriculture, Forestry and Animal Sciences">Agriculture, Forestry and Animal Sciences</option>
+                    <option value="Economics">Economics</option>
+                </select>
+
+                <input type="text" name="title" id="course-title" placeholder="Course Title">
+                <input type="text" name="abbreviation" id="course-abbreviation" placeholder="Abbreviation">
                 <textarea name="content" id="content" cols="60" rows="7" placeholder="Course Details"></textarea>
                 <textarea name="eligibility" id="eligibility" cols="60" rows="7" placeholder="Course Eligibility"></textarea>
                 <textarea name="job" id="job" cols="60" rows="7" placeholder="Job Prospects"></textarea>
@@ -190,6 +210,5 @@
             });
         });
     </script>
-    
 </body>
 </html>
