@@ -2,7 +2,7 @@
 
 /* User-Admin-Institution Panel*/
 
-.course-title {
+.course-title{
     position: relative;
     margin-top: -70vh;
     color: white;
@@ -153,13 +153,27 @@
     width: 11.11%;
 }
 
+#course-abbreviation{
+    width: 11.11%;
+    margin-right: 0;
+}
+
 .input-container .title{
     width: 77.57%;
     margin-right: 0;
 }
 
+#course-title{
+    width: 87.80%;
+    margin-right: 0.5vw;
+}
+
 .input-container .collegeId, .input-container .affiliation{
     width: 11.11%;
+}
+
+.input-container .field{
+    width: 30%;
 }
 
 .input-container .collegename{
@@ -450,7 +464,7 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
     vertical-align: top;
 }
 
-.admission-title, .affiliation-category-title{
+.admission-title, .affiliation-category-title, .course-affiliation-category-title{
     margin: -80vh 0vw 0vh 56.87vw;
     font-weight: 500;
     font-size: 1.7rem;
@@ -462,14 +476,26 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
     width: 35%;
 }
 
-.category-grid-container{
+.course-affiliation-category-title{
+    margin: -53.67vh 0vw 0vh 39.87vw;
+    width: 35%;
+}
+
+.category-grid-container, .course-category-grid-container{
     position: relative;
     top: 5.7vh;
     left: 7vw;
-    width: 35%;
+    width: 30%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15vw, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(10vw, 1fr));
     grid-gap: 1vw;
+}
+
+.course-category-grid-container{
+    width: 52.35%;
+    margin: 0vh 0vw 0vh 33vw;
+    background-color: #082465;
+    grid-template-columns: repeat(auto-fit, minmax(13vw, 1fr));
 }
 
 .category-grid-item{
@@ -553,6 +579,13 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 
 .carousel img{
     width: 100%;
+}
+
+.category-college-title, .category-course-title{
+    margin: -25.15vh 0vw 0vh 7vw;
+    font-weight: 500;
+    font-size: 1.7rem;
+    color: white;
 }
 
 /* Institution */
