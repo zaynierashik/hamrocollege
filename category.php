@@ -64,7 +64,7 @@
     <?php
     if(isset($affiliation) && !empty($colleges)): ?>
         <div class="colleges" id="colleges">
-        <p class="category-college-title"><?php echo $affiliation;?> COLLEGES</p>
+        <p class="category-college-title">COLLEGES</p>
         <div class="college-grid-container">
             <?php
                 foreach($colleges as $college):

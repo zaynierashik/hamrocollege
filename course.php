@@ -94,7 +94,6 @@
     <link rel="icon" type="image/png" sizes="16x16" href="Favicon/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
 </head>
-
 <body>
     <!-- Main Page -->
 
@@ -149,6 +148,8 @@
                     <option value="Humanities and Social Sciences">Humanities and Social Sciences</option>
                     <option value="Agriculture, Forestry and Animal Sciences">Agriculture, Forestry and Animal Sciences</option>
                     <option value="Economics">Economics</option>
+                    <option value="Health Professional Education">Health Professional Education</option>
+                    <option value="Law">Law</option>
                 </select>
 
                 <input type="text" name="title" id="course-title" placeholder="Course Title">

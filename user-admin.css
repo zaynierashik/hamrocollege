@@ -2,20 +2,15 @@
 
 /* User-Admin-Institution Panel*/
 
-.course-title{
+.course-title, .college-title{
     position: relative;
-    margin-top: -70vh;
+    margin-top: -65vh;
     color: white;
 }
 
 .college-address{
     padding-top: 1vh;
     font-size: 0.87rem;
-}
-
-.college-title {
-    position: relative;
-    margin-top: 20.5vh;
 }
 
 .college-grid-container img{
@@ -52,10 +47,11 @@
 }
 
 .nav-section{
-    text-decoration: none;
-    color: white;
-    margin-right: 2.25vw;
     position: relative;
+    margin-right: 2.25vw;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
 }
   
 .nav-section::after, .active::after{
@@ -465,40 +461,43 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 }
 
 .admission-title, .affiliation-category-title, .course-affiliation-category-title{
-    margin: -80vh 0vw 0vh 56.87vw;
+    margin: -65vh 0vw 0vh 7vw;
     font-weight: 500;
     font-size: 1.7rem;
-    color: #082465;
+    color: white
 }
 
-.affiliation-category-title{
-    margin: 10vh 0vw 0vh 7vw;
-    width: 35%;
+.category-background{
+    background-color: #e6e9ef;
+    height: 75vh;
 }
 
 .course-affiliation-category-title{
-    margin: -53.67vh 0vw 0vh 39.87vw;
+    margin: -65vh 0vw 0vh 7vw;
     width: 35%;
+    color: #082465;
+}
+
+.course-affiliation-category-title span{
+    color: white;
 }
 
 .category-grid-container, .course-category-grid-container{
     position: relative;
-    top: 5.7vh;
+    top: 5vh;
     left: 7vw;
-    width: 30%;
+    width: 68.5%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(10vw, 1fr));
     grid-gap: 1vw;
 }
 
 .course-category-grid-container{
-    width: 52.35%;
-    margin: 0vh 0vw 0vh 33vw;
-    background-color: #082465;
-    grid-template-columns: repeat(auto-fit, minmax(13vw, 1fr));
+    width: 85.7%;
+    grid-template-columns: repeat(auto-fit, minmax(15vw, 1fr));
 }
 
-.category-grid-item{
+.category-grid-item, .course-category-grid-item{
     background-color: white;
     color: #082465;
     text-decoration: none;
@@ -510,9 +509,8 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
     cursor: pointer;
 }
 
-.category-grid-item i{
-    font-size: 1rem;
-    padding-bottom: 2vh;
+.course-category-grid-item{
+    padding: 4vh 1vw 2.05vh 1vw;
 }
 
 .board-logo{
@@ -525,7 +523,7 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 }
 
 .feedback-title{
-    margin: 83vh 0vw 0vh 7vw;
+    margin: 15vh 0vw 0vh 7vw;
     font-weight: 500;
     font-size: 1.7rem;
     color: #082465;
@@ -533,9 +531,7 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 
 .interested-form, .feedback-form{
     position: relative;
-    margin-top: 5vh;
-    margin-bottom: 5vh;
-    left: 57.15vw;
+    margin: 5vh 0vh 0vh 7vw;
     width: 35%;
     padding: 20px 15px;
     border-radius: 15px;
@@ -563,7 +559,7 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 
 .image-board, .image-board-one{
     position: relative;
-    margin: 10.5vh 0vw 0vh 7vw;
+    margin: 15vh 0vw 0vh 7vw;
     width: 47.7%;
 }
 

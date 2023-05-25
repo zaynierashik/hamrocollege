@@ -71,11 +71,23 @@
     <title>Hamro College</title>
     <link rel="stylesheet" href="user-admin.css">
     <script src="https://kit.fontawesome.com/296ff2fa8f.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="apple-touch-icon" sizes="180x180" href="Favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="Favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="Favicon/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
+
+    <style>
+        .hidden{
+            display: none;
+        }
+
+        .nav a.active{
+            font-weight: bold;
+            color: #000000;
+        }
+    </style>
 </head>
 <body>
     <!-- Main Page -->
@@ -95,6 +107,16 @@
                 <li class="logout"><a href="logout.php" class="scroll-to-section">logout</a></li>
             </ul>
         </nav>
+
+        <nav class="nav">
+            <ul>
+                <li><a onclick="showDiv('courses')" class="nav-section">Courses</a></li>
+                <li><a onclick="showDiv('colleges')" class="nav-section">Colleges</a></li>
+                <li><a onclick="showDiv('disciplines')" class="nav-section">Disciplines</a></li>
+                <li><a onclick="showDiv('universities')" class="nav-section">Universities</a></li>
+                <li><a onclick="showDiv('admission')" class="nav-section">Admissions</a></li>
+            </ul>
+        </nav>
     </div>
     
     <img src="Images/shape1.png" class="shape-one">
@@ -105,7 +127,7 @@
 
     <!-- Courses -->
 
-    <div class="courses" id="courses">
+    <div class="hidden" id="courses">
         <p class="course-title">COURSES</p>
         <div class="course-grid-container">
         <?php
@@ -125,7 +147,7 @@
     
     <!-- Colleges -->
     
-    <div class="colleges" id="colleges">
+    <div class="hidden" id="colleges">
         <p class="college-title">COLLEGES</p>
         <div class="college-grid-container">
             <?php
@@ -146,16 +168,16 @@
                 }
             ?>
         </div>
-        <img src="Images/shape2.png" class="shape-two">
+        <!-- <img src="Images/shape2.png" class="shape-two"> -->
     </div>
 
     <!-- SLIDESHOW -->
 
-    <a href="https://kathford.edu.np/" target="_blank">
+    <!-- <a href="https://kathford.edu.np/" target="_blank">
         <img src="Images/kathfordImg.jpg" alt="Kathford" class="image-board"></a>
 
-    <!-- <a href="https://heraldcollege.edu.np/" target="_blank">
-        <img src="Images/heraldImg.png" alt="Herald" class="image-board-one"></a> -->
+    <a href="https://heraldcollege.edu.np/" target="_blank">
+        <img src="Images/heraldImg.png" alt="Herald" class="image-board-one"></a>
 
     <div class="slider">
         <a href="#" id="carouselLink" target="_blank">
@@ -163,11 +185,11 @@
             <img id="carouselImage">
         </div>
         </a>
-    </div>
+    </div> -->
 
     <!-- Interested -->
 
-    <div class="interested" id="interested">
+    <div class="hidden" id="admission">
         <p class="admission-title">ADMISSION FORM</p>
         <form action="" method="POST" class="interested-form">
         <div class="input-container">
@@ -210,32 +232,38 @@
 
     <!-- Category -->
 
-    <div id="affiliation-category">
-        <p class="affiliation-category-title">AFFILIATION</p>
+    <div class="category-background hidden" id="disciplines">
+        <div id="affiliation-category">
+        <p class="course-affiliation-category-title"><span>FIELDS</span> OF STUDY</p>
+        <div class="course-category-grid-container">
+            <a href="category.php?field=Computer and Information Technology" class="course-category-grid-item"><i class="fa-solid fa-microchip" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Computer and Information Technology</a>
+            <a href="category.php?field=Engineering" class="course-category-grid-item"><i class="fa-solid fa-helmet-safety" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Engineering</a>
+            <a href="category.php?field=Management" class="course-category-grid-item"><i class="fa-solid fa-people-group" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Management</a>
+            <a href="category.php?field=Science and Technology" class="course-category-grid-item"><i class="fa-solid fa-microscope" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Science and Technology</a>
+            <a href="category.php?field=Humanities and Social Sciences" class="course-category-grid-item"><i class="fa-solid fa-people-roof" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Humanities and Social Sciences</a>
+            <a href="category.php?field=Agriculture, Forestry and Animal Sciences" class="course-category-grid-item"><i class="fa-solid fa-tree" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Agriculture, Forestry and Animal Sciences</a>
+            <a href="category.php?field=Health Professional Education" class="course-category-grid-item"><i class="fa-solid fa-suitcase-medical" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Health Professional Education</a>
+            <!-- <a href="category.php?field=Education" class="course-category-grid-item"><i class="fa-solid fa-person-chalkboard" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Education</a> -->
+            <a href="category.php?field=Law" class="course-category-grid-item"><i class="fa-solid fa-scale-balanced" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Law</a>
+        </div>
+        </div>
+    </div>
+
+    <div class="category-background hidden" id="universities">
+        <div id="affiliation-category">
+        <p class="affiliation-category-title">UNIVERSITIES</p>
         <div class="category-grid-container">
             <a href="category.php?affiliation=TU" class="category-grid-item"><img src="Images/tu-logo.png" class="board-logo"><br><br>Tribhuvan University</a>
             <a href="category.php?affiliation=KU" class="category-grid-item"><img src="Images/ku-logo.png" class="board-logo"><br><br>Kathmandu University</a>
             <a href="category.php?affiliation=PU" class="category-grid-item"><img src="Images/pu-logo.png" class="board-logo"><br><br>Pokhara University</a>
             <a href="category.php?affiliation=International" class="category-grid-item"><img src="Images/international-logo.jpg" class="board-logo international"><br><br>International</a>
         </div>
-    </div>
-
-    <div id="affiliation-category">
-        <p class="course-affiliation-category-title">FIELDS OF STUDY</p>
-        <div class="course-category-grid-container">
-            <a href="category.php?field=Computer and Information Technology" class="category-grid-item"><br><br>Computer and Information Technology</a>
-            <a href="category.php?field=Engineering" class="category-grid-item"><br><br>Engineering</a>
-            <a href="category.php?field=Management" class="category-grid-item"><br><br>Management</a>
-            <a href="category.php?field=Science and Technology" class="category-grid-item"><br><br>Science and Technology</a>
-            <a href="category.php?field=Humanities and Social Sciences" class="category-grid-item"><br><br>Humanities and Social Sciences</a>
-            <a href="category.php?field=Agriculture, Forestry and Animal Sciences" class="category-grid-item"><br><br>Agriculture, Forestry and Animal Sciences</a>
-            <a href="category.php?field=Economics" class="category-grid-item"><br><br>Economics</a>
         </div>
     </div>
 
     <!-- Feedback -->
 
-    <div class="feedback" id="feedback">
+    <!-- <div class="feedback" id="feedback">
         <p class="feedback-title">FEEDBACK</p>
         <form action="" method="post" class="feedback-form">
             <div class="input-container">
@@ -249,7 +277,7 @@
             <textarea class="textarea" name="feedback" id="textarea" cols="60" rows="6" placeholder="Give us some feedback ..."></textarea>
             <input type="submit" class="submit" name="submit" id="submit" value="Submit">
         </form>
-    </div>
+    </div> -->
 
     <!-- Footer -->
 
@@ -293,5 +321,32 @@
             window.location.href = "category.php?field=" + field;
         }
     </script>
+    
+    <script>
+    function showDiv(divId) {
+        // Hide all divs
+        var divs = document.getElementsByClassName('hidden');
+        for (var i = 0; i < divs.length; i++) {
+            divs[i].style.display = 'none';
+        }
+
+        // Show the selected div
+        var divToShow = document.getElementById(divId);
+        if (divToShow) {
+            divToShow.style.display = 'block';
+        }
+
+        // Highlight the active nav link
+        var navLinks = document.getElementsByClassName('nav')[0].getElementsByTagName('a');
+        for (var i = 0; i < navLinks.length; i++) {
+            navLinks[i].classList.remove('active');
+        }
+
+        var currentNavLink = document.querySelector('a[href="#' + divId + '"]');
+        if (currentNavLink) {
+            currentNavLink.classList.add('active');
+        }
+    }
+</script>
 </body>
 </html>
