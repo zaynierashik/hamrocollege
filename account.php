@@ -50,9 +50,19 @@
     <link rel="icon" type="image/png" sizes="32x32" href="Favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="Favicon/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
+
+    <style>
+        .white-row{
+            background-color: #ffffff;
+        }
+
+        .black-row{
+            background-color: #e6e9ef;
+        }
+    </style>
+
 </head>
 <body>
-
     <!-- Main Page -->
 
     <a href="user.php"><img src="Images/websitelogo.png" alt="Website Logo" class="website-logo"></a>
@@ -71,13 +81,10 @@
 
     <!-- Manage Account -->
 
-    <form action="" method="POST">
-        <i class="fa-solid fa-trash" name="delete"></i>
-    </form>
-
-    <div class="account-form" id="register">
+    <div class="manage-background">
+        <p class="manage-title">MANAGE ACCOUNT</p>
+        <div class="account-form" id="register">
         <form action="" method="POST">
-            <p class="manage-title">MANAGE ACCOUNT</p>
             <?php
                 $stmt = $conn->prepare("SELECT * FROM user_data WHERE userId = :userId");
                 $stmt ->bindParam(':userId', $i_id);
@@ -97,37 +104,44 @@
             <input type="submit" class="submit" name="update-submit" id="update-submit" value="Save Profile">
             <?php } ?>
         </form>
-    </div>
+        </div>
 
-    <!-- Submitted Form -->
+        <form action="" method="POST">
+            <i class="fa-solid fa-trash" name="delete"></i>
+        </form>
 
-    <div class="manage-admission-table" id="manage-admission-table">
+        <!-- Submitted Form -->
+
+        <p class="manage-applied-title">APPLIED COLLEGE & <span>COURSE</span></p>
+        <div class="manage-admission-table" id="manage-admission-table">
         <table>
-        <thead>
+            <thead>
             <tr>
                 <td class="table-head-id">S.N.</td>
                 <td class="table-head">Name</td>
                 <td class="table-head">Course</td>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             <?php
-                $stmt= "SELECT * FROM admission_data WHERE email = '".$_SESSION['username']."'" ;
+                $stmt = "SELECT * FROM admission_data WHERE email = '" . $_SESSION['username'] . "'";
                 $data = $conn->query($stmt);
                 $count = 1;
-                while($row = $data->fetchObject()){ 
-            ?>
-            <tr>
-                <td class="table-SN"><?= $count++; ?></td>
-                <td class="table-body"><?= $row->name; ?></td>
-                <td class="table-title"><?= $row->title; ?></td>
-            </tr>
-            <?php 
+                while ($row = $data->fetchObject()){
+                    $row_class = ($count % 2 == 0) ? "black-row" : "white-row";
+                ?>
+                    <tr class="<?= $row_class ?>">
+                        <td class="table-SN"><?= $count++; ?></td>
+                        <td class="table-body"><?= $row->name; ?></td>
+                        <td class="table-title"><?= $row->title; ?></td>
+                    </tr>
+                <?php
                 }
-            ?>
-        </tbody>
+                ?>
+            </tbody>
         </table>
-    </div>
+        </div>
+
     <script src="script.js"></script>
 </body>
 </html>

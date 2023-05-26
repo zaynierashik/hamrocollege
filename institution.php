@@ -62,7 +62,7 @@
                     <td class="table-head">Phone Number</td>
                     <td class="table-head">Email Address</td>
                     <td class="table-head">Interested Course</td>
-                    <td class="table-head">Message</td>
+                    <!-- <td class="table-head">Message</td> -->
                 </tr>
             </thead>
             <tbody>
@@ -82,7 +82,7 @@
                 <td class="table-phone"><?= $row->phone; ?></td>
                 <td class="table-body"><?= $row->email; ?></td>
                 <td class="table-title"><?= $row->title; ?></td>
-                <td class="table-body"><?= $row->message; ?></td>
+                <!-- <td class="table-body"><?= $row->message; ?></td> -->
             </tr>
             <?php 
                 }

@@ -82,12 +82,8 @@
         .hidden{
             display: none;
         }
-
-        .nav a.active{
-            font-weight: bold;
-            color: #000000;
-        }
     </style>
+    
 </head>
 <body>
     <!-- Main Page -->
@@ -127,7 +123,7 @@
 
     <!-- Courses -->
 
-    <div class="hidden" id="courses">
+    <div class="category-background hidden" id="courses">
         <p class="course-title">COURSES</p>
         <div class="course-grid-container">
         <?php
@@ -147,7 +143,7 @@
     
     <!-- Colleges -->
     
-    <div class="hidden" id="colleges">
+    <div class="college-category-background hidden" id="colleges">
         <p class="college-title">COLLEGES</p>
         <div class="college-grid-container">
             <?php
@@ -168,29 +164,64 @@
                 }
             ?>
         </div>
-        <!-- <img src="Images/shape2.png" class="shape-two"> -->
     </div>
 
-    <!-- SLIDESHOW -->
+    <!-- Category -->
 
-    <!-- <a href="https://kathford.edu.np/" target="_blank">
-        <img src="Images/kathfordImg.jpg" alt="Kathford" class="image-board"></a>
-
-    <a href="https://heraldcollege.edu.np/" target="_blank">
-        <img src="Images/heraldImg.png" alt="Herald" class="image-board-one"></a>
-
-    <div class="slider">
-        <a href="#" id="carouselLink" target="_blank">
-        <div class="carousel">
-            <img id="carouselImage">
+    <div class="mixed-category-background hidden" id="disciplines">
+        <div id="affiliation-category">
+        <p class="course-affiliation-category-title">DISCIPLINES</p>
+        <p class="field-of-study">Field of Studies</p>
+        <div class="course-category-grid-container">
+            <a href="category.php?field=Computer and Information Technology" class="course-category-grid-item"><i class="fa-solid fa-microchip" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Computer and Information Technology</a>
+            <a href="category.php?field=Engineering" class="course-category-grid-item"><i class="fa-solid fa-helmet-safety" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Engineering</a>
+            <a href="category.php?field=Management" class="course-category-grid-item"><i class="fa-solid fa-people-group" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Management</a>
+            <a href="category.php?field=Science and Technology" class="course-category-grid-item"><i class="fa-solid fa-microscope" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Science and Technology</a>
+            <a href="category.php?field=Humanities and Social Sciences" class="course-category-grid-item"><i class="fa-solid fa-people-roof" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Humanities and Social Sciences</a>
+            <a href="category.php?field=Agriculture, Forestry and Animal Sciences" class="course-category-grid-item"><i class="fa-solid fa-tree" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Agriculture, Forestry and Animal Sciences</a>
+            <a href="category.php?field=Health Professional Education" class="course-category-grid-item"><i class="fa-solid fa-suitcase-medical" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Health Professional Education</a>
+            <!-- <a href="category.php?field=Education" class="course-category-grid-item"><i class="fa-solid fa-person-chalkboard" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Education</a> -->
+            <a href="category.php?field=Law" class="course-category-grid-item"><i class="fa-solid fa-scale-balanced" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Law</a>
         </div>
-        </a>
-    </div> -->
+        </div>
+    </div>
 
-    <!-- Interested -->
+    <div class="mixed-category-background hidden" id="universities">
+        <div id="affiliation-category">
+        <p class="affiliation-category-title">UNIVERSITIES</p>
+        <div class="category-grid-container">
+            <a href="category.php?affiliation=TU" class="category-grid-item"><img src="Images/tu-logo.png" class="board-logo"><br><br>Tribhuvan University</a>
+            <a href="category.php?affiliation=KU" class="category-grid-item"><img src="Images/ku-logo.png" class="board-logo"><br><br>Kathmandu University</a>
+            <a href="category.php?affiliation=PU" class="category-grid-item"><img src="Images/pu-logo.png" class="board-logo"><br><br>Pokhara University</a>
+            <a href="category.php?affiliation=International" class="category-grid-item"><img src="Images/international-logo.jpg" class="board-logo international"><br><br>International</a>
+        </div>
+        </div>
+    </div>
 
-    <div class="hidden" id="admission">
-        <p class="admission-title">ADMISSION FORM</p>
+    <!-- Admission -->
+
+    <div class="admission-category-background hidden" id="admission">
+        <p class="admission-title">FEATURED ADMISSION</p>
+
+        <!-- SLIDESHOW -->
+
+        <a href="https://kathford.edu.np/" target="_blank">
+            <img src="Images/kathfordImg.jpg" alt="Kathford" class="image-board"></a>
+
+        <!-- <a href="https://heraldcollege.edu.np/" target="_blank">
+            <img src="Images/heraldImg.png" alt="Herald" class="image-board-one"></a> -->
+
+        <div class="slider">
+            <a href="#" id="carouselLink" target="_blank">
+            <div class="carousel">
+                <img id="carouselImage">
+            </div>
+            </a>
+        </div>
+
+        <!-- Admission Form -->
+
+        <p class="admission-form-title">ADMISSION FORM</p>
         <form action="" method="POST" class="interested-form">
         <div class="input-container">
             <input type="text" name="username" id="username" placeholder="Name" required>
@@ -228,36 +259,26 @@
         </div>
         <input type="submit" class="submit" name="interested-submit" id="interested-submit" value="Submit Application">
         </form>
-    </div>
 
-    <!-- Category -->
-
-    <div class="category-background hidden" id="disciplines">
-        <div id="affiliation-category">
-        <p class="course-affiliation-category-title"><span>FIELDS</span> OF STUDY</p>
-        <div class="course-category-grid-container">
-            <a href="category.php?field=Computer and Information Technology" class="course-category-grid-item"><i class="fa-solid fa-microchip" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Computer and Information Technology</a>
-            <a href="category.php?field=Engineering" class="course-category-grid-item"><i class="fa-solid fa-helmet-safety" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Engineering</a>
-            <a href="category.php?field=Management" class="course-category-grid-item"><i class="fa-solid fa-people-group" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Management</a>
-            <a href="category.php?field=Science and Technology" class="course-category-grid-item"><i class="fa-solid fa-microscope" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Science and Technology</a>
-            <a href="category.php?field=Humanities and Social Sciences" class="course-category-grid-item"><i class="fa-solid fa-people-roof" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Humanities and Social Sciences</a>
-            <a href="category.php?field=Agriculture, Forestry and Animal Sciences" class="course-category-grid-item"><i class="fa-solid fa-tree" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Agriculture, Forestry and Animal Sciences</a>
-            <a href="category.php?field=Health Professional Education" class="course-category-grid-item"><i class="fa-solid fa-suitcase-medical" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Health Professional Education</a>
-            <!-- <a href="category.php?field=Education" class="course-category-grid-item"><i class="fa-solid fa-person-chalkboard" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Education</a> -->
-            <a href="category.php?field=Law" class="course-category-grid-item"><i class="fa-solid fa-scale-balanced" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Law</a>
-        </div>
-        </div>
-    </div>
-
-    <div class="category-background hidden" id="universities">
-        <div id="affiliation-category">
-        <p class="affiliation-category-title">UNIVERSITIES</p>
-        <div class="category-grid-container">
-            <a href="category.php?affiliation=TU" class="category-grid-item"><img src="Images/tu-logo.png" class="board-logo"><br><br>Tribhuvan University</a>
-            <a href="category.php?affiliation=KU" class="category-grid-item"><img src="Images/ku-logo.png" class="board-logo"><br><br>Kathmandu University</a>
-            <a href="category.php?affiliation=PU" class="category-grid-item"><img src="Images/pu-logo.png" class="board-logo"><br><br>Pokhara University</a>
-            <a href="category.php?affiliation=International" class="category-grid-item"><img src="Images/international-logo.jpg" class="board-logo international"><br><br>International</a>
-        </div>
+        <div class="admission-college-grid-container">
+            <?php
+            $collegeIds = array(15, 5, 7);
+            foreach ($collegeIds as $collegeId) {
+                $sql = "SELECT * FROM college_data WHERE collegeId = $collegeId";
+                $stmt = $conn->query($sql);
+        
+                if ($stmt->rowCount() > 0) {
+                    $row = $stmt->fetch();
+                    echo '<a href="collegedetails.php?collegeId=' . $row['collegeId'] . '" class="college-grid-item">';
+                    echo '<img src="./Images/' . $row['logo'] . '">';
+                    echo '<p class="college-name">' . $row['name'] . '</p>';
+                    echo '<p class="college-address">' . $row['address'] . '</p>';
+                    echo '</a>';
+                } else {
+                    echo "College not found.";
+                }
+            }
+            ?>
         </div>
     </div>
 
@@ -323,30 +344,17 @@
     </script>
     
     <script>
-    function showDiv(divId) {
-        // Hide all divs
-        var divs = document.getElementsByClassName('hidden');
-        for (var i = 0; i < divs.length; i++) {
-            divs[i].style.display = 'none';
-        }
+        function showDiv(divId){
+            var divs = document.getElementsByClassName('hidden');
+            for(var i = 0; i < divs.length; i++){
+                divs[i].style.display = 'none';
+            }
 
-        // Show the selected div
-        var divToShow = document.getElementById(divId);
-        if (divToShow) {
-            divToShow.style.display = 'block';
+            var divToShow = document.getElementById(divId);
+            if(divToShow){
+                divToShow.style.display = 'block';
+            }
         }
-
-        // Highlight the active nav link
-        var navLinks = document.getElementsByClassName('nav')[0].getElementsByTagName('a');
-        for (var i = 0; i < navLinks.length; i++) {
-            navLinks[i].classList.remove('active');
-        }
-
-        var currentNavLink = document.querySelector('a[href="#' + divId + '"]');
-        if (currentNavLink) {
-            currentNavLink.classList.add('active');
-        }
-    }
-</script>
+    </script>
 </body>
 </html>

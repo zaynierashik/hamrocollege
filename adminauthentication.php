@@ -65,7 +65,8 @@
     <link rel="manifest" href="/site.webmanifest">
 </head>
 <body>
-    <a href="adminauthentication.php"><img src="Images/logo.png" alt="Website Logo" class="register-website-logo"></a>
+    
+    <a href="homepage.php"><img src="Images/logo.png" alt="Website Logo" class="register-website-logo"></a>
     
     <div class="register" id="register">
         <form action="" method="POST" class="register-form">

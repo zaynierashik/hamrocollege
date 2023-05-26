@@ -113,23 +113,19 @@
     <script src="script.js"></script>
 
     <?php
-    if(isset($success) == 1 ){
-    ?>
-    <script>
-        const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false
-    })
+    if(isset($success) == 1 ){?>
+        <script>
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false
+            })
 
-    Toast.fire({
-        icon: "success",
-        title: "Signup successful!"
-    });
-    </script>
-    <?php
-    }
-    ?>
-    
+            Toast.fire({
+                icon: "success",
+                title: "Signup successful!"
+            });
+        </script>
+    <?php }?>
 </body>
 </html>

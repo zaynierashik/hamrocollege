@@ -315,20 +315,12 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 
 .manage-detail-table{
     position: relative;
-    margin: -99.45vh 0vw 0vh 22.87vw;
+    margin: -87vh 0vw 0vh 22.87vw;
     width: 60%;
     padding: 1.5vh 2.5vh 3.7vh 2.5vh;
     border-radius: 30px;
     background-color: white;
     box-shadow: 0px 0px 7px 0px rgba(163, 158, 163, 1);
-}
-
-.fa-trash-can{
-    position: relative;
-    font-size: 1.15rem;
-    cursor: pointer;
-    left: 55.65vw;
-    top: 4.1vh;
 }
 
 .manage-detail-table table{
@@ -338,7 +330,7 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 
 .manage-college-table{
     position: relative;
-    margin: -99.45vh 0vw 0vh 22.87vw;
+    margin: -87vh 0vw 0vh 22.87vw;
     width: 69.69%;
     padding: 1.5vh 2.5vh 3.7vh 2.5vh;
     border-radius: 30px;
@@ -376,26 +368,34 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 
 .account-shape-one{
     margin-top: -25vh;
-    width: 28.7%;
+    width: 35%;
+}
+
+.manage-title, .manage-applied-title{
+    position: relative;
+    width: max-content;
+    top: 6.7vh;
+    left: 69.67vw;
+    font-weight: 500;
+    font-size: 1.7rem;
+    color: #082465;
+}
+
+.manage-applied-title{
+    top: -58.35vh;
+    left: 7vw;
+    color: white;
 }
 
 .account-form{
     position: relative;
-    margin-top: -27.5vh;
-    left: 69.80vw;
+    top: 10vh;
+    left: 69.77vw;
     width: 23%;
-    padding: 15px 20px 20px 20px;
+    padding: 25px 20px 20px 20px;
     border-radius: 15px;
     background-color: white;
     box-shadow: 0px 0px 7px 0px rgba(163, 158, 163, 1);
-}
-
-.manage-title{
-    padding-bottom: 1vh;
-    /* text-align: center; */
-    font-weight: 500;
-    font-size: 1.7rem;
-    color: #082465;
 }
 
 .account-form .input-container{
@@ -417,8 +417,8 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 .fa-trash{
     position: relative;
     cursor: pointer;
-    left: 88.30vw;
-    top: 27.7vh;
+    left: 88.27vw;
+    top: 0.485vh;
     padding: 1.87vh 1.91vh;
     z-index: 999;
     font-size: 1.25rem;
@@ -433,7 +433,7 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 
 .manage-admission-table{
     position: relative;
-    margin: -57.85vh 0vw 0vh 7vw;
+    margin: -55.15vh 0vw 0vh 7vw;
     width: 55%;
     padding: 1.5vh 2.5vh 3.7vh 2.5vh;
     border-radius: 15px;
@@ -460,6 +460,13 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
     vertical-align: top;
 }
 
+.ad{
+    position: relative;
+    margin-top: -27.5vh;
+    left: 7vw;
+    width: 23%;
+}
+
 .admission-title, .affiliation-category-title, .course-affiliation-category-title{
     margin: -65vh 0vw 0vh 7vw;
     font-weight: 500;
@@ -467,18 +474,47 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
     color: white
 }
 
-.category-background{
+.admission-college-grid-container{
+    position: relative;
+    margin-top: -141.5vh;
+    margin-left: 7vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15vw, 1fr));
+    grid-gap: 1vw;
+    width: 50vw;
+}
+
+.category-background, .college-category-background, .admission-category-background, .manage-background{
     background-color: #e6e9ef;
-    height: 75vh;
+    height: 100vh;
+}
+
+.college-category-background{
+    height: 150vh;
+}
+
+.admission-category-background{
+    height: 157vh
+}
+
+.manage-background{
+    margin: -45vh 0vh 0vh 0vw;
+    height: 82vh;
+}
+
+.mixed-category-background{
+    background-color: #e6e9ef;
+    height: 71vh;
 }
 
 .course-affiliation-category-title{
     margin: -65vh 0vw 0vh 7vw;
     width: 35%;
-    color: #082465;
+    color: white;
 }
 
-.course-affiliation-category-title span{
+.field-of-study{
+    margin: 1vh 0vw 0vh 7vw;
     color: white;
 }
 
@@ -493,6 +529,7 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 }
 
 .course-category-grid-container{
+    top: 5.67vh;
     width: 85.7%;
     grid-template-columns: repeat(auto-fit, minmax(15vw, 1fr));
 }
@@ -522,17 +559,21 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
     width: 77%;
 }
 
-.feedback-title{
+.feedback-title, .admission-form-title{
     margin: 15vh 0vw 0vh 7vw;
     font-weight: 500;
     font-size: 1.7rem;
     color: #082465;
 }
 
+.admission-form-title{
+    margin: 7vh 0vh 0vh 59.25vw;
+}
+
 .interested-form, .feedback-form{
     position: relative;
-    margin: 5vh 0vh 0vh 7vw;
-    width: 35%;
+    margin: 5vh 0vh 0vh 59.25vw;
+    width: 33%;
     padding: 20px 15px;
     border-radius: 15px;
     background-color: white;
@@ -545,11 +586,11 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 }
 
 .interested-form #username{
-    width: 48.75%;
+    width: 48.65%;
 }
 
 .interested-form #phone{
-    width: 48.75%;
+    width: 48.65%;
     margin-right: 0;
 }
 
@@ -557,20 +598,14 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
     width: 100%;
 }
 
-.image-board, .image-board-one{
+.image-board, .image-board-one, .slider{
     position: relative;
-    margin: 15vh 0vw 0vh 7vw;
-    width: 47.7%;
-}
-
-.image-board-one{
-    margin: 0.5vh 0vw 0vh 7vw;
+    margin: 5vh 0vh 0vh 59.25vw;
+    width: 33%;
 }
 
 .slider{
-    position: relative;
-    margin: 0vh 0vw 0vh 7vw;
-    width: 47.7%;
+    margin: 0.5vh 0vh 0vh 59.25vw;
 }
 
 .carousel img{

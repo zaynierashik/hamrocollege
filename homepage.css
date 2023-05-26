@@ -49,6 +49,13 @@ html{
     cursor: pointer;
 }
 
+.fa-circle{
+    position: absolute;
+    margin: 32.5vh 0vw 0vh 34vw;
+    font-size: 0.7rem;
+    /* cursor: context-menu; */
+}
+
 .scroll-to-section{
     text-decoration: none;
     color: black;
@@ -216,8 +223,7 @@ html{
 /* Colleges */
 
 .college-title{
-    margin-top: 10vh;
-    margin-left: 7vw;
+    margin: 10vh 0vw 0vh 7vw;
     font-weight: 500;
     font-size: 1.7rem;
     color: #082465;
@@ -246,11 +252,6 @@ html{
 .college-address{
     padding-top: 1vh;
     font-size: 0.87rem;
-}
-
-.college-title {
-    position: relative;
-    margin-top: 20.5vh;
 }
 
 .college-grid-container img{

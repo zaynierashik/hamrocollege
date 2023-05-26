@@ -26,6 +26,17 @@
     <link rel="icon" type="image/png" sizes="32x32" href="Favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="Favicon/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
+    
+    <style>
+        .white-row{
+            background-color: #ffffff;
+        }
+
+        .black-row{
+            background-color: #e6e9ef;
+        }
+    </style>
+
 </head>
 <body>
     <!-- Main Page -->
@@ -39,13 +50,6 @@
                 <li class="logout"><a href="logout.php" class="scroll-to-section">logout</a></li>
             </ul>
         </nav>
-
-        <!-- <nav class="nav">
-            <ul>
-                <li><a href="admin.php" class="nav-section active">Dashboard</a></li>
-                <li><a href="#" class="nav-section" id="admin-option">Add Admin</a></li>
-            </ul>
-        </nav> -->
     </div>
     
     <img src="Images/shape1.png" class="admin-shape-one">
@@ -84,7 +88,6 @@
     <!-- Manage Admin -->
 
     <div class="manage-detail-table" id="manage-admin-table" style="display: none;">
-        <!-- <button name="remove"><i class="fa-solid fa-trash-can" style="color: #cc0000;"></i></button> -->
         <table class="user-container">
             <thead>
                 <tr>
@@ -101,13 +104,13 @@
                 $data = $conn->query($stmt);
                 $count = 1;
                 while($row = $data->fetchObject()){ 
+                    $row_class = ($count % 2 == 0) ? "black-row" : "white-row";
             ?>
-            <tr>
+           <tr class="<?= $row_class ?>">
                 <td class="table-SN"><?= $count++; ?></td>
                 <td class="table-body"><?= $row->name; ?></td>
                 <td class="table-phone"><?= $row->phone; ?></td>
                 <td class="table-body"><?= $row->email; ?></td>
-                <!-- <td class="checkBox"><input type="checkbox" name=userId[] value=<?= $row->userId; ?>></td> -->
             </tr>
             <?php 
                 }
@@ -119,7 +122,6 @@
     <!-- Manage User -->
 
     <div class="manage-detail-table" id="manage-user-table" style="display: none;">
-        <!-- <button name="remove"><i class="fa-solid fa-trash-can" style="color: #cc0000;"></i></button> -->
         <table class="user-container">
             <thead>
                 <tr>
@@ -127,7 +129,6 @@
                     <td class="table-head">Name</td>
                     <td class="table-head">Phone number</td>
                     <td class="table-head">Email address</td>
-                    <!-- <td class="table-head-id"></td> -->
                 </tr>
             </thead>
             <tbody>
@@ -136,14 +137,14 @@
                 $data = $conn->query($stmt);
                 $count = 1;
                 while($row = $data->fetchObject()){ 
-            ?>
-            <tr>
-                <td class="table-SN"><?= $count++; ?></td>
-                <td class="table-body"><?= $row->name; ?></td>
-                <td class="table-phone"><?= $row->phone; ?></td>
-                <td class="table-body"><?= $row->email; ?></td>
-                <!-- <td class="checkBox"><input type="checkbox" name=userId[] value=<?= $row->userId; ?>></td> -->
-            </tr>
+                    $row_class = ($count % 2 == 0) ? "black-row" : "white-row";
+                ?>
+                <tr class="<?= $row_class ?>">
+                    <td class="table-SN"><?= $count++; ?></td>
+                    <td class="table-body"><?= $row->name; ?></td>
+                    <td class="table-phone"><?= $row->phone; ?></td>
+                    <td class="table-body"><?= $row->email; ?></td>
+                </tr>
             <?php 
                 }
             ?>
@@ -154,14 +155,12 @@
     <!-- Manage Course -->
 
     <div class="manage-detail-table" id="manage-course-table">
-        <!-- <button name="remove"><i class="fa-solid fa-trash-can" style="color: #cc0000;"></i></button> -->
         <table class="user-container">
             <thead>
                 <tr>
                     <td class="table-head-id">S.N.</td>
                     <td class="table-head">Course Name</td>
                     <td class="table-head">Abbreviation</td>
-                    <!-- <td class="table-head-id"></td> -->
                 </tr>
             </thead>
             <tbody>
@@ -170,12 +169,12 @@
                 $data = $conn->query($stmt);
                 $count = 1;
                 while($row = $data->fetchObject()){ 
+                    $row_class = ($count % 2 == 0) ? "black-row" : "white-row";
             ?>
-            <tr>
+            <tr class="<?= $row_class ?>">
                 <td class="table-SN"><?= $count++; ?></td>
                 <td class="table-body"><?= $row->title; ?></td>
                 <td class="table-phone"><?= $row->abbreviation; ?></td>
-                <!-- <td class="checkBox"><input type="checkbox" name=userId[] value=<?= $row->userId; ?>></td> -->
             </tr>
             <?php 
                 }
@@ -187,7 +186,6 @@
     <!-- Manage Colleges -->
 
     <div class="manage-college-table" id="manage-college-table" style="display: none;">
-        <!-- <button name="remove"><i class="fa-solid fa-trash-can" style="color: #cc0000;"></i></button> -->
         <table class="user-container">
             <thead>
                 <tr>
@@ -195,7 +193,6 @@
                     <td class="table-head">Name</td>
                     <td class="table-head">Phone number</td>
                     <td class="table-head">Email address</td>
-                    <!-- <td class="table-head-id"></td> -->
                 </tr>
             </thead>
             <tbody>
@@ -204,13 +201,13 @@
                 $data = $conn->query($stmt);
                 $count = 1;
                 while($row = $data->fetchObject()){ 
+                    $row_class = ($count % 2 == 0) ? "black-row" : "white-row";
             ?>
-            <tr>
+            <tr class="<?= $row_class ?>">
                 <td class="table-SN"><?= $count++; ?></td>
                 <td class="table-name"><?= $row->name; ?></td>
                 <td class="table-phone"><?= $row->phone; ?></td>
                 <td class="table-email"><?= $row->email; ?></td>
-                <!-- <td class="checkBox"><input type="checkbox" name=userId[] value=<?= $row->userId; ?>></td> -->
             </tr>
             <?php 
                 }

@@ -96,6 +96,7 @@
 </head>
 
 <body>
+    
     <!-- Search Results -->
 
     <?php
@@ -167,6 +168,8 @@
     <div class="home-content">
         <img src="Images/shape1.png" class="shape-one">
         <img src="Images/icon.png" class="icon-one" alt="Illustration">
+        
+        <a href="adminauthentication.php"><i class="fa-solid fa-circle" style="color: #2b2b2b;"></i></a>
         <p class="explore">Explore. Enroll.</p>
         <p class="explore-text">Searching for colleges to expand your study? Explore some of the best <br> colleges around you.</p>
     </div>
