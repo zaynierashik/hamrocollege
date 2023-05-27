@@ -94,11 +94,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="Favicon/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
 </head>
-
 <body>
-    
     <!-- Search Results -->
-
     <?php
         if($searchValue){?>
             <a href="homepage.php"><img src="Images/websitelogo.png" alt="Website Logo" class="website-logo"></a>
@@ -159,7 +156,6 @@
             
             <input type="checkbox" class="checkbox" onclick="showPassword()">
             <div class="show">Show Password</div>
-    
             <input type="submit" class="submit" name="login-submit" id="login-submit" value="Login">
             <i class="fa-solid fa-xmark fa-lg" style="color: black;"></i>
         </form>
@@ -168,7 +164,7 @@
     <div class="home-content">
         <img src="Images/shape1.png" class="shape-one">
         <img src="Images/icon.png" class="icon-one" alt="Illustration">
-        
+
         <a href="adminauthentication.php"><i class="fa-solid fa-circle" style="color: #2b2b2b;"></i></a>
         <p class="explore">Explore. Enroll.</p>
         <p class="explore-text">Searching for colleges to expand your study? Explore some of the best <br> colleges around you.</p>
@@ -186,7 +182,6 @@
         <?php
             $sql = "SELECT * FROM course_data LIMIT 7";
             $stmt = $conn->query($sql);
-
             if($stmt->rowCount() > 0){
                 while($row = $stmt->fetch()){
                     echo '<a href="coursedetails.php?courseId=' . $row['courseId'] . '" class="course-grid-item">' . $row['title'] . '</a>';

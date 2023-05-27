@@ -80,6 +80,48 @@
     transform: scale(1.05);
 }
 
+.search-box{
+    position: absolute;
+    top: 3.7vh;
+    right: 23.7vw;
+    height: 5.5vh;
+    width: 25vw;
+    padding-left: 1.1vw;
+    border-radius: 30px;
+    background-color: white;
+    color: black;
+    outline: none;
+}
+
+.fa-magnifying-glass{
+    position: absolute;
+    top: 5.40vh;
+    right: 25vw;
+    color: black;
+    cursor: pointer;
+}
+
+.search-box-search{
+    position: absolute;
+    top: 4vh;
+    right: 7vw;
+    height: 5.5vh;
+    width: 35vw;
+    padding-left: 1.1vw;
+    border-radius: 30px;
+    background-color: white;
+    color: black;
+    outline: none;
+}
+
+.search-icon{
+    position: absolute;
+    top: 5.7vh;
+    right: 8.3vw;
+    color: black;
+    cursor: pointer;
+}
+
 #toggleButton{
     position: relative;
     top: 49.5vh;

@@ -40,26 +40,33 @@
         }
     }
 
-    // $courseId;
-    // $i = 0;
-    // $searchValue;
-    // @$count = $_GET['count'];
+    $courseId;
+    $i = 0;
+    $searchValue;
+    @$count = $_GET['count'];
+    @$status = $_GET['status'];
 
-    // do{
-    //     @$courseId = $_GET[$i];
-    //     if($courseId != null){
-    //         $stmt = $conn->prepare("SELECT * FROM course_data WHERE courseId = :courseId");
-    //         $stmt ->bindParam(':courseId', $courseId);
-    //         $stmt ->execute();
-    //         $value[$i] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    //         $searchValue = true;
-    //     }else{
-    //         $stmt = $conn->prepare("SELECT * FROM course_data");
-    //         $value = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    //         $searchValue = false;
-    //     }
-    //     $i++;
-    // }while($i<$count);
+    do{
+        @$courseId = $_GET[$i];
+        @$collegeId = $_GET[$i];
+
+        if($courseId != null){
+            if($status == 1){
+                $stmt = $conn->prepare("SELECT * FROM course_data WHERE courseId = :courseId");
+                $stmt ->bindParam(':courseId', $courseId);
+            }else{
+                $stmt = $conn->prepare("SELECT * FROM college_data WHERE collegeId = :collegeId");
+                $stmt ->bindParam(':collegeId', $collegeId);
+            }
+
+            $stmt ->execute();
+            $value[$i] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $searchValue = true;
+        }else{
+            $searchValue = false;
+        }
+        $i++;
+    }while($i<$count);
 ?>
 
 <!DOCTYPE html>
@@ -77,25 +84,52 @@
     <link rel="icon" type="image/png" sizes="32x32" href="Favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="Favicon/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-
-    <style>
-        .hidden{
-            display: none;
-        }
-    </style>
-    
 </head>
 <body>
+    <!-- Search Results -->
+    <?php
+        if($searchValue){?>
+            <a href="homepage.php"><img src="Images/websitelogo.png" alt="Website Logo" class="website-logo"></a>
+            
+            <div class="main-navbar">
+                <form action="datasearch.php" method="POST" id="search">
+                    <input type="text" class="search-box-search" name="search" id="search-form" placeholder="Search courses, colleges ...">
+                    <i class="fa-solid fa-magnifying-glass search-icon" id="search-icon"></i>
+                </form>
+            </div>
+
+            <img src="Images/shape1.png" class="search-shape-one">
+            <div class="result">Found results.</div>
+            <?php
+                echo '<div class="search-grid-container">';
+                foreach($value as $item){
+                    if($status == 1){
+                        echo '<a href="coursedetails.php?courseId=' . $item[0]['courseId'] . '" class="search-grid-item">' . $item[0]['title'] . '</a>';
+                    }
+                    else{
+                        echo '<a href="collegedetails.php?collegeId=' . $item[0]['collegeId'] . '" class="search-grid-item">';
+                        echo '<img src="./Images/' . $item[0]['logo'] . '">';
+                        echo '<p class="search-name">' . $item[0]['name'] . '</p>';
+                        echo '<p class="search-address">' . $item[0]['address'] . '</p>';
+                        echo '</a>';
+                    }
+                }
+                echo '</div>';
+            ?>
+        <?php 
+        }else{ 
+    ?>
+
     <!-- Main Page -->
 
     <a href="user.php"><img src="Images/websitelogo.png" alt="Website Logo" class="website-logo"></a>
     
     <div class="main-navbar">
-        <!-- <form action="search.php" method="POST" id="search">
+        <form action="datasearch.php" method="POST" id="search">
             <input type="text" class="search-box" name="search" id="search-form" placeholder="Search courses, colleges ...">
             <i class="fa-solid fa-magnifying-glass" id="search-icon"></i>
-        </form> -->
-        
+        </form>
+
         <nav class="navbar">
             <ul>
                 <li><a href="account.php?userId=<?php echo $_SESSION['userId'];?>"><i class="fa-solid fa-user" style="color: #000000; position: relative; left: 1.5vw"></i></a></li>
@@ -106,11 +140,11 @@
 
         <nav class="nav">
             <ul>
-                <li><a onclick="showDiv('courses')" class="nav-section">Courses</a></li>
-                <li><a onclick="showDiv('colleges')" class="nav-section">Colleges</a></li>
-                <li><a onclick="showDiv('disciplines')" class="nav-section">Disciplines</a></li>
-                <li><a onclick="showDiv('universities')" class="nav-section">Universities</a></li>
-                <li><a onclick="showDiv('admission')" class="nav-section">Admissions</a></li>
+                <li><a onclick="showManageTable('courses')" class="nav-section">Courses</a></li>
+                <li><a onclick="showManageTable('colleges')" class="nav-section">Colleges</a></li>
+                <li><a onclick="showManageTable('disciplines')" class="nav-section">Disciplines</a></li>
+                <li><a onclick="showManageTable('universities')" class="nav-section">Universities</a></li>
+                <li><a onclick="showManageTable('admission')" class="nav-section">Admissions</a></li>
             </ul>
         </nav>
     </div>
@@ -123,7 +157,7 @@
 
     <!-- Courses -->
 
-    <div class="category-background hidden" id="courses">
+    <div class="category-background" id="courses">
         <p class="course-title">COURSES</p>
         <div class="course-grid-container">
         <?php
@@ -143,7 +177,7 @@
     
     <!-- Colleges -->
     
-    <div class="college-category-background hidden" id="colleges">
+    <div class="college-category-background" id="colleges" style="display: none;">
         <p class="college-title">COLLEGES</p>
         <div class="college-grid-container">
             <?php
@@ -168,7 +202,7 @@
 
     <!-- Category -->
 
-    <div class="mixed-category-background hidden" id="disciplines">
+    <div class="mixed-category-background" id="disciplines" style="display: none;">
         <div id="affiliation-category">
         <p class="course-affiliation-category-title">DISCIPLINES</p>
         <p class="field-of-study">Field of Studies</p>
@@ -186,7 +220,7 @@
         </div>
     </div>
 
-    <div class="mixed-category-background hidden" id="universities">
+    <div class="mixed-category-background" id="universities" style="display: none;">
         <div id="affiliation-category">
         <p class="affiliation-category-title">UNIVERSITIES</p>
         <div class="category-grid-container">
@@ -200,7 +234,7 @@
 
     <!-- Admission -->
 
-    <div class="admission-category-background hidden" id="admission">
+    <div class="admission-category-background" id="admission" style="display: none;">
         <p class="admission-title">FEATURED ADMISSION</p>
 
         <!-- SLIDESHOW -->
@@ -312,6 +346,8 @@
         </ul>
     </div>
 
+    <?php } ?>
+
     <script src="script.js"></script>
     <script>
         const imageSources = ["Images/softwaricaImg.jpg", "Images/islingtonImg.png"];
@@ -344,17 +380,28 @@
     </script>
     
     <script>
-        function showDiv(divId){
-            var divs = document.getElementsByClassName('hidden');
-            for(var i = 0; i < divs.length; i++){
-                divs[i].style.display = 'none';
+        var currentManageTable = document.getElementById("courses");
+
+        function showManageTable(tableId){
+            var manageTable = document.getElementById(tableId);
+            if(currentManageTable !== null && currentManageTable !== manageTable){
+                currentManageTable.style.display = "none";
             }
 
-            var divToShow = document.getElementById(divId);
-            if(divToShow){
-                divToShow.style.display = 'block';
+            if(manageTable.style.display === "none"){
+                manageTable.style.display = "block";
+                currentManageTable = manageTable;
             }
         }
+
+        function hideAllManageTables(){
+            var manageTables = document.getElementsByClassName("colleges");
+            for(var i = 0; i < manageTables.length; i++){
+                manageTables[i].style.display = "none";
+            }
+            currentManageTable = null;
+        }
+        currentManageTable.style.display = "block";
     </script>
 </body>
 </html>

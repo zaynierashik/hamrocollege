@@ -47,11 +47,11 @@
     <?php 
     }else{
         $queryString = http_build_query($get_id);
-        header("location: homepage.php?count=$count&status=$status&$queryString");
+        header("location: user.php?count=$count&status=$status&$queryString");
     }    
     ?>
     <script>
         setTimeout(function(){
-            window.location.href = "homepage.php";
+            window.location.href = "user.php";
         }, 1700);
     </script>
