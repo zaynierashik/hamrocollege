@@ -87,7 +87,7 @@
 
     <!-- Manage Admin -->
 
-    <div class="manage-detail-table" id="manage-admin-table" style="display: none;">
+    <div class="manage-detail-table" id="manage-admin-table">
         <table class="user-container">
             <thead>
                 <tr>
@@ -154,7 +154,7 @@
 
     <!-- Manage Course -->
 
-    <div class="manage-detail-table" id="manage-course-table">
+    <div class="manage-detail-table" id="manage-course-table" style="display: none;">
         <table class="user-container">
             <thead>
                 <tr>
@@ -191,7 +191,7 @@
                 <tr>
                     <td class="table-head-id">S.N.</td>
                     <td class="table-head">Name</td>
-                    <td class="table-head">Phone number</td>
+                    <!-- <td class="table-head">Phone number</td> -->
                     <td class="table-head">Email address</td>
                 </tr>
             </thead>
@@ -206,7 +206,7 @@
             <tr class="<?= $row_class ?>">
                 <td class="table-SN"><?= $count++; ?></td>
                 <td class="table-name"><?= $row->name; ?></td>
-                <td class="table-phone"><?= $row->phone; ?></td>
+                <!-- <td class="table-phone"><?= $row->phone; ?></td> -->
                 <td class="table-email"><?= $row->email; ?></td>
             </tr>
             <?php 
@@ -250,7 +250,7 @@
 
     <script src="script.js"></script>
     <script>
-        var currentManageTable = document.getElementById("manage-course-table");
+        var currentManageTable = document.getElementById("manage-admin-table");
 
         function showManageTable(tableId){
             var manageTable = document.getElementById(tableId);
@@ -261,9 +261,6 @@
             if(manageTable.style.display === "none"){
                 manageTable.style.display = "block";
                 currentManageTable = manageTable;
-            }else{
-                manageTable.style.display = "none";
-                currentManageTable = null;
             }
         }
 

@@ -117,8 +117,8 @@
             <p class="update-college-title">UPDATE COLLEGE</p>
             <div class="input-container">
                 <?php
-                    $stmt = $conn->prepare("SELECT * FROM college_data WHERE collegeId = :instutionId");
-                    $stmt -> bindParam(":instutionId", $i_id);
+                    $stmt = $conn->prepare("SELECT * FROM college_data WHERE collegeId = :instiutionId"); // instutionId
+                    $stmt -> bindParam(":instiutionId", $i_id); // instutionId
                     $stmt ->execute();
                     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     

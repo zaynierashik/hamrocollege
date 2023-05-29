@@ -13,10 +13,11 @@
         $name = $_POST['name'];
         $title = $_POST['title'];
         $message = $_POST['message'];
+        $status = "Pending";
     
-        $sql = "INSERT INTO admission_data (username, phone, email, name, title, message) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO admission_data (username, phone, email, name, title, message, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        if($stmt->execute([$username, $phone, $email, $name, $title, $message])){
+        if($stmt->execute([$username, $phone, $email, $name, $title, $message, $status])){
             header("location: user.php");
         }
     }
@@ -86,7 +87,9 @@
     <link rel="manifest" href="/site.webmanifest">
 </head>
 <body>
+
     <!-- Search Results -->
+    
     <?php
         if($searchValue){?>
             <a href="homepage.php"><img src="Images/websitelogo.png" alt="Website Logo" class="website-logo"></a>
@@ -271,7 +274,7 @@
 
                     foreach($result as $row){
                         $selected = ($row['name'] == $_POST['name']) ? "selected" : "";
-                        echo "<option value='".$row['name']."' ".$selected.">".$row['name']."</option>";
+                        echo "<option value='".$row['collegeId']."' ".$selected.">".$row['name']."</option>";
                     }
                 ?>
             </select>

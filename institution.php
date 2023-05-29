@@ -63,15 +63,16 @@
                     <td class="table-head">Email Address</td>
                     <td class="table-head">Interested Course</td>
                     <!-- <td class="table-head">Message</td> -->
+                    <td class="table-head">Status</td>
+                    <td class="table-head">Action</td>
                 </tr>
             </thead>
             <tbody>
             <?php
-                $i_name = $_SESSION['institutionName'];
-                @$institutionId = $_GET['institutionId'];
-                $stmt= "SELECT * FROM admission_data WHERE name = :institutionName";
+                $institutionId = $_SESSION['institutionId'];
+                $stmt = "SELECT * FROM admission_data WHERE name = :institutionName";
                 $data = $conn->prepare($stmt);
-                $data->bindParam(":institutionName", $i_name);
+                $data ->bindParam(":institutionName", $institutionId);
                 $count = 1;
                 $data->execute();
                 while($row = $data->fetchObject()){ 
@@ -83,6 +84,22 @@
                 <td class="table-body"><?= $row->email; ?></td>
                 <td class="table-title"><?= $row->title; ?></td>
                 <!-- <td class="table-body"><?= $row->message; ?></td> -->
+                <td class="table-body" id="status-<?php echo $row->email; ?>">
+                    <?php
+                        $status = $row->status;
+                        if($status == 'Contacted'){
+                            echo $status;
+                        }else{
+                            echo 'Pending';
+                        }
+                    ?>
+                </td>
+                <td>
+                    <select name="status" onchange="updateStatus(this,<?php echo $row->email; ?>)">
+                        <option value="" disabled selected>Update</option>
+                        <option value="Contacted">Contacted</option>
+                    </select>
+                </td>
             </tr>
             <?php 
                 }
@@ -93,3 +110,4 @@
     </div>
     <script src="script.js"></script>
 </body>
+</html>

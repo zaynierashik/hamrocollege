@@ -138,7 +138,8 @@
     left: 10.80vw;
     width: 77.5%;
     padding: 100px 33px 25px 33px;
-    border-radius: 30px;
+    border-radius: 15px;
+    background-color: white;
     box-shadow: 0px 0px 7px 0px rgba(163, 158, 163, 1);
 }
 
@@ -286,7 +287,7 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
     color: #082465;
     text-decoration: none;
     font-size: 0.87rem;
-    border-radius: 30px;
+    border-radius: 15px;
     text-align: center;
     padding: 2.05vh 1vw;
     box-shadow: 0px 0px 5px 0px rgba(163, 158, 163, 1);
@@ -360,7 +361,7 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
     margin: -87vh 0vw 0vh 22.87vw;
     width: 60%;
     padding: 1.5vh 2.5vh 3.7vh 2.5vh;
-    border-radius: 30px;
+    border-radius: 15px;
     background-color: white;
     box-shadow: 0px 0px 7px 0px rgba(163, 158, 163, 1);
 }
@@ -375,7 +376,7 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
     margin: -87vh 0vw 0vh 22.87vw;
     width: 69.69%;
     padding: 1.5vh 2.5vh 3.7vh 2.5vh;
-    border-radius: 30px;
+    border-radius: 15px;
     background-color: white;
     box-shadow: 0px 0px 7px 0px rgba(163, 158, 163, 1);
 }
@@ -668,7 +669,8 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
     margin: -20.7vh 0vw 0vh 8.8vw;
     width: 82.35%;
     padding: 3vh 2.5vh 3.7vh 2.5vh;
-    border-radius: 30px;
+    border-radius: 15px;
+    background-color: white;
     box-shadow: 0px 0px 7px 0px rgba(163, 158, 163, 1);
 }
 

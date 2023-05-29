@@ -81,12 +81,12 @@
             <div class="show">Show Password</div>
             <input type="submit" class="submit" name="register-submit" id="register-submit" value="Register">
 
-            <div class="manage">Already have an account?<a href="#"> Login</a></div>
+            <div class="manage">Already have an account?<a href="#" onclick="showRegisterForm()"> Login</a></div>
         </form>
     </div>
 
-    <div>
-        <form action="" method="POST" class="admin-login-form">
+    <div id="login">
+        <form action="" method="POST" class="admin-login-form" style="display: none;">
             <div class="input-container">
                 <input type="email" name="email" id="email" placeholder="Email address" required><br>
                 <input type="password" name="password" id="password" placeholder="Password" required>
