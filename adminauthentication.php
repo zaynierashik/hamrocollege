@@ -65,9 +65,7 @@
     <link rel="manifest" href="/site.webmanifest">
 </head>
 <body>
-    
     <a href="homepage.php"><img src="Images/logo.png" alt="Website Logo" class="register-website-logo"></a>
-    
     <div class="register" id="register">
         <form action="" method="POST" class="register-form">
             <div class="input-container">
@@ -80,26 +78,34 @@
             <input type="checkbox" class="checkbox" onclick="showPassword()">
             <div class="show">Show Password</div>
             <input type="submit" class="submit" name="register-submit" id="register-submit" value="Register">
-
-            <div class="manage">Already have an account?<a href="#" onclick="showRegisterForm()"> Login</a></div>
         </form>
     </div>
 
+    <div class="divider">OR</div>
+
     <div id="login">
-        <form action="" method="POST" class="admin-login-form" style="display: none;">
+        <form action="" method="POST" class="admin-login-form">
             <div class="input-container">
                 <input type="email" name="email" id="email" placeholder="Email address" required><br>
-                <input type="password" name="password" id="password" placeholder="Password" required>
+                <input type="password" name="password" id="adminpassword" placeholder="Password" required>
             </div>
             
-            <input type="checkbox" class="checkbox" onclick="showPassword()">
+            <input type="checkbox" class="checkbox" onclick="showAdminPassword()">
             <div class="show">Show Password</div>
             <input type="submit" class="submit" name="login-submit" id="login-submit" value="Login">
-
-            <div class="account">No account?<a href="#"> Register Here</a></div>
         </form>
     </div>
 
     <script src="script.js"></script>
+    <script>
+        function showAdminPassword(){
+        var x = document.getElementById("adminpassword");
+        if(x.type == "password"){
+            x.type = "text";
+        }else{
+            x.type = "password";
+        }
+    }
+    </script>
 </body>
 </html>

@@ -300,25 +300,24 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 }
 
 .register-form{
-    left: 32.5vw;
+    left: 15vw;
     width: 35%;
-    padding: 50px 25px;
+    padding: 35px 25px;
     border-radius: 30px;
     background-color: white;
     box-shadow: 0px 0px 7px 0px rgba(163, 158, 163, 1);
 }
 
-.manage{
-    margin: 2.2vh 0 0 8.55vw;
+.divider{
+    margin: -33vh 0vw 0vh 53vw;
+    font-size: 1.25rem;
 }
 
 .admin-login-form{
-    position: relative;
-    top: -57.35vh;
-    left: 32.5vw;
-    width: 35%;
-    height: 45.7vh;
-    padding: 50px;
+    margin: -25vh 0vw 0vh 58vw;
+    width: 27%;
+    height: 42vh;
+    padding: 35px 25px;
     border-radius: 30px;
     background-color: white;
     box-shadow: 0px 0px 7px 0px rgba(163, 158, 163, 1);
@@ -350,10 +349,6 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 
 .admin-login-form .submit:hover{
     transform: scale(1.015);
-}
-
-.account{
-    margin: 2.2vh 0 0 8vw;
 }
 
 .manage-detail-table{
