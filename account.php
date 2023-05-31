@@ -115,30 +115,33 @@
         <p class="manage-applied-title">APPLIED COLLEGE & <span>COURSE</span></p>
         <div class="manage-admission-table" id="manage-admission-table">
         <table>
-            <thead>
+        <thead>
             <tr>
                 <td class="table-head-id">S.N.</td>
                 <td class="table-head">Name</td>
                 <td class="table-head">Course</td>
             </tr>
-            </thead>
-            <tbody>
+        </thead>
+        
+        <tbody>
             <?php
-                $stmt = "SELECT * FROM admission_data WHERE email = '" . $_SESSION['username'] . "'";
-                $data = $conn->query($stmt);
-                $count = 1;
-                while ($row = $data->fetchObject()){
-                    $row_class = ($count % 2 == 0) ? "black-row" : "white-row";
+            $stmt = $conn->prepare("SELECT * FROM admission_data WHERE email = :username");
+            $stmt->bindParam(':username', $_SESSION['username']);
+            $stmt->execute();
+            
+            $count = 1;
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $row_class = ($count % 2 == 0) ? "black-row" : "white-row";
                 ?>
-                    <tr class="<?= $row_class ?>">
-                        <td class="table-SN"><?= $count++; ?></td>
-                        <td class="table-body"><?= $row->name; ?></td>
-                        <td class="table-title"><?= $row->title; ?></td>
-                    </tr>
+                <tr class="<?= $row_class ?>">
+                    <td class="table-SN"><?= $count++; ?></td>
+                    <td class="table-body"><?= $row['collegeId']; ?></td>
+                    <td class="table-title"><?= $row['title']; ?></td>
+                </tr>
                 <?php
-                }
-                ?>
-            </tbody>
+            }
+            ?>
+        </tbody>
         </table>
         </div>
 

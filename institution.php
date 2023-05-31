@@ -2,9 +2,16 @@
     session_start();
     include 'connect.php';
 
-    if(!isset($_SESSION['institutionemail'])){
+    if (!isset($_SESSION['institutionemail'])) {
         header('location: homepage.php');
+        exit();
     }
+
+    $institutionId = $_SESSION['institutionId'];
+    $stmt = $conn->prepare("SELECT * FROM admission_data WHERE collegeId = :institutionId");
+    $stmt ->bindParam(':institutionId', $institutionId);
+    $stmt ->execute();
+    $admissionData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -21,16 +28,28 @@
     <link rel="icon" type="image/png" sizes="32x32" href="Favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="Favicon/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
+
+    <style>
+        .white-row{
+            background-color: #ffffff;
+        }
+
+        .black-row{
+            background-color: #e6e9ef;
+        }
+    </style>
 </head>
 <body>
     <!-- Main Page -->
 
     <a href="institution.php"><img src="Images/websitelogo.png" alt="Website Logo" class="website-logo"></a>
-    
+
     <div class="main-navbar">
         <nav class="navbar">
             <ul>
-                <li><div class="scroll-to-section"><?php echo $_SESSION['institutionemail'] ?></div></li>
+                <li>
+                    <div class="scroll-to-section"><?php echo $_SESSION['institutionemail'] ?></div>
+                </li>
                 <li class="logout"><a href="logout.php" class="scroll-to-section">logout</a></li>
             </ul>
         </nav>
@@ -39,11 +58,11 @@
             <ul>
                 <li><a href="institution.php" class="nav-section active">Dashboard</a></li>
                 <li><a href="course.php" class="nav-section">Course</a></li>
-                <li><a href="college.php?institutionId=<?php echo $_SESSION['institutionId']?>" class="nav-section">College</a></li> 
+                <li><a href="college.php?institutionId=<?php echo $_SESSION['institutionId'] ?>" class="nav-section">College</a></li>
             </ul>
         </nav>
     </div>
-    
+
     <img src="Images/shape1.png" class="admin-shape-one">
 
     <div class="top hidden">
@@ -53,61 +72,40 @@
     <!-- Manage Admission -->
 
     <div class="manage-interested-table">
-    <form action="" method="POST">
-        <table class="interested-container">
-            <thead>
-                <tr>
-                    <td class="table-head-id">S.N.</td>
-                    <td class="table-head">Name</td>
-                    <td class="table-head">Phone Number</td>
-                    <td class="table-head">Email Address</td>
-                    <td class="table-head">Interested Course</td>
-                    <!-- <td class="table-head">Message</td> -->
-                    <td class="table-head">Status</td>
-                    <td class="table-head">Action</td>
-                </tr>
-            </thead>
-            <tbody>
-            <?php
-                $institutionId = $_SESSION['institutionId'];
-                $stmt = "SELECT * FROM admission_data WHERE name = :institutionName";
-                $data = $conn->prepare($stmt);
-                $data ->bindParam(":institutionName", $institutionId);
-                $count = 1;
-                $data->execute();
-                while($row = $data->fetchObject()){ 
-            ?>
-            <tr>
-                <td class="table-SN"><?= $count++; ?></td>
-                <td class="table-body"><?= $row->username; ?></td>
-                <td class="table-phone"><?= $row->phone; ?></td>
-                <td class="table-body"><?= $row->email; ?></td>
-                <td class="table-title"><?= $row->title; ?></td>
-                <!-- <td class="table-body"><?= $row->message; ?></td> -->
-                <td class="table-body" id="status-<?php echo $row->email; ?>">
+        <form action="" method="POST">
+            <table class="interested-container">
+                <thead>
+                    <tr>
+                        <td class="table-head-id">S.N.</td>
+                        <td class="table-head">Name</td>
+                        <td class="table-head">Phone Number</td>
+                        <td class="table-head">Email Address</td>
+                        <td class="table-head">Interested Course</td>
+                        <!-- <td class="table-head">Message</td> -->
+                    </tr>
+                </thead>
+                <tbody>
                     <?php
-                        $status = $row->status;
-                        if($status == 'Contacted'){
-                            echo $status;
-                        }else{
-                            echo 'Pending';
-                        }
+                    $count = 1;
+                    foreach ($admissionData as $row) {
+                        $row_class = ($count % 2 == 0) ? "black-row" : "white-row";
                     ?>
-                </td>
-                <td>
-                    <select name="status" onchange="updateStatus(this,<?php echo $row->email; ?>)">
-                        <option value="" disabled selected>Update</option>
-                        <option value="Contacted">Contacted</option>
-                    </select>
-                </td>
-            </tr>
-            <?php 
-                }
-            ?>
-            </tbody>
-        </table>
-    </form>
+                        <tr class="<?= $row_class ?>">
+                            <td class="table-SN"><?= $count++; ?></td>
+                            <td class="table-body"><?= $row['username']; ?></td>
+                            <td class="table-phone"><?= $row['phone']; ?></td>
+                            <td class="table-body"><?= $row['email']; ?></td>
+                            <td class="table-title"><?= $row['title']; ?></td>
+                            <!-- <td class="table-body"><?= $row['message']; ?></td> -->
+                        </tr>
+                    <?php
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </form>
     </div>
     <script src="script.js"></script>
+    
 </body>
 </html>

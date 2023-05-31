@@ -10,14 +10,14 @@
         $username = $_POST['username'];
         $phone = $_POST['phone'];
         $email = $_POST['email'];
-        $name = $_POST['name'];
+        $collegeId = $_POST['collegeId'];
         $title = $_POST['title'];
         $message = $_POST['message'];
         $status = "Pending";
     
-        $sql = "INSERT INTO admission_data (username, phone, email, name, title, message, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO admission_data (username, phone, email, collegeId, title, message, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        if($stmt->execute([$username, $phone, $email, $name, $title, $message, $status])){
+        if($stmt->execute([$username, $phone, $email, $collegeId, $title, $message, $status])){
             header("location: user.php");
         }
     }
@@ -265,7 +265,7 @@
             <input type="number" name="phone" id="phone" placeholder="Phone number" required>
             <input type="email" name="email" id="email" placeholder="Email address" required>
 
-            <select name="name" id="name" required>
+            <select name="collegeId" id="name" required>
                 <option value="">Apply To</option>
                 <?php
                     $stmt = $conn->prepare("SELECT * FROM college_data");
@@ -299,7 +299,7 @@
 
         <div class="admission-college-grid-container">
             <?php
-            $collegeIds = array(15, 5, 7);
+            $collegeIds = array(15, 5, 7, 10, 3);
             foreach ($collegeIds as $collegeId) {
                 $sql = "SELECT * FROM college_data WHERE collegeId = $collegeId";
                 $stmt = $conn->query($sql);
