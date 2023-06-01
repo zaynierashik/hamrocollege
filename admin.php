@@ -36,7 +36,6 @@
             background-color: #e6e9ef;
         }
     </style>
-
 </head>
 <body>
     <!-- Main Page -->
@@ -79,7 +78,7 @@
             Total college: <?php echo $collegeCount ?>
         </p>
 
-        <p class="count-grid-item" onclick="showManageTable('feedback')">
+        <p class="count-grid-item" onclick="showManageTable('manage-feedback-table')">
             <i class="fa-solid fa-message fa-lg" style="color: #000000;"></i><br>
             View Feedback
         </p>
@@ -100,17 +99,17 @@
             </thead>
             <tbody>
             <?php
-                $stmt= "SELECT * FROM admin_data" ;
-                $data = $conn->query($stmt);
+                $stmt = $conn->prepare("SELECT * FROM admin_data");
+                $stmt ->execute();
                 $count = 1;
-                while($row = $data->fetchObject()){ 
+                while($row = $stmt->fetch(PDO::FETCH_ASSOC)){ 
                     $row_class = ($count % 2 == 0) ? "black-row" : "white-row";
             ?>
            <tr class="<?= $row_class ?>">
                 <td class="table-SN"><?= $count++; ?></td>
-                <td class="table-body"><?= $row->name; ?></td>
-                <td class="table-phone"><?= $row->phone; ?></td>
-                <td class="table-body"><?= $row->email; ?></td>
+                <td class="table-body"><?php echo $row['name']; ?></td>
+                <td class="table-phone"><?php echo $row['phone']; ?></td>
+                <td class="table-body"><?php echo $row['email']; ?></td>
             </tr>
             <?php 
                 }
@@ -133,17 +132,17 @@
             </thead>
             <tbody>
             <?php
-                $stmt= "SELECT * FROM user_data" ;
-                $data = $conn->query($stmt);
+                $stmt = $conn->prepare("SELECT * FROM user_data");
+                $stmt ->execute();
                 $count = 1;
-                while($row = $data->fetchObject()){ 
+                while($row = $stmt->fetch(PDO::FETCH_ASSOC)){ 
                     $row_class = ($count % 2 == 0) ? "black-row" : "white-row";
                 ?>
                 <tr class="<?= $row_class ?>">
                     <td class="table-SN"><?= $count++; ?></td>
-                    <td class="table-body"><?= $row->name; ?></td>
-                    <td class="table-phone"><?= $row->phone; ?></td>
-                    <td class="table-body"><?= $row->email; ?></td>
+                    <td class="table-body"><?php echo $row['name']; ?></td>
+                    <td class="table-phone"><?php echo $row['phone']; ?></td>
+                    <td class="table-body"><?php echo $row['email']; ?></td>
                 </tr>
             <?php 
                 }
@@ -165,16 +164,16 @@
             </thead>
             <tbody>
             <?php
-                $stmt= "SELECT * FROM course_data" ;
-                $data = $conn->query($stmt);
+                $stmt = $conn->prepare("SELECT * FROM course_data");
+                $stmt ->execute();
                 $count = 1;
-                while($row = $data->fetchObject()){ 
+                while($row = $stmt->fetch(PDO::FETCH_ASSOC)){ 
                     $row_class = ($count % 2 == 0) ? "black-row" : "white-row";
             ?>
             <tr class="<?= $row_class ?>">
                 <td class="table-SN"><?= $count++; ?></td>
-                <td class="table-body"><?= $row->title; ?></td>
-                <td class="table-phone"><?= $row->abbreviation; ?></td>
+                <td class="table-body"><?php echo $row['title']; ?></td>
+                <td class="table-phone"><?php echo $row['abbreviation']; ?></td>
             </tr>
             <?php 
                 }
@@ -197,17 +196,17 @@
             </thead>
             <tbody>
             <?php
-                $stmt= "SELECT * FROM college_data" ;
-                $data = $conn->query($stmt);
+                $stmt = $conn->prepare("SELECT * FROM college_data");
+                $stmt ->execute();
                 $count = 1;
-                while($row = $data->fetchObject()){ 
+                while($row = $stmt->fetch(PDO::FETCH_ASSOC)){ 
                     $row_class = ($count % 2 == 0) ? "black-row" : "white-row";
             ?>
             <tr class="<?= $row_class ?>">
-                <td class="table-SN"><?= $count++; ?></td>
-                <td class="table-name"><?= $row->name; ?></td>
-                <!-- <td class="table-phone"><?= $row->phone; ?></td> -->
-                <td class="table-email"><?= $row->email; ?></td>
+                <td class="table-SN"><?php echo $count++; ?></td>
+                <td class="table-body"><?php echo $row['name']; ?></td>
+                <!-- <td class="table-phone"><?php echo $row['phone']; ?></td> -->
+                <td class="table-body"><?php echo $row['email']; ?></td>
             </tr>
             <?php 
                 }
@@ -230,16 +229,17 @@
             </thead>
             <tbody>
             <?php
-                $stmt= "SELECT * FROM feedback_data" ;
-                $data = $conn->query($stmt);
+                $stmt = $conn->prepare("SELECT * FROM feedback_data");
+                $stmt ->execute();
                 $count = 1;
-                while($row = $data->fetchObject()){ 
+                while($row = $stmt->fetch(PDO::FETCH_ASSOC)){ 
+                    $row_class = ($count % 2 == 0) ? "black-row" : "white-row";
             ?>
-            <tr>
+            <tr class="<?= $row_class ?>">
                 <td class="table-SN"><?= $count++; ?></td>
-                <td class="table-body"><?= $row->username; ?></td>
-                <td class="table-phone"><?= $row->email; ?></td>
-                <td class="table-body"><?= $row->feedback; ?></td>
+                <td class="table-body"><?= $row['username']; ?></td>
+                <td class="table-phone"><?= $row['email']; ?></td>
+                <td class="table-body" style="text-align: justify;"><?= $row['feedback']; ?></td>
             </tr>
             <?php 
                 }
