@@ -76,7 +76,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Panel</title>
+    <title>Hamro College</title>
     <link rel="stylesheet" href="user-admin.css">
     <script src="https://kit.fontawesome.com/296ff2fa8f.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -143,10 +143,8 @@
 
         <nav class="nav">
             <ul>
-                <li><a onclick="showManageTable('courses')" class="nav-section">Courses</a></li>
                 <li><a onclick="showManageTable('colleges')" class="nav-section">Colleges</a></li>
-                <li><a onclick="showManageTable('disciplines')" class="nav-section">Disciplines</a></li>
-                <li><a onclick="showManageTable('universities')" class="nav-section">Universities</a></li>
+                <li><a onclick="showManageTable('courses')" class="nav-section">Courses</a></li>
                 <li><a onclick="showManageTable('admission')" class="nav-section">Admissions</a></li>
             </ul>
         </nav>
@@ -158,29 +156,9 @@
         <a href="#top" class="top"><i class="fa-solid fa-arrow-right fa-rotate-270 fa-lg" style="color: black;"></i></a>
     </div>
 
-    <!-- Courses -->
-
-    <div class="category-background" id="courses">
-        <p class="course-title">COURSES</p>
-        <div class="course-grid-container">
-        <?php
-            $sql = "SELECT * FROM course_data";
-            $stmt = $conn->query($sql);
-
-            if($stmt->rowCount() > 0) {
-                while ($row = $stmt->fetch()){
-                    echo '<a href="coursedetails.php?courseId=' . $row['courseId'] . '" class="course-grid-item">' . $row['title'] . '</a>';
-                }
-                echo '</div>';
-            }else{
-                echo "No courses found.";
-            }
-        ?>
-    </div>
-    
     <!-- Colleges -->
     
-    <div class="college-category-background" id="colleges" style="display: none;">
+    <div class="college-category-background" id="colleges">
         <p class="college-title">COLLEGES</p>
         <div class="college-grid-container">
             <?php
@@ -200,30 +178,7 @@
                     echo "No colleges found.";
                 }
             ?>
-        </div>
-    </div>
 
-    <!-- Category -->
-
-    <div class="mixed-category-background" id="disciplines" style="display: none;">
-        <div id="affiliation-category">
-        <p class="course-affiliation-category-title">DISCIPLINES</p>
-        <p class="field-of-study">Field of Studies</p>
-        <div class="course-category-grid-container">
-            <a href="category.php?field=Computer and Information Technology" class="course-category-grid-item"><i class="fa-solid fa-microchip" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Computer and Information Technology</a>
-            <a href="category.php?field=Engineering" class="course-category-grid-item"><i class="fa-solid fa-helmet-safety" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Engineering</a>
-            <a href="category.php?field=Management" class="course-category-grid-item"><i class="fa-solid fa-people-group" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Management</a>
-            <a href="category.php?field=Science and Technology" class="course-category-grid-item"><i class="fa-solid fa-microscope" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Science and Technology</a>
-            <a href="category.php?field=Humanities and Social Sciences" class="course-category-grid-item"><i class="fa-solid fa-people-roof" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Humanities and Social Sciences</a>
-            <a href="category.php?field=Agriculture, Forestry and Animal Sciences" class="course-category-grid-item"><i class="fa-solid fa-tree" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Agriculture, Forestry and Animal Sciences</a>
-            <a href="category.php?field=Health Professional Education" class="course-category-grid-item"><i class="fa-solid fa-suitcase-medical" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Health Professional Education</a>
-            <!-- <a href="category.php?field=Education" class="course-category-grid-item"><i class="fa-solid fa-person-chalkboard" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Education</a> -->
-            <a href="category.php?field=Law" class="course-category-grid-item"><i class="fa-solid fa-scale-balanced" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Law</a>
-        </div>
-        </div>
-    </div>
-
-    <div class="mixed-category-background" id="universities" style="display: none;">
         <div id="affiliation-category">
         <p class="affiliation-category-title">UNIVERSITIES</p>
         <div class="category-grid-container">
@@ -232,6 +187,41 @@
             <a href="category.php?affiliation=PU" class="category-grid-item"><img src="Images/pu-logo.png" class="board-logo"><br><br>Pokhara University</a>
             <a href="category.php?affiliation=International" class="category-grid-item"><img src="Images/international-logo.jpg" class="board-logo international"><br><br>International</a>
         </div>
+        </div>
+    </div>
+
+    <!-- Courses -->
+
+    <div class="category-background" id="courses" style="display: none;">
+        <p class="course-title">COURSES</p>
+        <div class="course-grid-container">
+        <?php
+            $sql = "SELECT * FROM course_data";
+            $stmt = $conn->query($sql);
+
+            if($stmt->rowCount() > 0) {
+                while ($row = $stmt->fetch()){
+                    echo '<a href="coursedetails.php?courseId=' . $row['courseId'] . '" class="course-grid-item">' . $row['title'] . '</a>';
+                }
+                echo '</div>';
+            }else{
+                echo "No courses found.";
+            }
+        ?>
+
+        <div id="affiliation-category">
+            <p class="course-affiliation-category-title">DISCIPLINES</p>
+            <p class="field-of-study">Field of Studies</p>
+            <div class="course-category-grid-container">
+                <a href="category.php?field=Computer and Information Technology" class="course-category-grid-item"><i class="fa-solid fa-microchip" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Computer and Information Technology</a>
+                <a href="category.php?field=Engineering" class="course-category-grid-item"><i class="fa-solid fa-helmet-safety" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Engineering</a>
+                <a href="category.php?field=Management" class="course-category-grid-item"><i class="fa-solid fa-people-group" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Management</a>
+                <a href="category.php?field=Science and Technology" class="course-category-grid-item"><i class="fa-solid fa-microscope" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Science and Technology</a>
+                <a href="category.php?field=Humanities and Social Sciences" class="course-category-grid-item"><i class="fa-solid fa-people-roof" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Humanities and Social Sciences</a>
+                <a href="category.php?field=Agriculture, Forestry and Animal Sciences" class="course-category-grid-item"><i class="fa-solid fa-tree" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Agriculture, Forestry and Animal Sciences</a>
+                <a href="category.php?field=Health Professional Education" class="course-category-grid-item"><i class="fa-solid fa-suitcase-medical" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Health Professional Education</a>
+                <a href="category.php?field=Law" class="course-category-grid-item"><i class="fa-solid fa-scale-balanced" style="color: #2b2b2b; font-size: 5rem;"></i><br><br>Law</a>
+            </div>
         </div>
     </div>
 
@@ -383,7 +373,7 @@
     </script>
     
     <script>
-        var currentManageTable = document.getElementById("courses");
+        var currentManageTable = document.getElementById("colleges");
 
         function showManageTable(tableId){
             var manageTable = document.getElementById(tableId);
@@ -398,7 +388,7 @@
         }
 
         function hideAllManageTables(){
-            var manageTables = document.getElementsByClassName("colleges");
+            var manageTables = document.getElementsByClassName("courses");
             for(var i = 0; i < manageTables.length; i++){
                 manageTables[i].style.display = "none";
             }

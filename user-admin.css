@@ -512,6 +512,16 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
     color: white
 }
 
+.course-affiliation-category-title{
+    margin: 10vh 0vw 0vh 7vw;
+    color: #082465;
+}
+
+.affiliation-category-title{
+    margin: 10vh 0vw 0vh 7vw;
+    color: #082465;
+}
+
 .admission-college-grid-container{
     position: relative;
     margin-top: -141.5vh;
@@ -524,11 +534,14 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 
 .category-background, .college-category-background, .admission-category-background, .manage-background{
     background-color: #e6e9ef;
-    height: 100vh;
+}
+
+.category-background{
+    height: 177vh;
 }
 
 .college-category-background{
-    height: 150vh;
+    height: 195vh;
 }
 
 .admission-category-background{
@@ -545,15 +558,10 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
     height: 71vh;
 }
 
-.course-affiliation-category-title{
-    margin: -65vh 0vw 0vh 7vw;
-    width: 35%;
-    color: white;
-}
-
 .field-of-study{
-    margin: 1vh 0vw 0vh 7vw;
-    color: white;
+    position: relative;
+    margin: 1.7vh 0vw 0vh 7vw;
+    color: #082465;
 }
 
 .category-grid-container, .course-category-grid-container{
