@@ -156,21 +156,9 @@
         <a href="#top" class="top"><i class="fa-solid fa-arrow-right fa-rotate-270 fa-lg" style="color: black;"></i></a>
     </div>
 
-    <!-- Chatbot -->
-
-    <div>
-        <div class="hamrobot">Hamro Bot</div>
-        <div class="form">
-            <i class="fas fa-user"></i>
-            <p>Hello there, how can I help you?</p>
-        </div>
-        <input class="bot-input" type="text" placeholder="Type something here.." required>
-        <button class="bot-send">Send</button>
-    </div>
-
     <!-- Colleges -->
     
-    <!-- <div class="college-category-background" id="colleges">
+    <div class="college-category-background" id="colleges">
         <p class="college-title">COLLEGES</p>
         <div class="college-grid-container">
             <?php
@@ -200,7 +188,22 @@
             <a href="category.php?affiliation=International" class="category-grid-item"><img src="Images/international-logo.jpg" class="board-logo international"><br><br>International</a>
         </div>
         </div>
-    </div> -->
+
+        <!-- ChatBot -->
+
+        <div class="bot-btn" onclick="toggleChatBot()">
+            <i class="fa-solid fa-message fa-lg" style="color: #000000;"></i>
+        </div>
+    
+        <div class="bot" style="display: none;">
+            <div class="hamrobot">Hamro Bot</div>
+            <div class="form">
+                <p class="msg-header"><i class="fa-solid fa-robot" style="color: #121212; padding-right: 0.5vw;"></i>Hello there, how can I help you?</p>
+            </div>
+            <input class="bot-input" id="bot-input" type="text" placeholder="Type something here.." required>
+            <button class="bot-send" id="bot-send"><i class="fa-solid fa-paper-plane" style="color: #082465"></i></button>
+        </div>
+    </div>
 
     <!-- Courses -->
 
@@ -407,6 +410,41 @@
             currentManageTable = null;
         }
         currentManageTable.style.display = "block";
+    </script>
+
+    <script>
+        function toggleChatBot(){
+            var chatbotContainer = document.querySelector('.bot');
+            var currentDisplay = chatbotContainer.style.display;
+    
+            if(currentDisplay === 'none'){
+                chatbotContainer.style.display = 'block';
+            }else{
+                chatbotContainer.style.display = 'none';
+            }
+        }
+    </script>
+
+    <script>
+        $(document).ready(function(){
+            $("#bot-send").on("click", function(){
+                $value = $("#bot-input").val();
+                $msg = '<p class="user-text">'+ $value +'</p>';
+                $(".form").append($msg);
+                $("#bot-input").val('');
+                
+                $.ajax({
+                    url: 'chat.php',
+                    type: 'POST',
+                    data: 'text='+$value,
+                    success: function(result){
+                        $replay = '<p class="msg-header"><i class="fa-solid fa-robot" style="color: #121212; padding-right: 0.5vw;"></i>'+ result +'</p>';
+                        $(".form").append($replay);
+                        $(".form").scrollTop($(".form")[0].scrollHeight);
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
