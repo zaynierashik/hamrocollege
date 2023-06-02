@@ -156,6 +156,18 @@
         <a href="#top" class="top"><i class="fa-solid fa-arrow-right fa-rotate-270 fa-lg" style="color: black;"></i></a>
     </div>
 
+    <!-- Chatbot -->
+
+    <div>
+    <div class="hamrobot">Hamro Bot</div>
+        <div class="form">
+            <i class="fas fa-user"></i>
+            <p>Hello there, how can I help you?</p>
+        </div>
+        <input class="bot-input" type="text" placeholder="Type something here.." required>
+        <button class="bot-send">Send</button>
+    </div>
+
     <!-- Colleges -->
     
     <div class="college-category-background" id="colleges">
