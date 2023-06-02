@@ -159,7 +159,7 @@
     <!-- Chatbot -->
 
     <div>
-    <div class="hamrobot">Hamro Bot</div>
+        <div class="hamrobot">Hamro Bot</div>
         <div class="form">
             <i class="fas fa-user"></i>
             <p>Hello there, how can I help you?</p>
@@ -170,7 +170,7 @@
 
     <!-- Colleges -->
     
-    <div class="college-category-background" id="colleges">
+    <!-- <div class="college-category-background" id="colleges">
         <p class="college-title">COLLEGES</p>
         <div class="college-grid-container">
             <?php
@@ -200,7 +200,7 @@
             <a href="category.php?affiliation=International" class="category-grid-item"><img src="Images/international-logo.jpg" class="board-logo international"><br><br>International</a>
         </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Courses -->
 
