@@ -152,10 +152,6 @@
     
     <img src="Images/shape1.png" class="shape-one">
 
-    <div class="top hidden">
-        <a href="#top" class="top"><i class="fa-solid fa-arrow-right fa-rotate-270 fa-lg" style="color: black;"></i></a>
-    </div>
-
     <!-- Colleges -->
     
     <div class="college-category-background" id="colleges">
@@ -446,5 +442,6 @@
             });
         });
     </script>
+    
 </body>
 </html>

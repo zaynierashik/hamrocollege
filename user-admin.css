@@ -406,17 +406,18 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 
 .bot-btn{
     position: fixed;
-    margin: 0vh 0vw 0vh 94.5vw; 
-    top: 90.97vh; 
-    cursor: pointer;
-    width: max-content;
-    height: max-content;
-    padding: 1vh 0.7vw;
-    border-radius: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0vh 0vw 0vh 95vw; 
+    top: 92.27vh; 
+    width: 40px;
+    height: 40px;
+    border-radius: 47%;
     z-index: 999;
+    cursor: pointer;
     box-shadow: 0px 0px 7px 0px rgba(163, 158, 163, 1);
     background-color: white;
-    text-align: center;
 }
 
 .bot{
@@ -443,6 +444,22 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
     border-radius: 10px;
     padding: 1vh 0.7vw;
     overflow-y: auto;
+}
+
+.form::-webkit-scrollbar {
+    width: 7px;
+}
+
+.form::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.form::-webkit-scrollbar-thumb {
+    background: #ddd;
+}
+
+.form::-webkit-scrollbar-thumb:hover{
+    background: #ccc;
 }
 
 .msg-header{
