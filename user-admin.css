@@ -475,7 +475,7 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 .user-text{
     position: relative;
     margin: 1.25vh 0vw;
-    right: -2.5vw;
+    right: -2.80vw;
     width: 87%; 
     padding: 1.1vh 0.7vw;
     font-size: 0.825rem;
@@ -487,7 +487,7 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 
 .bot-input{
     position: relative;
-    width: 84%;
+    width: 94%;
     padding: 1.1vh 0.7vw;
     margin: 0.5vh 0 0 0.7vw;
     border: none;
@@ -500,13 +500,12 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 
 .bot-send{
     position: relative;
-    top: 0.40vh;
+    margin: -4.25vh 0vw 0vh 20.25vw; 
     width: max-content;
     border: none;
-    background-color: white;
-    font-size: 1.25rem;
+    background-color: #e6e9ef;
+    font-size: 1.1rem;
     cursor: pointer;
-    margin-right: 0.7vw;
 }
 
 .account-shape-one{

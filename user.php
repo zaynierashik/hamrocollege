@@ -197,7 +197,7 @@
                 <p class="msg-header"><i class="fa-solid fa-robot" style="color: #121212; padding-right: 0.5vw;"></i>Hello there, how can I help you?</p>
             </div>
             <input class="bot-input" id="bot-input" type="text" placeholder="Type something here.." required>
-            <button class="bot-send" id="bot-send"><i class="fa-solid fa-paper-plane" style="color: #082465"></i></button>
+            <button class="bot-send" id="bot-send" style="display: none;"><i class="fa-solid fa-paper-plane" style="color: #082465"></i></button>
         </div>
     </div>
 
@@ -440,6 +440,19 @@
                     }
                 });
             });
+        });
+    </script>
+
+    <script>
+        var botInput = document.getElementById('bot-input');
+        var botSend = document.getElementById('bot-send');
+
+        botInput.addEventListener('input', function(){
+            if(botInput.value.trim() !== ''){
+                botSend.style.display = 'block';
+            }else{
+                botSend.style.display = 'none';
+            }
         });
     </script>
     
