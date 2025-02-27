@@ -56,6 +56,9 @@ class User(models.Model):
     province = models.CharField(max_length=100, choices=PROVINCES, blank=True, null=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
     
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+
     def __str__(self):
         return self.name
     
@@ -111,6 +114,16 @@ class Institution(models.Model):
         ('purbanchal', 'Purbanchal University'),
         ('foreign', 'Foreign University'),
     ]
+
+    PROVINCES = [
+        ('province_1', 'Province No. 1'),
+        ('province_2', 'Province No. 2'),
+        ('bagmati', 'Bagmati Province'),
+        ('gandaki', 'Gandaki Province'),
+        ('lumbini', 'Lumbini Province'),
+        ('karnali', 'Karnali Province'),
+        ('sudurpashchim', 'Sudurpashchim Province'),
+    ]
     
     name = models.CharField(max_length=255, unique=True)
     overview = models.TextField()
@@ -120,6 +133,7 @@ class Institution(models.Model):
     email = models.EmailField(unique=True)
     website = models.URLField(blank=True, null=True)
     address = models.CharField(max_length=255)
+    province = models.CharField(max_length=100, choices=PROVINCES, blank=True, null=True)
     map = models.TextField(blank=True, null=True, help_text="Embed map URL with width value 950 and height value 500.")
     logo = models.ImageField(upload_to=logo_upload_to, blank=True, null=True)
     Cover_Photo = models.ImageField(upload_to=cover_upload_to, blank=True, null=True)
@@ -133,6 +147,9 @@ class Institution(models.Model):
 
     average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.0)
     
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+
     def increment_admission_count(self):
         """Increase admission count if admission period is active."""
         if self.admission:

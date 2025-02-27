@@ -62,6 +62,11 @@ urlpatterns = [
     path('update-course/<int:course_id>/', views.update_course, name='update-course'),
     path('update-admin-profile/<int:id>', views.update_adminprofile, name='update-admin-profile'),
 
+    # Algorithm
+    path('update-location/', views.update_location, name='update_location'),
+    path('update-institution-location/', views.update_institution_location, name='update_institution_location'),
+    path('nearby-institutions/<int:user_id>/<int:radius>/', views.nearby_institutions_view, name='nearby_institutions'),
+
     # Optional for now. Can delete these two urls later
     path('password-setting/', views.password_setting, name='password-setting'),
     path('change-setting/', views.change_setting, name='change-setting'),

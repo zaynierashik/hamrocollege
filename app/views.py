@@ -13,6 +13,8 @@ from django.utils.crypto import get_random_string
 from django.db.models import Count
 from datetime import timedelta
 
+from app.utils import get_nearby_institutions, haversine
+
 # Website
 def index(request):
     if 'user_id' in request.session:
@@ -347,13 +349,17 @@ def institution_login(request):
             messages.error(request, "Invalid password.")
             return render(request, 'institution_authentication.html')
 
-        if institution.status != 'approved':
+        if institution.status == 'not_decided':
             messages.error(request, "Your account is in verification phase.")
+            return render(request, 'institution_authentication.html')
+        
+        if institution.status == 'rejected':
+            messages.error(request, "Your account request has been rejected.")
             return render(request, 'institution_authentication.html')
 
         request.session['institution_id'] = institution.id
         request.session.set_expiry(7200) 
-        return redirect('institution-dashboard')
+        return redirect('institution-profile')
 
     return render(request, 'institution_authentication.html')
 
@@ -418,13 +424,23 @@ def institution_profile(request):
         ('foreign', 'Foreign University'),
     ]
 
+    PROVINCES = [
+        ('province_1', 'Province No. 1'),
+        ('province_2', 'Province No. 2'),
+        ('bagmati', 'Bagmati Province'),
+        ('gandaki', 'Gandaki Province'),
+        ('lumbini', 'Lumbini Province'),
+        ('karnali', 'Karnali Province'),
+        ('sudurpashchim', 'Sudurpashchim Province'),
+    ]
+
     # admin_institution = institution.managed_institution
     admin_institution = Institution.objects.filter(admin=institution).first()
 
     if admin_institution:
-        return render(request, 'institution_profile.html', {'affiliation_choices': AFFILIATION_CHOICES, 'institution': institution, 'admin_institution': admin_institution, 'edit_mode': True})
+        return render(request, 'institution_profile.html', {'affiliation_choices': AFFILIATION_CHOICES, 'provinces': PROVINCES, 'institution': institution, 'admin_institution': admin_institution, 'edit_mode': True})
     else:
-        return render(request, 'institution_profile.html', {'affiliation_choices': AFFILIATION_CHOICES, 'institution': institution, 'edit_mode': False})
+        return render(request, 'institution_profile.html', {'affiliation_choices': AFFILIATION_CHOICES, 'provinces': PROVINCES, 'institution': institution, 'edit_mode': False})
 
 def institutionadmin_profile(request):
     if 'institution_id' not in request.session:
@@ -471,10 +487,11 @@ def add_institution(request):
         email = request.POST.get('email')
         website = request.POST.get('website')
         address = request.POST.get('address')
+        province = request.POST.get('province')
         map = request.POST.get('map')
         logo = request.FILES.get('file-upload')
 
-        institution = Institution(name=name, affiliation=affiliation, Foreign_University_Name=foreign_university_name, program=program, overview=overview, message=message, phone=phone, email=email, website=website, address=address, map=map, logo=logo, admin=institution)
+        institution = Institution(name=name, affiliation=affiliation, Foreign_University_Name=foreign_university_name, program=program, overview=overview, message=message, phone=phone, email=email, website=website, address=address, province=province, map=map, logo=logo, admin=institution)
         institution.save()
         messages.success(request, 'Institution added successfully.')
 
@@ -502,6 +519,11 @@ def update_institution(request, institution_id):
         institution.phone = request.POST.get('phone')
         institution.website = request.POST.get('website')
         institution.address = request.POST.get('address')
+
+        province = request.POST.get('province')
+        if province:
+            institution.province = province
+
         institution.overview = request.POST.get('overview')
         institution.message = request.POST.get('message')
         institution.program = request.POST.get('program')
@@ -744,7 +766,7 @@ def user(request):
     return render(request, 'user.html', {'users': users})
 
 def institution(request):
-    institutions = Institution.objects.all().select_related('admin').order_by('-id')
+    institutions = InstitutionAdmin.objects.all().order_by('-id')
     return render(request, 'institution.html', {'institutions': institutions})
 
 def course(request):
@@ -870,6 +892,8 @@ def feedback(request):
     feedbacks = Feedback.objects.all().order_by('-id')
     return render(request, 'feedback.html', {'feedbacks': feedbacks})
 
+# Algorithm
+# Time Decay Ranking
 def get_trending_institutions():
     """Fetch institutions with the most views in the last 7 days."""
     last_week = now() - timedelta(days=7)
@@ -879,6 +903,85 @@ def get_trending_institutions():
     ).order_by('-recent_views')
 
     return trending_institutions
+
+# Haversine Formula
+def nearby_institutions_view(request, user_id, radius=50):
+    user = get_object_or_404(User, id=user_id)
+    institutions = get_nearby_institutions(user, radius_km=radius)
+    
+    data = [{
+        "name": inst.name, 
+        "address": inst.address, 
+        "distance": haversine(user.latitude, user.longitude, inst.latitude, inst.longitude)
+    } for inst in institutions]
+
+    return JsonResponse({"nearby_institutions": data})
+
+# User coordinates
+@csrf_exempt  # Disable CSRF for now (use authentication in production)
+def update_location(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            print("Received data:", data)  # Debugging: Check if user_id is received
+
+            latitude = data.get("latitude")
+            longitude = data.get("longitude")
+            user_id = data.get("user_id")  # Get user_id from request body
+
+            if not latitude or not longitude or not user_id:
+                return JsonResponse({"error": "Latitude, longitude, and user_id are required"}, status=400)
+
+            # Fetch the user from the database
+            try:
+                user = User.objects.get(id=user_id)
+            except User.DoesNotExist:
+                return JsonResponse({"error": "User not found"}, status=404)
+
+            # Update user location
+            user.latitude = latitude
+            user.longitude = longitude
+            user.save()
+
+            print(f"Updated user {user_id} -> Lat: {latitude}, Lon: {longitude}")  # Debugging
+            return JsonResponse({"message": "Location updated successfully"})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+# Institution coordinates
+@csrf_exempt  # Disable CSRF for testing (use proper authentication in production)
+def update_institution_location(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            institution_id = data.get("institution_id")
+            admin_id = data.get("admin_id")
+            latitude = data.get("latitude")
+            longitude = data.get("longitude")
+
+            if not institution_id or not admin_id or not latitude or not longitude:
+                return JsonResponse({"error": "Institution ID, Admin ID, latitude, and longitude are required"}, status=400)
+
+            # Fetch the institution and the admin
+            institution = get_object_or_404(Institution, id=institution_id)
+            admin = get_object_or_404(InstitutionAdmin, id=admin_id)
+
+            # Ensure the institution belongs to the given admin
+            if institution.admin != admin:
+                return JsonResponse({"error": "You do not have permission to update this institution's location"}, status=403)
+
+            # Update institution location
+            institution.latitude = latitude
+            institution.longitude = longitude
+            institution.save()
+
+            return JsonResponse({"message": "Institution location updated successfully"})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
 
 # Ajax
 # Update the status of an institution admin account

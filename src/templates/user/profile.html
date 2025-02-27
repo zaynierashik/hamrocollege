@@ -43,10 +43,19 @@
                                                     <p class="text-sm font-medium">Phone: <span class="text-gray-500">{{ user.phone }}</span></p>
                                                 </div>
                                     
-                                                <div class="mt-12">
-                                                    <a href="{% url 'password-setting' %}" class="inline-flex items-center justify-center px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-3xl text-sm">
-                                                        Change Password
-                                                    </a>
+                                                <div class="grid grid-cols-2 mt-12">
+                                                    <div>
+                                                        <a href="{% url 'password-setting' %}" class="inline-flex items-center justify-center px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-3xl text-sm">
+                                                            Change Password
+                                                        </a>
+                                                    </div>
+
+                                                    <div class="flex justify-end">
+                                                        <button onclick="getLocation()" class="p-2 rounded-full text-white bg-blue-600 hover:bg-blue-700">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-current-location size-5"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 1a1 1 0 0 1 1 1v1.055a9.004 9.004 0 0 1 7.946 7.945h1.054a1 1 0 0 1 0 2h-1.055a9.004 9.004 0 0 1 -7.944 7.945l-.001 1.055a1 1 0 0 1 -2 0v-1.055a9.004 9.004 0 0 1 -7.945 -7.944l-1.055 -.001a1 1 0 0 1 0 -2h1.055a9.004 9.004 0 0 1 7.945 -7.945v-1.055a1 1 0 0 1 1 -1m0 4a7 7 0 1 0 0 14a7 7 0 0 0 0 -14m0 3a4 4 0 1 1 -4 4l.005 -.2a4 4 0 0 1 3.995 -3.8" /></svg>
+                                                        </button>
+                                                        <p id="location-info" class="hidden"></p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -123,6 +132,67 @@
 			</div>
 		</div>
 	</main>
+
+    <script>
+        // Store user_id in localStorage so JavaScript can access it
+        localStorage.setItem('user_id', "{{ user.id }}");
+    </script>
+    
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        let latitude = position.coords.latitude;
+                        let longitude = position.coords.longitude;
+                        
+                        document.getElementById("location-info").innerHTML = `Latitude: ${latitude}, Longitude: ${longitude}`;
+
+                        // Send to backend
+                        sendLocationToServer(latitude, longitude);
+                    },
+                    function (error) {
+                        console.log("Error getting location:", error);
+                        alert("Please enable location services.");
+                    }
+                );
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function sendLocationToServer(lat, lon) {
+            let userId = localStorage.getItem('user_id');  // Retrieve user_id from storage
+
+            if (!userId) {
+                console.error("User ID not found in localStorage");
+                return;
+            }
+
+            fetch('/update-location/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken(),
+                },
+                body: JSON.stringify({ 
+                    latitude: lat, 
+                    longitude: lon, 
+                    user_id: userId  // Send user_id in request
+                })
+            })
+            .then(response => response.json())
+            .then(data => console.log("Location updated:", data))
+            .catch(error => console.error("Error:", error));
+        }
+
+        // Function to get CSRF token from cookies (Django users)
+        function getCSRFToken() {
+            return document.cookie.split('; ')
+                .find(row => row.startsWith('csrftoken'))
+                ?.split('=')[1];
+        }
+    </script>
 
 	<script src="{% static 'js/script.js' %}"></script>
 	<script src="{% static 'libs/jquery/dist/jquery.min.js' %} "></script>
