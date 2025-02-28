@@ -12,9 +12,9 @@ def haversine(lat1, lon1, lat2, lon2):
     return R * c  # Distance in km
 
 def get_nearby_institutions(user, radius_km=50):
-    """Return institutions within a given radius (default 50 km) of the user."""
+    """Return institutions within a given radius (default 50 km) of the user with distances."""
     if not user.latitude or not user.longitude:
-        return Institution.objects.none()  # No location set for user
+        return []  # No location set for user
     
     institutions = Institution.objects.all()
     nearby = []
@@ -23,12 +23,12 @@ def get_nearby_institutions(user, radius_km=50):
         if institution.latitude and institution.longitude:
             distance = haversine(user.latitude, user.longitude, institution.latitude, institution.longitude)
             if distance <= radius_km:
-                nearby.append((institution, distance))
+                nearby.append({'institution': institution, 'distance': round(distance, 2)})  # Round to 2 decimal places
     
     # Sort by nearest distance
-    nearby.sort(key=lambda x: x[1])
+    nearby.sort(key=lambda x: x['distance'])
     
-    return [institution[0] for institution in nearby]
+    return nearby
 
 def filter_institutions_by_province(user):
     """Return institutions in the same province as the user."""

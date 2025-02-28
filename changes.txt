@@ -2,8 +2,11 @@
 2. Pagination for tables - Doing it later
 3. Filtering in tables
 4. Put a field of study, university board category filter or section
-5. Institution registration status should be mailed to the respective admin email [Status updating is not working]
+5. Institution registration status should be mailed to the respective admin email 
+    [Status updating sometimes does not work due to jquery API - no need to work on]
 6. Search in homepage should work
+7. The content entry should be more customizable like MS-Word
+8. Blog Section?
 
 In Future:
 1. Algorithm

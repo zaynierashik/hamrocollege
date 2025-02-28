@@ -857,6 +857,10 @@ select {
   right: -5rem;
 }
 
+.-right-24 {
+  right: -6rem;
+}
+
 .-right-28 {
   right: -7rem;
 }
@@ -865,12 +869,20 @@ select {
   right: -8rem;
 }
 
+.-right-44 {
+  right: -11rem;
+}
+
 .-right-5 {
   right: -1.25rem;
 }
 
 .-right-\[5px\] {
   right: -5px;
+}
+
+.-top-10 {
+  top: -2.5rem;
 }
 
 .-top-12 {
@@ -1087,30 +1099,6 @@ select {
 
 .top-full {
   top: 100%;
-}
-
-.-top-10 {
-  top: -2.5rem;
-}
-
-.-right-44 {
-  right: -11rem;
-}
-
-.-right-24 {
-  right: -6rem;
-}
-
-.-right-\[80px\] {
-  right: -80px;
-}
-
-.-right-\[100px\] {
-  right: -100px;
-}
-
-.-right-\[96px\] {
-  right: -96px;
 }
 
 .isolate {
@@ -1998,6 +1986,10 @@ select {
   width: 8rem;
 }
 
+.w-36 {
+  width: 9rem;
+}
+
 .w-4 {
   width: 1rem;
 }
@@ -2122,10 +2114,6 @@ select {
 
 .w-screen {
   width: 100vw;
-}
-
-.w-36 {
-  width: 9rem;
 }
 
 .min-w-32 {
@@ -5618,6 +5606,10 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 
   .sm\:grid-cols-1 {
     grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  .sm\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .sm\:flex-row-reverse {

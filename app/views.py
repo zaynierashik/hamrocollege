@@ -191,8 +191,13 @@ def institutions(request):
     if 'user_id' not in request.session:
         return redirect('authentication')
     
+    user_id = request.session.get('user_id')
+    user = User.objects.get(id=user_id)
+
     institutions = Institution.objects.all().order_by('name')
-    return render(request, 'institutions.html', {'institutions': institutions})
+    nearby_institutions = get_nearby_institutions(user, radius_km=50)
+
+    return render(request, 'institutions.html', {'institutions': institutions, 'nearby_institutions': nearby_institutions})
 
 def courses(request):
     courses = Course.objects.all().order_by('name')
@@ -917,13 +922,12 @@ def nearby_institutions_view(request, user_id, radius=50):
 
     return JsonResponse({"nearby_institutions": data})
 
-# User coordinates
-@csrf_exempt  # Disable CSRF for now (use authentication in production)
+# Update user coordinates
+@csrf_exempt
 def update_location(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
-            print("Received data:", data)  # Debugging: Check if user_id is received
 
             latitude = data.get("latitude")
             longitude = data.get("longitude")
@@ -932,26 +936,23 @@ def update_location(request):
             if not latitude or not longitude or not user_id:
                 return JsonResponse({"error": "Latitude, longitude, and user_id are required"}, status=400)
 
-            # Fetch the user from the database
             try:
                 user = User.objects.get(id=user_id)
             except User.DoesNotExist:
                 return JsonResponse({"error": "User not found"}, status=404)
 
-            # Update user location
             user.latitude = latitude
             user.longitude = longitude
             user.save()
 
-            print(f"Updated user {user_id} -> Lat: {latitude}, Lon: {longitude}")  # Debugging
             return JsonResponse({"message": "Location updated successfully"})
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
 
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
-# Institution coordinates
-@csrf_exempt  # Disable CSRF for testing (use proper authentication in production)
+# Update institution coordinates
+@csrf_exempt
 def update_institution_location(request):
     if request.method == "POST":
         try:
@@ -964,7 +965,6 @@ def update_institution_location(request):
             if not institution_id or not admin_id or not latitude or not longitude:
                 return JsonResponse({"error": "Institution ID, Admin ID, latitude, and longitude are required"}, status=400)
 
-            # Fetch the institution and the admin
             institution = get_object_or_404(Institution, id=institution_id)
             admin = get_object_or_404(InstitutionAdmin, id=admin_id)
 
@@ -972,7 +972,6 @@ def update_institution_location(request):
             if institution.admin != admin:
                 return JsonResponse({"error": "You do not have permission to update this institution's location"}, status=403)
 
-            # Update institution location
             institution.latitude = latitude
             institution.longitude = longitude
             institution.save()
