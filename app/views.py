@@ -94,6 +94,10 @@ def about_us(request):
     feedbacks = Feedback.objects.filter(status='show').order_by('?')[:5]
     return render(request, 'about.html', {'feedbacks': feedbacks})
 
+def all_institutions(request):
+    institutions = Institution.objects.all().order_by('name')
+    return render(request, 'all_institution.html', {'institutions': institutions})
+
 def institution_details(request, id):
     try:
         institution = Institution.objects.get(id=id)

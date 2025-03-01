@@ -30,3 +30,4 @@ Problems/Update:
 
 Algorithm Implemented
 1. Time Decay Ranking - For ranking most viewed institutions
+2. 

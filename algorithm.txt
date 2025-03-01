@@ -5,6 +5,5 @@
  - Use TF-IDF or cosine similarity to match users with similar institutions/courses.
  - Show "Recommended Institutions" or "Courses You May Like."
 
-2. Location-Based Recommendations [Being Done]
- - Suggest institutions close to the user’s location.
+2. Location-Based Recommendations [Being Done - Province based is remaining]
  - Filter institutions based on province or a given radius (e.g., Haversine formula for geo-distance).

@@ -29,9 +29,3 @@ def get_nearby_institutions(user, radius_km=50):
     nearby.sort(key=lambda x: x['distance'])
     
     return nearby
-
-def filter_institutions_by_province(user):
-    """Return institutions in the same province as the user."""
-    if not user.province:
-        return Institution.objects.none()
-    return Institution.objects.filter(province=user.province)

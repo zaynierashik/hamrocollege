@@ -17,12 +17,8 @@
 			<nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
 				<div class="flex lg:flex-1">
 					<a href="{% url 'index' %}" class="-m-1.5">
-						<span class="sr-only">Your Company</span>
+						<span class="sr-only">Hamrocollege</span>
 						<img src="{% static 'images/logos/logo-light.png' %}" class="h-11 w-auto block dark:hidden" alt="Gurkha Cyber Force Light Logo" />
-					</a>
-					<a href="{% url 'index' %}" class="-m-1.5">
-						<span class="sr-only">Your Company</span>
-						<img src="{% static 'images/logos/logo-dark.png' %}" class="h-11 w-auto hidden dark:block" alt="Gurkha Cyber Force Dark Logo" />
 					</a>
 				</div>
 		
@@ -88,18 +84,7 @@
 		<div class="relative">
 			<video src="{% static 'images/background/index-bg.mp4' %}" autoplay loop></video>
 			<div class="absolute inset-0 -z-10 bg-index bg-cover opacity-5" aria-hidden="true"></div>
-			<!-- <div class="relative isolate px-6 mt-[81px] lg:px-8">
-				<div class="mx-auto max-w-3xl py-32 sm:py-48 lg:py-64">
-					<div class="text-center">
-						<h1 class="text-balance text-5xl font-semibold tracking-tight text-gray-900 sm:text-4xl">Explore. Enroll.</h1>
-						<p class="mt-5 text-pretty text-lg font-medium text-gray-500 sm:text-base/8">Searching for colleges to expand your study? Explore some of the best colleges around you.</p>
-						<div class="mt-10">
-							<a href="#" class="rounded-md bg-blue-400 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get started</a>
-						</div>
-					</div>
-				</div>
-			</div> -->
-
+			
 			<!-- About -->
 			<section class="relative py-11" id="about">
 				<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-4 relative">
@@ -156,7 +141,7 @@
 						</div>
 					</div>
 
-					<div class="relative flex justify-center mt-32">
+					<!-- <div class="relative flex justify-center mt-32">
 						<div class="relative w-96 transition-all duration-500 focus-within:w-full">
 							<input name="search" class="text-center text-sm rounded-xl shadow-lg border-gray-300 px-10 py-3.5 2 w-full transition-all outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500" placeholder="Search for institutions and courses ..."/>
 							<div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
@@ -165,12 +150,12 @@
 								</svg>                                                                               
 							</div>
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</section>
 
 			<!-- Trending Institutions -->
-			<section class="mt-20 py-11" id="institutions">
+			<section class="mt-44 py-11" id="institutions">
 				<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div class="w-full mb-8 text-center">
 						<h2 class="text-pretty text-lg font-medium tracking-tight text-primary-text">Most Viewed<span class="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-tr from-indigo-600 to-violet-600"> Institutions</span></h2>
@@ -197,7 +182,7 @@
 						{% endfor %}
 
 						<div class="flex justify-center items-center">
-							<a href="{% url 'institutions' %}" class="flex justify-center gap-1 items-center py-2 pl-4 pr-2 text-sm cursor-pointer bg-gray-50 backdrop-blur-md lg:font-medium isolation-auto border-gray-50 before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-[#111827] hover:text-white text-gray-800 before:-z-10 before:aspect-square before:hover:scale-150 before:hover:duration-700 relative z-10 overflow-hidden border-2 rounded-full group transition-colors duration-700">
+							<a href="{% url 'all-institutions' %}" class="flex justify-center gap-1 items-center py-2 pl-4 pr-2 text-sm cursor-pointer bg-gray-50 backdrop-blur-md lg:font-medium isolation-auto border-gray-50 before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-[#111827] hover:text-white text-gray-800 before:-z-10 before:aspect-square before:hover:scale-150 before:hover:duration-700 relative z-10 overflow-hidden border-2 rounded-full group transition-colors duration-700">
 								Explore More
 								<svg class="w-7 h-7 justify-end group-hover:rotate-90 group-hover:bg-gray-50 text-gray-50 ease-linear duration-300 rounded-full border border-gray-700 group-hover:border-none p-2 rotate-45" viewBox="0 0 16 19" xmlns="http://www.w3.org/2000/svg">
 									<path class="fill-gray-800 group-hover:fill-gray-800" d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z"></path>
@@ -242,6 +227,7 @@
 			<section class="py-11">
 				<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<h2 class="mb-8 font-manrope font-semibold text-3xl min-[400px]:text-3xl text-black max-lg:text-center flex-grow">Testimonials</h2>
+					
 					<div class="text-justify columns-1 md:columns-2 xl:columns-3 gap-7 lg:mb-10 mb-8">
 						{% for feedback in feedbacks %}
 						<div class="break-inside-avoid mb-8 bg-white p-6 rounded-2xl shadow-md shadow-gray-100 cursor-pointer hover:transform hover:scale-105 transition-transform duration-[800ms]">
