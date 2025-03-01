@@ -95,8 +95,18 @@ def about_us(request):
     return render(request, 'about.html', {'feedbacks': feedbacks})
 
 def all_institutions(request):
+    PROVINCES = [
+        ('province_1', 'Province No. 1'),
+        ('province_2', 'Province No. 2'),
+        ('bagmati', 'Bagmati Province'),
+        ('gandaki', 'Gandaki Province'),
+        ('lumbini', 'Lumbini Province'),
+        ('karnali', 'Karnali Province'),
+        ('sudurpashchim', 'Sudurpashchim Province'),
+    ]
+
     institutions = Institution.objects.all().order_by('name')
-    return render(request, 'all_institution.html', {'institutions': institutions})
+    return render(request, 'all_institution.html', {'institutions': institutions, 'provinces': Institution.PROVINCES})
 
 def institution_details(request, id):
     try:

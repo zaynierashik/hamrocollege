@@ -53,10 +53,20 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Province Filter -->
+                    <div class="flex justify-end mb-4">
+                        <select id="provinceFilter" class="border-gray-300 py-2 px-4 w-56 rounded-xl shadow-md text-sm focus:ring-gray-500 focus:border-gray-500">
+                            <option value="">All Provinces</option>
+                            {% for code, name in provinces %}
+                                <option value="{{ code }}">{{ name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 
                     <div id="institutionsGrid" class="grid lg:grid-cols-3 sm:grid-cols-1 gap-x-5 gap-y-10">
                         {% for institution in institutions %}
-                            <a href="{% url 'institution-details' institution.id %}" class="institution-card min-w-[280px] max-w-96 mx-auto bg-white transform transition-all duration-[800ms] hover:translate-x-2 hover:-translate-y-2 hover:shadow-lg shadow-md shadow-gray-100 rounded-2xl">
+                            <a href="{% url 'institution-details' institution.id %}"  data-province="{{ institution.province }}" class="institution-card min-w-[280px] max-w-96 mx-auto bg-white transform transition-all duration-[800ms] hover:translate-x-2 hover:-translate-y-2 hover:shadow-lg shadow-md shadow-gray-100 rounded-2xl">
                                 <div class="w-full max-w-sm">
                                     <img src="{% if institution.Cover_Photo %}{{ institution.Cover_Photo.url }}{% else %}{{ 'default-cover.jpg' }}{% endif %}" alt="cream image" class="min-h-[100px] rounded-t-xl object-cover">
                                 </div>
@@ -91,8 +101,25 @@
                     </div>
                 </div>
             </div>
-		</div>
+		</main>
 	</div>
+
+    <script>
+        document.getElementById("provinceFilter").addEventListener("change", function() {
+            let selectedProvince = this.value;
+            let institutions = document.querySelectorAll(".institution-card");
+    
+            institutions.forEach(institution => {
+                let institutionProvince = institution.getAttribute("data-province");
+    
+                if (selectedProvince === "" || institutionProvince === selectedProvince) {
+                    institution.style.display = "block";
+                } else {
+                    institution.style.display = "none";
+                }
+            });
+        });
+    </script>
 
     <script>
         function filterInstitutions() {
