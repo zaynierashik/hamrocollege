@@ -1004,8 +1004,12 @@ def update_status(request, institution_id):
         status = request.POST.get('status')
         try:
             institution = InstitutionAdmin.objects.get(id=institution_id)
-            institution.status = status
-            institution.save()
+            
+            if institution.status != status:  # Check if status has changed
+                institution.status = status
+                institution.save()
+                institution.send_status_notification()  # Send email notification
+
             return JsonResponse({'success': True, 'message': 'Status updated successfully.'})
         except InstitutionAdmin.DoesNotExist:
             return JsonResponse({'success': False, 'message': 'Institution not found.'}, status=404)
@@ -1017,6 +1021,7 @@ def get_courses(request, institution_id):
     course_data = [{'id': course.course.id, 'name': course.course.name} for course in courses]
     return JsonResponse({'courses': course_data})
 
+# Forget password
 def password_setting(request):
     return render(request, 'request_otp.html')
 
@@ -1041,7 +1046,7 @@ def send_otp(email):
 
         send_mail(
             'Your OTP for password change',
-            f'Your OTP to change your password is: {otp}',
+            f'Your OTP to change the password is: {otp}',
             'zaynierashik@gmail.com',  # Replace with your own email
             [email],
             fail_silently=False,

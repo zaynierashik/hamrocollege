@@ -2,11 +2,8 @@
 2. Pagination for tables - Doing it later
 3. Filtering in tables
 4. Put a field of study, university board category filter or section
-5. Institution registration status should be mailed to the respective admin email 
-    [Status updating sometimes does not work due to jquery API - no need to work on]
-6. Search in homepage should work
-7. The content entry should be more customizable like MS-Word
-8. Blog Section?
+5. Search in homepage should work
+6. The content entry should be more customizable like MS-Word
 
 In Future:
 1. Algorithm
@@ -30,4 +27,4 @@ Problems/Update:
 
 Algorithm Implemented
 1. Time Decay Ranking - For ranking most viewed institutions
-2. 
+2. Location Based Recommendation [Haversine Algorithm] and Filtering - For showing nearby institutions via coordinates and province

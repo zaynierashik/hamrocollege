@@ -2,6 +2,8 @@ import os
 
 from django.db import models
 from django.db.models import Avg
+from django.core.mail import send_mail
+from django.conf import settings
 from django.utils.timezone import now
 from django.contrib.auth.hashers import make_password
 
@@ -83,6 +85,34 @@ class InstitutionAdmin(models.Model):
     
     def __str__(self):
         return self.name
+    
+    def send_status_notification(self):
+        """Send email notification when the status changes via Brevo SMTP."""
+        subject = "Update on Institution Registration Status"
+        message = f"""
+        Dear {self.name},
+
+        Your institution registration status has been {self.status()}.
+
+        If you have any questions, feel free to reach out.
+
+        Regards,
+        Hamrocollege Team
+        """
+
+        try:
+            send_mail(
+                subject,  # Email subject
+                message,  # Email message
+                settings.DEFAULT_FROM_EMAIL,
+                [self.email],  # To email
+                fail_silently=False,  # Set to False to capture any errors
+            )
+            print("Status notification sent successfully")
+            return True
+        except Exception as e:
+            print("Error sending status notification:", e)
+            return False
     
     def save(self, *args, **kwargs):
         # Hash the password before saving if it's not already hashed
