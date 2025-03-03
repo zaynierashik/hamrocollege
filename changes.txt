@@ -1,9 +1,7 @@
 1. Assign features to admin and staff role - Doing it later
 2. Pagination for tables - Doing it later
 3. Filtering in tables
-4. Put a field of study, university board category filter or section
-5. Search in homepage should work
-6. The content entry should be more customizable like MS-Word
+4. The content entry should be more customizable like MS-Word
 
 In Future:
 1. Algorithm

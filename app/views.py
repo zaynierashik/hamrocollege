@@ -208,10 +208,20 @@ def institutions(request):
     user_id = request.session.get('user_id')
     user = User.objects.get(id=user_id)
 
+    PROVINCES = [
+        ('province_1', 'Province No. 1'),
+        ('province_2', 'Province No. 2'),
+        ('bagmati', 'Bagmati Province'),
+        ('gandaki', 'Gandaki Province'),
+        ('lumbini', 'Lumbini Province'),
+        ('karnali', 'Karnali Province'),
+        ('sudurpashchim', 'Sudurpashchim Province'),
+    ]
+
     institutions = Institution.objects.all().order_by('name')
     nearby_institutions = get_nearby_institutions(user, radius_km=50)
 
-    return render(request, 'institutions.html', {'institutions': institutions, 'nearby_institutions': nearby_institutions})
+    return render(request, 'institutions.html', {'provinces': Institution.PROVINCES, 'institutions': institutions, 'nearby_institutions': nearby_institutions})
 
 def courses(request):
     courses = Course.objects.all().order_by('name')

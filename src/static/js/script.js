@@ -35,6 +35,35 @@ function toggleForeignUniversityField() {
     }
 }
 
+function filterInstitutions() {
+    const searchInput = document.getElementById("searchInput").value.toLowerCase();
+    const institutionCards = document.querySelectorAll(".institution-card");
+
+    institutionCards.forEach(card => {
+        const institutionName = card.querySelector("h6.font-medium").textContent.toLowerCase();
+        if (institutionName.includes(searchInput)) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+
+document.getElementById("provinceFilter").addEventListener("change", function() {
+    let selectedProvince = this.value;
+    let institutions = document.querySelectorAll(".institution-card");
+
+    institutions.forEach(institution => {
+        let institutionProvince = institution.getAttribute("data-province");
+
+        if (selectedProvince === "" || institutionProvince === selectedProvince) {
+            institution.style.display = "block";
+        } else {
+            institution.style.display = "none";
+        }
+    });
+});
+
 // Call this function initially to check the current value and show/hide the field
 document.addEventListener('DOMContentLoaded', function () {
     toggleForeignUniversityField();
