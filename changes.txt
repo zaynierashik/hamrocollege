@@ -1,27 +1,19 @@
-1. Assign features to admin and staff role - Doing it later
-2. Pagination for tables - Doing it later
-3. Filtering in tables
-4. The content entry should be more customizable like MS-Word
+1. Pagination for tables - Doing it later
+2. Filtering in tables
 
 In Future:
 1. Algorithm
 2. Chatbot done for now but not dynamic
-3. Dynamic notifications in all actors portal
 
 Problems/Update:
-1. Password visibility is not working in admin login
-2. Active highlight not working for system users
-3. Admin logout is not working
-4. What if an email is same in all models for forget password: SuperAdmin, User, and InstitutionAdmin
-5. Forgot password done but make it in change password in setting for actors
-6. Sidebar active highlight not working for institution and user
-7. Search feature in admin tables
-8. Error and success message in admission form, institution course form, user profile
-9. The last admission count is not updating with current one when reseting
-10. Graphs is not showing
-11. Check responsiveness
-12. Without an admin to manage an institution, accessing the institution dashboard shows error
-13. The institution table in superadmin only shows after the institution is filled up. It should rather show at first
+1. What if an email is same in all models for forget password: SuperAdmin, User, and InstitutionAdmin
+2. Forgot password done but make it in change password in setting for actors
+3. Sidebar active highlight not working for institution and user
+4. Error and success message in admission form, institution course form, user profile
+5. The last admission count is not updating with current one when resetting
+6. Graphs is not showing
+7. Without an admin to manage an institution, accessing the institution dashboard shows error
+8. The institution table in superadmin only shows after the institution is filled up. It should rather show at first
 
 Algorithm Implemented
 1. Time Decay Ranking - For ranking most viewed institutions

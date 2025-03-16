@@ -509,7 +509,6 @@ def add_institution(request):
         name = request.POST.get('name')
         affiliation = request.POST.get('affiliation')
         foreign_university_name = request.POST.get('foreign_university_name')
-        program = request.POST.get('program')
         overview = request.POST.get('overview')
         message = request.POST.get('message')
         phone = request.POST.get('phone')
@@ -520,7 +519,7 @@ def add_institution(request):
         map = request.POST.get('map')
         logo = request.FILES.get('file-upload')
 
-        institution = Institution(name=name, affiliation=affiliation, Foreign_University_Name=foreign_university_name, program=program, overview=overview, message=message, phone=phone, email=email, website=website, address=address, province=province, map=map, logo=logo, admin=institution)
+        institution = Institution(name=name, affiliation=affiliation, Foreign_University_Name=foreign_university_name, overview=overview, message=message, phone=phone, email=email, website=website, address=address, province=province, map=map, logo=logo, admin=institution)
         institution.save()
         messages.success(request, 'Institution added successfully.')
 
@@ -555,7 +554,6 @@ def update_institution(request, institution_id):
 
         institution.overview = request.POST.get('overview')
         institution.message = request.POST.get('message')
-        institution.program = request.POST.get('program')
         institution.map = request.POST.get('map')
         institution.save()
 
@@ -738,9 +736,11 @@ def admin_signup(request):
     return render(request, "system_user.html")
 
 def admin_logout(request):
+    # Check if the admin is logged in
     if 'admin_id' in request.session:
         del request.session['admin_id']
     
+    # Redirect to the admin authentication page after logging out
     return redirect('admin-authentication')
 
 def dashboard(request):
@@ -780,6 +780,17 @@ def update_adminprofile(request, id):
     return redirect('admin-profile')
 
 def system_user(request):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+
+    try:
+        admin = SuperAdmin.objects.get(id=request.session['admin_id'])
+    except SuperAdmin.DoesNotExist:
+        return redirect('admin_login')
+
+    if admin.role != 'admin':
+        return redirect('dashboard')
+
     ROLES = [
         ('admin', 'Admin'),
         ('staff', 'Staff'),
@@ -787,18 +798,36 @@ def system_user(request):
 
     system_users = SuperAdmin.objects.all().order_by('name')
 
-    context = {'roles':ROLES, 'system_users':system_users}
+    context = {'admin': admin, 'roles': ROLES, 'system_users': system_users}
     return render(request, 'system_user.html', context)
 
 def user(request):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+    
+    admin_id = request.session.get('admin_id')
+    admin = SuperAdmin.objects.get(id=admin_id)
+
     users = User.objects.all().order_by('-id')
-    return render(request, 'user.html', {'users': users})
+    return render(request, 'user.html', {'users': users, 'admin': admin})
 
 def institution(request):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+    
+    admin_id = request.session.get('admin_id')
+    admin = SuperAdmin.objects.get(id=admin_id)
+
     institutions = InstitutionAdmin.objects.all().order_by('-id')
-    return render(request, 'institution.html', {'institutions': institutions})
+    return render(request, 'institution.html', {'institutions': institutions, 'admin': admin})
 
 def course(request):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+    
+    admin_id = request.session.get('admin_id')
+    admin = SuperAdmin.objects.get(id=admin_id)
+
     FIELDS = [
         ('engineering', 'Engineering'),
         ('cit', 'Computer and Information Technology'),
@@ -825,10 +854,16 @@ def course(request):
     courses = Course.objects.all().order_by('-id')
     institutions = Institution.objects.all()
 
-    context = {'fields': FIELDS, 'levels': LEVELS, 'affiliation_choices': AFFILIATION_CHOICES, 'courses': courses, 'institutions': institutions}
+    context = {'admin': admin, 'fields': FIELDS, 'levels': LEVELS, 'affiliation_choices': AFFILIATION_CHOICES, 'courses': courses, 'institutions': institutions}
     return render(request, 'course.html', context)
 
 def add_course(request):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+    
+    admin_id = request.session.get('admin_id')
+    admin = SuperAdmin.objects.get(id=admin_id)
+
     if request.method == "POST":
         name = request.POST.get('name')
         abbreviation = request.POST.get('abbreviation')
@@ -850,9 +885,15 @@ def add_course(request):
         return redirect("course")
 
     institutions = Institution.objects.all()
-    return render(request, "course.html", {"institutions": institutions})
+    return render(request, "course.html", {"institutions": institutions, 'admin': admin})
 
 def edit_course(request, course_id):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+    
+    admin_id = request.session.get('admin_id')
+    admin = SuperAdmin.objects.get(id=admin_id)
+
     course = get_object_or_404(Course, id=course_id)
     institutions = Institution.objects.all()
 
@@ -879,10 +920,16 @@ def edit_course(request, course_id):
         ('foreign', 'Foreign University'),
     ]
 
-    context = {'course': course, 'institutions': institutions, 'fields': FIELDS, 'levels': LEVELS, 'affiliation_choices': AFFILIATION_CHOICES}
+    context = {'admin': admin, 'course': course, 'institutions': institutions, 'fields': FIELDS, 'levels': LEVELS, 'affiliation_choices': AFFILIATION_CHOICES}
     return render(request, 'edit_course.html', context)
 
 def update_course(request, course_id):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+    
+    admin_id = request.session.get('admin_id')
+    admin = SuperAdmin.objects.get(id=admin_id)
+
     course = get_object_or_404(Course, id=course_id)
 
     if request.method == 'POST':
@@ -912,14 +959,22 @@ def update_course(request, course_id):
         messages.success(request, 'Course details updated successfully.')
         return redirect('edit-course', course_id=course.id)
 
-    return render(request, 'edit_course.html', {'course': course})
+    return render(request, 'edit_course.html', {'course': course, 'admin': admin})
 
 def feedback(request):
     if 'admin_id' not in request.session:
         return redirect('admin-authentication')
     
+    try:
+        admin = SuperAdmin.objects.get(id=request.session['admin_id'])
+    except SuperAdmin.DoesNotExist:
+        return redirect('admin_login')
+
+    if admin.role != 'admin':
+        return redirect('dashboard')
+    
     feedbacks = Feedback.objects.all().order_by('-id')
-    return render(request, 'feedback.html', {'feedbacks': feedbacks})
+    return render(request, 'feedback.html', {'feedbacks': feedbacks, 'admin': admin})
 
 # Algorithm
 # Time Decay Ranking

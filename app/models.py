@@ -158,7 +158,6 @@ class Institution(models.Model):
     name = models.CharField(max_length=255, unique=True)
     overview = models.TextField()
     message = models.TextField(blank=True, null=True)
-    program = models.TextField(help_text="List of programs offered, separated by commas.")
     phone = models.CharField(max_length=15)
     email = models.EmailField(unique=True)
     website = models.URLField(blank=True, null=True)

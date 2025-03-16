@@ -9,7 +9,12 @@
     <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
     <link href="{% static 'css/input.css' %}" rel="stylesheet">
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+	<style>
+		#accordion-collapse button[aria-expanded="true"]{
+			background-color: transparent !important;
+		}
+	</style>
 </head>
 <body class="bg-[#FAFAFA] dark:bg-[#121212]">
 	<div class="lg:mx-32">
@@ -144,11 +149,22 @@
 
 							{% if offered_courses %}
 								<h2 class="font-manrope font-bold lg:text-xl text-3xl text-[#121212] mb-4" id="offered-programs">Offered Programs</h2>
-								<ul class="font-medium text-sm text-justify leading-8 bg-[#f2f4f7] text-gray-600 lg:mb-10 mb-8 p-3 rounded-md">
-									{% for offered_course in offered_courses %}
-										<li class="border-b mb-2">{{ offered_course.course }}</li>
-									{% endfor %}
-								</ul>
+								<div class="bg-[#f2f4f7] text-gray-600 lg:mb-10 mb-8 p-3 rounded-md">
+									<div id="accordion-collapse" data-accordion="collapse">
+										{% for offered_course in offered_courses %}
+											<h2 id="accordion-heading-{{ forloop.counter }}">
+												<button type="button" class="flex items-center justify-between w-full font-medium text-sm leading-8 text-gray-600 border-b mb-2 transition-colors duration-200" data-accordion-target="#accordion-body-{{ forloop.counter }}" aria-expanded="false" aria-controls="accordion-body-{{ forloop.counter }}">
+													<span>{{ offered_course.course }}</span>
+												</button>
+											</h2>
+											<div id="accordion-body-{{ forloop.counter }}" class="hidden p-4">
+												<p class="text-sm text-justify leading-8">
+													{{ offered_course.details|default:"No description available." }}
+												</p>
+											</div>
+										{% endfor %}
+									</div>
+								</div>
 							{% endif %}
 
 							{% if gallery_images %}
@@ -310,5 +326,6 @@
 	<script src="{% static 'js/script.js' %}"></script>
 	<script src="{% static 'js/index.js' %}"></script>
 	<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 </body>
 </html>

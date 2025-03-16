@@ -193,7 +193,7 @@
 								<h2 class="font-manrope font-bold lg:text-xl text-3xl text-[#121212] mb-4" id="offering-institutions">Offering Institutions</h2>
 								<ul class="font-medium text-sm text-justify leading-8 bg-[#f2f4f7] text-gray-600 lg:mb-10 mb-8 p-3 rounded-md">
 									{% for offering_institution in offering_institutions %}
-										<li class="border-b mb-2"><a href="{% url 'institution-details' offering_institution.institution.id %}">{{ offering_institution.institution }}</a></li>
+										<li class="border-b mb-2"><a href="{% url 'institution-details' offering_institution.institution.id %}" target="_blank">{{ offering_institution.institution }}</a></li>
 									{% endfor %}
 								</ul>
 							{% endif %}

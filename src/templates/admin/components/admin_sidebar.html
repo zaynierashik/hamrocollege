@@ -35,6 +35,7 @@
                         <span>SECTIONS</span>
                     </li>
 
+                    {% if admin and admin.role == "admin" %}
                     <li class="sidebar-item">
                         <a href="{% url 'system-user' %}" class="sidebar-link gap-3 mb-1 py-3 px-3 rounded-md w-full flex items-center dark:text-gray-400 hover:text-blue-600 hover:bg-blue-500">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
@@ -43,6 +44,7 @@
                             <span>System Users</span>
                         </a>
                     </li>
+                    {% endif %}
 
                     <li class="sidebar-item">
                         <a href="{% url 'user' %}" class="sidebar-link gap-3 mb-1 py-3 px-3 rounded-md w-full flex items-center dark:text-gray-400 hover:text-blue-600 hover:bg-blue-500">
@@ -68,11 +70,13 @@
                         </a>
                     </li>   
 
+                    {% if admin and admin.role == "admin" %}
                     <li class="sidebar-item">
                         <a href="{% url 'feedback' %}" class="sidebar-link gap-3 mb-1 py-3 px-3 rounded-md w-full flex items-center dark:text-gray-400 hover:text-blue-600 hover:bg-blue-500">
                             <i class="ti ti-file-description text-xl"></i><span>Feedback</span>
                         </a>
                     </li> 
+                    {% endif %}
                 </ul>
             </nav>
         </div>
