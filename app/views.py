@@ -15,6 +15,9 @@ from datetime import timedelta
 
 from app.utils import get_nearby_institutions, haversine
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
 # Website
 def index(request):
     if 'user_id' in request.session:
@@ -1232,3 +1235,19 @@ def chatbot_course_details(request, name):
 
 def chat(request):
     return render(request, 'chatbot.html')
+
+# Graphs
+@api_view(['GET'])
+def user_distribution_by_province(request):
+    data = User.objects.values('province').annotate(count=Count('id'))
+    return Response(data)
+
+@api_view(['GET'])
+def institution_status_count(request):
+    data = InstitutionAdmin.objects.values('status').annotate(count=Count('id'))
+    return Response(data)
+
+@api_view(['GET'])
+def feedback_status_count(request):
+    data = Feedback.objects.values('status').annotate(count=Count('id'))
+    return Response(data)

@@ -11,9 +11,8 @@ Problems/Update:
 3. Sidebar active highlight not working for institution and user
 4. Error and success message in admission form, institution course form, user profile
 5. The last admission count is not updating with current one when resetting
-6. Graphs is not showing
-7. Without an admin to manage an institution, accessing the institution dashboard shows error
-8. The institution table in superadmin only shows after the institution is filled up. It should rather show at first
+6. Without an admin to manage an institution, accessing the institution dashboard shows error
+7. The institution table in superadmin only shows after the institution is filled up. It should rather show at first
 
 Algorithm Implemented
 1. Time Decay Ranking - For ranking most viewed institutions

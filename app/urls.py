@@ -90,4 +90,9 @@ urlpatterns = [
     path('api/chatbotcourses/', views.chatbot_courses, name='chatbotcourses'),
     path('api/chatbotcourses/<str:name>/', views.chatbot_course_details, name='chatbot_course_details'),
     path('chat/', views.chat, name='chat'),
+
+    # Graph API
+    path('api/user-distribution/', views.user_distribution_by_province, name='user_distribution'),
+    path('api/institution-status/', views.institution_status_count, name='institution_status'),
+    path('api/feedback-status/', views.feedback_status_count, name='feedback_status'),
 ]
