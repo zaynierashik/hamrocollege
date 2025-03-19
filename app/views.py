@@ -410,6 +410,11 @@ def institution_dashboard(request):
     institution_admin_id = request.session.get('institution_id')
     try:
         institution_admin = InstitutionAdmin.objects.get(id=institution_admin_id)
+        
+        # Check if the institution exists before proceeding
+        if not hasattr(institution_admin, 'managed_institution'):
+            return redirect('institution-profile')
+        
         institution = institution_admin.managed_institution
     except InstitutionAdmin.DoesNotExist:
         return redirect('institution-authentication')
@@ -572,6 +577,11 @@ def programs(request):
     institution_admin_id = request.session.get('institution_id')
     try:
         institution_admin = InstitutionAdmin.objects.get(id=institution_admin_id)
+        
+        # Check if the institution exists before proceeding
+        if not hasattr(institution_admin, 'managed_institution'):
+            return redirect('institution-profile')
+        
         institution = institution_admin.managed_institution
     except InstitutionAdmin.DoesNotExist:
         return redirect('institution-authentication')
@@ -654,7 +664,17 @@ def admission(request):
         return redirect('institution-authentication')
     
     institution_id = request.session.get('institution_id')
-    institution = InstitutionAdmin.objects.get(id=institution_id).managed_institution
+
+    try:
+        institution_admin = InstitutionAdmin.objects.get(id=institution_id)
+
+        # Check if the institution exists before proceeding
+        if not hasattr(institution_admin, 'managed_institution'):
+            return redirect('institution-profile')
+
+        institution = institution_admin.managed_institution
+    except InstitutionAdmin.DoesNotExist:
+        return redirect('institution-authentication')
 
     admissions = Application.objects.filter(institution=institution).order_by('-id')
 
