@@ -1,5 +1,8 @@
 1. Pagination for tables - Doing it later
 2. Filtering in tables
+3. Hide/Show feedback
+4. Placeholder names in fields
+5. Error/Success message showing in some places due to Json
 
 In Future:
 1. Algorithm
@@ -8,10 +11,9 @@ In Future:
 Problems/Update:
 1. What if an email is same in all models for forget password: SuperAdmin, User, and InstitutionAdmin
 2. Forgot password done but make it in change password in setting for actors
-3. Sidebar active highlight not working for institution and user
+3. Sidebar active highlight not working for user
 4. Error and success message in admission form, institution course form, user profile
 5. The last admission count is not updating with current one when resetting
-6. The institution table in superadmin only shows after the institution is filled up. It should rather show at first
 
 Algorithm Implemented
 1. Time Decay Ranking - For ranking most viewed institutions
