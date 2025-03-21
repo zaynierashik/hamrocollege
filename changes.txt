@@ -3,17 +3,15 @@
 3. Hide/Show feedback
 4. Placeholder names in fields
 5. Error/Success message showing in some places due to Json
+6. Application is not submitting in application page for some course
+7. Changes are not updating in admin portal
 
 In Future:
 1. Algorithm
-2. Chatbot done for now but not dynamic
 
 Problems/Update:
-1. What if an email is same in all models for forget password: SuperAdmin, User, and InstitutionAdmin
-2. Forgot password done but make it in change password in setting for actors
-3. Sidebar active highlight not working for user
-4. Error and success message in admission form, institution course form, user profile
-5. The last admission count is not updating with current one when resetting
+1. Error and success message in admission form, institution course form, user profile
+2. The last admission count is not updating with current one when resetting
 
 Algorithm Implemented
 1. Time Decay Ranking - For ranking most viewed institutions

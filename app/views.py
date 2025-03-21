@@ -233,14 +233,18 @@ def courses(request):
 def applications(request):
     if 'user_id' not in request.session:
         return redirect('authentication')
-    
+
     user_id = request.session.get('user_id')
     user = User.objects.get(id=user_id)
 
     institutions = Institution.objects.filter(admission=True).order_by('name')
-    applications = Application.objects.all().order_by('-id')
+    application_list = Application.objects.all().order_by('-id')
 
-    context = {'institutions': institutions, 'applications': applications, 'user': user}
+    paginator = Paginator(application_list, 7)  
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {'institutions': institutions, 'page_obj': page_obj, 'user': user}
     return render(request, 'applications.html', context)
 
 def send_application(request):
@@ -288,7 +292,7 @@ def send_application(request):
         )
         application.save()
 
-        messages.success(request, "Your application has been successfully submitted!")
+        # messages.success(request, "Your application has been successfully submitted!")
         return redirect('applications')  # Redirect to a success page
 
     # If not a POST request, redirect to the application form
@@ -662,13 +666,12 @@ def delete_offered_course(request, course_id):
 def admission(request):
     if 'institution_id' not in request.session:
         return redirect('institution-authentication')
-    
+
     institution_id = request.session.get('institution_id')
 
     try:
         institution_admin = InstitutionAdmin.objects.get(id=institution_id)
 
-        # Check if the institution exists before proceeding
         if not hasattr(institution_admin, 'managed_institution'):
             return redirect('institution-profile')
 
@@ -676,9 +679,13 @@ def admission(request):
     except InstitutionAdmin.DoesNotExist:
         return redirect('institution-authentication')
 
-    admissions = Application.objects.filter(institution=institution).order_by('-id')
+    admissions_list = Application.objects.filter(institution=institution).order_by('-id')
 
-    context = {'institutions': institutions, 'admissions': admissions, 'institution': institution}
+    paginator = Paginator(admissions_list, 7)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {'page_obj': page_obj, 'institution': institution}
     return render(request, 'admission.html', context)
 
 @csrf_exempt

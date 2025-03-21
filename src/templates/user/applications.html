@@ -24,81 +24,127 @@
 
                 <!-- Main Content -->
 				<main class="h-full overflow-y-auto max-w-full pt-[6px]" id="admissions-table">
-					<div class="container full-container py-5 flex flex-col gap-6">
-                        <div class="flex gap-3">
-                            <div class="flex-grow card min-h-[613px]">
-                                <div class="card-body">
-                                    <div class="flex justify-between items-center mb-6">
-                                        <h4 class="text-gray-600 text-lg tracking-wider font-semibold uppercase">Applications</h4>
-                                        <svg id="new-admission" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 cursor-pointer">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                                        </svg>
-                                    </div>
-                                    
-                                    <div class="relative overflow-x-auto">
-                                        <table class="text-left w-full whitespace-nowrap text-sm">
-                                            <thead class="text-gray-700">
-                                                <tr class="font-semibold text-gray-600">
-                                                    <th scope="col" class="p-4">S.N.</th>
-                                                    <th scope="col" class="p-4">Institution</th>
-                                                    <th scope="col" class="p-4">Program</th>
-                                                    <th scope="col" class="p-4">Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {% for application in applications %}
-                                                <tr>
-                                                    <td class="p-4 font-medium text-gray-500">{{ forloop.counter }}</td>
-                                                    <td class="p-4">
-                                                        <span class="font-medium text-gray-500">{{ application.institution }}</span>
-                                                    </td>
-                                                    <td class="p-4">
-                                                        <span class="font-medium text-gray-500">{{ application.program.course }}</span>
-                                                    </td>
-                                                    <td class="p-4">
-                                                        <span class="font-medium text-gray-500">
-                                                            {% if application.status == 'pending' %}
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                                </svg>
-                                                            {% elif application.status == 'accepted' %}
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12" />
-                                                                </svg>
-                                                            {% else %}
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                                </svg>
-                                                            {% endif %}
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                                {% endfor %}
-                                            </tbody>
-                                        </table>
-                                    </div>									
+					<div class="container full-container py-5">
+                        <div class="card min-h-[613px]">
+                            <div class="card-body">
+                                <div class="flex justify-between items-center mb-6">
+                                    <h4 class="text-gray-600 text-lg tracking-wider font-semibold uppercase">Applications</h4>
+                                    <svg id="new-admission" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 cursor-pointer">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                    </svg>
                                 </div>
+                                    
+                                <div class="relative overflow-x-auto">
+                                    <table class="text-left w-full whitespace-nowrap text-sm">
+                                        <thead class="text-gray-700">
+                                            <tr class="font-semibold text-gray-600">
+                                                <th scope="col" class="p-4">S.N.</th>
+                                                <th scope="col" class="p-4">Institution</th>
+                                                <th scope="col" class="p-4">Program</th>
+                                                <th scope="col" class="p-4">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for application in page_obj.object_list %}
+                                            <tr>
+                                                <td class="p-4 font-medium text-gray-500">{{ forloop.counter }}</td>
+                                                <td class="p-4">
+                                                    <span class="font-medium text-gray-500">{{ application.institution }}</span>
+                                                </td>
+                                                <td class="p-4">
+                                                    <span class="font-medium text-gray-500">{{ application.program.course }}</span>
+                                                </td>
+                                                <td class="p-4">
+                                                    <span class="font-medium text-gray-500">
+                                                        {% if application.status == 'pending' %}
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                            </svg>
+                                                        {% elif application.status == 'accepted' %}
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12" />
+                                                            </svg>
+                                                        {% else %}
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                            </svg>
+                                                        {% endif %}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                    {% if page_obj %}
+                                        <div class="pagination-wrapper mt-4">
+                                            <nav class="flex items-center gap-x-1 justify-center" aria-label="Pagination">
+                                                {% if page_obj.has_previous %}
+                                                    <a href="?page={{ page_obj.previous_page_number }}" class="pagination-button" aria-label="Previous">
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m15 18-6-6 6-6"></path>
+                                                        </svg>
+                                                        <span>Previous</span>
+                                                    </a>
+                                                {% else %}
+                                                    <button type="button" class="pagination-button disabled" aria-label="Previous" disabled>
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m15 18-6-6 6-6"></path>
+                                                        </svg>
+                                                        <span>Previous</span>
+                                                    </button>
+                                                {% endif %}
+                                                    
+                                                <div class="flex items-center gap-x-1">
+                                                    {% for page in page_obj.paginator.page_range %}
+                                                        {% if page == page_obj.number %}
+                                                            <button type="button" class="pagination-button active" aria-current="page">{{ page }}</button>
+                                                        {% else %}
+                                                            <a href="?page={{ page }}" class="pagination-button">{{ page }}</a>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                    
+                                                {% if page_obj.has_next %}
+                                                    <a href="?page={{ page_obj.next_page_number }}" class="pagination-button" aria-label="Next">
+                                                        <span>Next</span>
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m9 18 6-6-6-6"></path>
+                                                        </svg>
+                                                    </a>
+                                                {% else %}
+                                                    <button type="button" class="pagination-button disabled" aria-label="Next" disabled>
+                                                        <span>Next</span>
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m9 18 6-6-6-6"></path>
+                                                        </svg>
+                                                    </button>
+                                                {% endif %}
+                                            </nav>
+                                        </div>
+                                    {% endif %}
+                                </div>									
                             </div>
-                        
-                            <div class="card min-h-[613px]">
-                                <div class="card-body">
-                                    <div class="grid gap-5 mb-7">
-                                        <a href="" class="max-w-56 mx-auto">
-                                            <div class="w-full max-w-sm">
-                                                <img src="{% static 'images/banners/islington-ad.png' %}" alt="cream image" class="w-full h-full rounded-md">
-                                            </div>
-                                        </a>
-                                        <a href="" class="max-w-56 mx-auto">
-                                            <div class="w-full max-w-sm">
-                                                <img src="{% static 'images/banners/kathford-ad.jpg' %}" alt="cream image" class="w-full h-full rounded-md">
-                                            </div>
-                                        </a>
-                                        <a href="" class="max-w-56 mx-auto">
-                                            <div class="w-full max-w-sm">
-                                                <img src="{% static 'images/banners/softwarica-ad.jpg' %}" alt="cream image" class="w-full h-full rounded-md">
-                                            </div>
-                                        </a>
-                                    </div>
+                        </div>
+
+                        <div class="card my-7">
+                            <div class="card-body">
+                                <div class="grid grid-cols-3 gap-3">
+                                    <a href="" class="">
+                                        <div class="w-full">
+                                            <img src="{% static 'images/banners/islington-ad.png' %}" alt="cream image" class="w-full rounded-md">
+                                        </div>
+                                    </a>
+                                    <a href="" class="">
+                                        <div class="w-full">
+                                            <img src="{% static 'images/banners/kathford-ad.jpg' %}" alt="cream image" class="w-full rounded-md">
+                                        </div>
+                                    </a>
+                                    <a href="" class="">
+                                        <div class="w-full">
+                                            <img src="{% static 'images/banners/softwarica-ad.jpg' %}" alt="cream image" class="w-full rounded-md">
+                                        </div>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -261,6 +307,7 @@
     </script>
 	
 	<script src="{% static 'js/index.js' %} "></script>
+    <script src="{% static 'libs/jquery/dist/jquery.min.js' %} "></script>
 	<script src="{% static 'js/sidebarmenu.js' %} "></script>
     <script src="{% static 'js/dashboard.js' %} "></script>
 	<script src="{% static 'libs/simplebar/dist/simplebar.min.js' %} "></script>

@@ -111,7 +111,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for admission in admissions %}
+                                            {% for admission in page_obj.object_list %}
                                             <tr>
                                                 <td class="p-4 font-medium text-gray-500">{{ forloop.counter }}</td>
                                                 <td class="p-4">
@@ -141,6 +141,54 @@
                                             {% endfor %}
                                         </tbody>
                                     </table>
+
+                                    {% if page_obj %}
+                                        <div class="pagination-wrapper mt-4">
+                                            <nav class="flex items-center gap-x-1 justify-center" aria-label="Pagination">
+                                                {% if page_obj.has_previous %}
+                                                    <a href="?page={{ page_obj.previous_page_number }}" class="pagination-button" aria-label="Previous">
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m15 18-6-6 6-6"></path>
+                                                        </svg>
+                                                        <span>Previous</span>
+                                                    </a>
+                                                {% else %}
+                                                    <button type="button" class="pagination-button disabled" aria-label="Previous" disabled>
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m15 18-6-6 6-6"></path>
+                                                        </svg>
+                                                        <span>Previous</span>
+                                                    </button>
+                                                {% endif %}
+                                                
+                                                <div class="flex items-center gap-x-1">
+                                                    {% for page in page_obj.paginator.page_range %}
+                                                        {% if page == page_obj.number %}
+                                                            <button type="button" class="pagination-button active" aria-current="page">{{ page }}</button>
+                                                        {% else %}
+                                                            <a href="?page={{ page }}" class="pagination-button">{{ page }}</a>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                
+                                                {% if page_obj.has_next %}
+                                                    <a href="?page={{ page_obj.next_page_number }}" class="pagination-button" aria-label="Next">
+                                                        <span>Next</span>
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m9 18 6-6-6-6"></path>
+                                                        </svg>
+                                                    </a>
+                                                {% else %}
+                                                    <button type="button" class="pagination-button disabled" aria-label="Next" disabled>
+                                                        <span>Next</span>
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m9 18 6-6-6-6"></path>
+                                                        </svg>
+                                                    </button>
+                                                {% endif %}
+                                            </nav>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
