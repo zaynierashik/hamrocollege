@@ -238,7 +238,7 @@ def applications(request):
     user = User.objects.get(id=user_id)
 
     institutions = Institution.objects.filter(admission=True).order_by('name')
-    application_list = Application.objects.all().order_by('-id')
+    application_list = Application.objects.filter(user=user_id).order_by('-id')
 
     paginator = Paginator(application_list, 7)  
     page_number = request.GET.get('page')
@@ -1208,9 +1208,11 @@ def update_application_status(request, application_id):
         if new_status in ['accepted', 'rejected', 'pending']:
             application.status = new_status
             application.save()
-            messages.success(request, f"Application status updated to {new_status.capitalize()}!")
 
-    return redirect('institution-dashboard')
+            if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+                return JsonResponse({"success": True, "status": new_status})
+
+    return redirect('admission')
 
 def reset_admission_count(request, institution_id):
     """Reset admission count for a new academic period."""

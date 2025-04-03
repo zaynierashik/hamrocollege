@@ -81,7 +81,7 @@ urlpatterns = [
     path("toggle-admission/<int:institution_id>/", views.toggle_admission, name="toggle-admission"),
 
     # Test URLs
-    path('update-application/<int:application_id>/', views.update_application_status, name='update-application'),
+    path('update-application-status/<int:application_id>/', views.update_application_status, name='update-application-status'),
     path('reset-admissions/<int:institution_id>/', views.reset_admission_count, name='reset-admissions'),
 
     # ChatBot API

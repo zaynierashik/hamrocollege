@@ -57,7 +57,7 @@
 
                                                 {% if admin and admin.role == "admin" %}
                                                     <td class="p-4">
-                                                        <select name="status" class="status-dropdown rounded text-sm border-none ps-2 pr-8" data-institution-id="{{ institution.id }}">
+                                                        <select name="status" class="status-dropdown cursor-pointer rounded text-sm border-none ps-2 pr-8" data-institution-id="{{ institution.id }}">
                                                             <option value="approved" {% if institution.status == 'approved' %}selected{% endif %}>Approved</option>
                                                             <option value="rejected" {% if institution.status == 'rejected' %}selected{% endif %}>Rejected</option>
                                                             <option value="not_decided" {% if institution.status == 'not_decided' %}selected{% endif %} {% if institution.status != 'not_decided' %}disabled{% endif %}>Not Decided</option>

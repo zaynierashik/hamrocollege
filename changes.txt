@@ -5,6 +5,8 @@
 5. Error/Success message showing in some places due to Json
 6. Application is not submitting in application page for some course
 7. Changes are not updating in admin portal
+8. System users
+9. Program/Course is being combined with each other college one in admission addition
 
 In Future:
 1. Algorithm
