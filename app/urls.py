@@ -43,7 +43,7 @@ urlpatterns = [
     path('update-institution/<int:institution_id>/', views.update_institution, name='update-institution'),
     path('update-offered-course/<int:institution_course_id>/', views.update_offered_course, name='update-offered-course'),
     path('update-institutionadmin-profile/<int:id>', views.update_institutionadminprofile, name='update-institutionadmin-profile'),
-    path("delete-offered-course/<int:course_id>/", views.delete_offered_course, name="delete-offered-course"),
+    path('delete-offered-course/<int:course_id>/', views.delete_offered_course, name='delete-offered-course'),
 
     # Admin
     path('admin-authentication/', views.admin_authentication, name='admin-authentication'),
@@ -57,6 +57,8 @@ urlpatterns = [
     path('institution/', views.institution, name='institution'),
     path('course/', views.course, name='course'),
     path('feedback/', views.feedback, name='feedback'),
+
+    path('delete-system-user/<int:system_user_id>/', views.delete_system_user, name='delete-system-user'),
     
     path('add-course/', views.add_course, name='add-course'),
     path('edit-course/<int:course_id>/', views.edit_course, name='edit-course'),

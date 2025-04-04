@@ -831,6 +831,26 @@ def system_user(request):
     context = {'admin': admin, 'roles': ROLES, 'system_users': system_users}
     return render(request, 'system_user.html', context)
 
+def delete_system_user(request, system_user_id):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+
+    try:
+        admin = SuperAdmin.objects.get(id=request.session['admin_id'])
+    except SuperAdmin.DoesNotExist:
+        return redirect('admin_login')
+
+    if admin.role != 'admin':
+        return redirect('dashboard')
+    
+    if request.method == "POST":
+        system_user = get_object_or_404(SuperAdmin, id=system_user_id)
+        system_user.delete()
+        messages.success(request, "User deleted successfully!")
+        return redirect("system-user")
+
+    return redirect("system-user")
+
 def user(request):
     if 'admin_id' not in request.session:
         return redirect('admin-authentication')
