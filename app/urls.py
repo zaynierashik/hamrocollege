@@ -44,6 +44,8 @@ urlpatterns = [
     path('update-offered-course/<int:institution_course_id>/', views.update_offered_course, name='update-offered-course'),
     path('update-institutionadmin-profile/<int:id>', views.update_institutionadminprofile, name='update-institutionadmin-profile'),
     path('delete-offered-course/<int:course_id>/', views.delete_offered_course, name='delete-offered-course'),
+    path('toggle-admission/<int:institution_id>/', views.toggle_admission, name='toggle-admission'),
+    path('update-application-status/<int:application_id>/', views.update_application_status, name='update-application-status'),
 
     # Admin
     path('admin-authentication/', views.admin_authentication, name='admin-authentication'),
@@ -79,12 +81,7 @@ urlpatterns = [
 
     # Ajax
     path('update-status/<int:institution_id>/', views.update_status, name='update-status'),
-    path('get-courses/<int:institution_id>/', views.get_courses, name='get_courses'),
-    path("toggle-admission/<int:institution_id>/", views.toggle_admission, name="toggle-admission"),
-
-    # Test URLs
-    path('update-application-status/<int:application_id>/', views.update_application_status, name='update-application-status'),
-    path('reset-admissions/<int:institution_id>/', views.reset_admission_count, name='reset-admissions'),
+    path('get-programs/<int:institution_id>/', views.get_programs, name='get-programs'),
 
     # ChatBot API
     path('api/chatbotinstitutions/', views.chatbot_institutions, name='chatbotinstitutions'),

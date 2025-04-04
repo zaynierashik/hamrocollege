@@ -149,6 +149,7 @@ def course_details(request, id):
     except Course.DoesNotExist:
         return render(request, '404.html', {'error': 'Institution not found'})
     
+    
 # User
 def userpage(request):
     if 'user_id' not in request.session:
@@ -335,6 +336,7 @@ def send_feedback(request):
         return redirect('feedbacks')
 
     return render(request, 'feedbacks.html', {'user': user})
+
 
 # Institution
 def institution_authentication(request):
@@ -703,7 +705,24 @@ def toggle_admission(request, institution_id):
             return JsonResponse({"success": False, "error": str(e)})
 
     return JsonResponse({"success": False, "error": "Invalid request method"})
+
+def update_application_status(request, application_id):
+    """Approve or reject an application and track admissions."""
+    application = get_object_or_404(Application, id=application_id)
+
+    if request.method == "POST":
+        new_status = request.POST.get("status")
+
+        if new_status in ['accepted', 'rejected', 'pending']:
+            application.status = new_status
+            application.save()
+
+            if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+                return JsonResponse({"success": True, "status": new_status})
+
+    return redirect('admission')
     
+
 # Admin
 def admin_authentication(request):
     if 'admin_id' in request.session:
@@ -1026,6 +1045,7 @@ def feedback(request):
     feedbacks = Feedback.objects.all().order_by('-id')
     return render(request, 'feedback.html', {'feedbacks': feedbacks, 'admin': admin})
 
+
 # Algorithm
 # Time Decay Ranking
 def get_trending_institutions():
@@ -1111,6 +1131,7 @@ def update_institution_location(request):
 
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
+
 # Ajax
 # Update the status of an institution admin account
 @csrf_exempt
@@ -1130,11 +1151,23 @@ def update_status(request, institution_id):
             return JsonResponse({'success': False, 'message': 'Institution not found.'}, status=404)
     return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=400)
 
-# Pass dynamic courses
-def get_courses(request, institution_id):
-    courses = InstitutionCourse.objects.filter(institution_id=institution_id).select_related('course')
-    course_data = [{'id': course.course.id, 'name': course.course.name} for course in courses]
-    return JsonResponse({'courses': course_data})
+# Pass offered courses by specific college to admission form
+def get_programs(request, institution_id):
+    """Return programs for a specific institution as JSON."""
+    programs = InstitutionCourse.objects.filter(institution_id=institution_id)
+    
+    # Format the data for the response
+    programs_data = [
+        {
+            'id': program.id,
+            'course_name': program.course.name,  # Just the course name
+            'full_name': str(program)  # Keep the full string for backend reference if needed
+        }
+        for program in programs
+    ]
+    
+    return JsonResponse({'programs': programs_data})
+
 
 # Forget password
 def password_setting(request):
@@ -1216,33 +1249,6 @@ def change_password(email, otp, new_password):
     
     return True, "Password changed successfully"
 
-# Test Views
-# Getting application count and resetting admission count
-def update_application_status(request, application_id):
-    """Approve or reject an application and track admissions."""
-    application = get_object_or_404(Application, id=application_id)
-
-    if request.method == "POST":
-        new_status = request.POST.get("status")
-
-        if new_status in ['accepted', 'rejected', 'pending']:
-            application.status = new_status
-            application.save()
-
-            if request.headers.get("X-Requested-With") == "XMLHttpRequest":
-                return JsonResponse({"success": True, "status": new_status})
-
-    return redirect('admission')
-
-def reset_admission_count(request, institution_id):
-    """Reset admission count for a new academic period."""
-    institution = get_object_or_404(Institution, id=institution_id)
-    
-    if request.method == "POST":
-        institution.reset_admissions()
-        messages.success(request, "Admissions count has been reset for the new period.")
-
-    return redirect('institution-dashboard')
 
 # ChatBot
 def chatbot_institutions(request):
@@ -1284,6 +1290,7 @@ def chatbot_course_details(request, name):
 
 def chat(request):
     return render(request, 'chatbot.html')
+
 
 # Graphs
 @api_view(['GET'])

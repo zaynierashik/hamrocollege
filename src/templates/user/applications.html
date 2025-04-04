@@ -286,23 +286,33 @@
     </script>
 
     <script>
-        document.getElementById('institution').addEventListener('change', function() {
-            const institutionId = this.value;
+        document.addEventListener('DOMContentLoaded', function() {
+            const institutionSelect = document.getElementById('institution');
             const programSelect = document.getElementById('program');
-
-            if (institutionId) {
-                fetch(`/get-courses/${institutionId}/`)
-                    .then(response => response.json())
-                    .then(data => {
-                        programSelect.innerHTML = '<option value="" selected>Choose an academic program</option>';
-                        data.courses.forEach(course => {
-                            programSelect.innerHTML += `<option value="${course.id}">${course.name}</option>`;
-                        });
-                    })
-                    .catch(error => console.error('Error fetching courses:', error));
-            } else {
+            
+            institutionSelect.addEventListener('change', function() {
+                const institutionId = this.value;
+                
+                // Clear current options
                 programSelect.innerHTML = '<option value="" selected>Choose an academic program</option>';
-            }
+                
+                if (institutionId) {
+                    // Fetch programs for the selected institution
+                    fetch(`/get-programs/${institutionId}/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            // Add the received programs to the dropdown
+                            data.programs.forEach(program => {
+                                const option = document.createElement('option');
+                                option.value = program.id;
+                                // Display only the course name, not the full string
+                                option.textContent = program.course_name;
+                                programSelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => console.error('Error fetching programs:', error));
+                }
+            });
         });
     </script>
 	
