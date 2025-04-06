@@ -2444,6 +2444,10 @@ select {
   min-width: max-content;
 }
 
+.min-w-\[384px\] {
+  min-width: 384px;
+}
+
 .max-w-12 {
   max-width: 3rem;
 }
@@ -3142,10 +3146,6 @@ select {
 
 .gap-9 {
   gap: 2.25rem;
-}
-
-.gap-\[18px\] {
-  gap: 18px;
 }
 
 .gap-x-0 {
@@ -6813,6 +6813,18 @@ select {
 
 .duration-\[800ms\] {
   transition-duration: 800ms;
+}
+
+.duration-\[1000ms\] {
+  transition-duration: 1000ms;
+}
+
+.duration-\[2000ms\] {
+  transition-duration: 2000ms;
+}
+
+.duration-\[5000ms\] {
+  transition-duration: 5000ms;
 }
 
 .ease-in {

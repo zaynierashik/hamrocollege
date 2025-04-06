@@ -78,6 +78,7 @@ class InstitutionAdmin(models.Model):
     ]
     
     name = models.CharField(max_length=255)
+    phone = models.CharField(max_length=10, unique=True, blank=True, null=True)
     institution = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)

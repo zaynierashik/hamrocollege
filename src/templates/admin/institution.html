@@ -29,20 +29,29 @@
 						<div class="card min-h-[613px]">
                             <div class="card-body">
                                 <h4 class="text-gray-600 text-lg tracking-wider font-semibold mb-6 uppercase">Institutions</h4>
+
+                                <div class="relative w-full mt-7 mb-10">
+                                    <input id="searchInput" name="search" class="text-sm shadow-md border-gray-200 pe-10 py-3 rounded-xl w-full transition-all outline-none focus:ring-0 focus:ring-gray-500 focus:border-gray-500" placeholder="Search for institution name ..." onkeyup="filterInstitution()"/>
+                                    <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+                                        <svg class="size-5 text-gray-500" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" stroke-linejoin="round" stroke-linecap="round"></path>
+                                        </svg>                                                                               
+                                    </div>
+                                </div>
+                                
                                 <div class="relative overflow-x-auto">
                                     <table class="text-left w-full whitespace-nowrap text-sm">
                                         <thead class="text-gray-700">
                                             <tr class="font-semibold text-gray-600">
                                                 <th scope="col" class="p-4">S.N.</th>
-                                                <th scope="col" class="p-4">Name</th>
-                                                <th scope="col" class="p-4">Institution</th>
+                                                <th scope="col" class="p-4">Institution Admin</th>
+                                                <th scope="col" class="p-4">Institution Name</th>
                                                 <th scope="col" class="p-4">Email</th>
                                                 <th scope="col" class="ps-6">Status</th>
-                                                <!-- <th scope="col" class=""></th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for institution in institutions %}
+                                            {% for institution in page_obj.object_list %}
                                             <tr>
                                                 <td class="p-4 font-medium text-gray-500">{{ forloop.counter }}</td>
                                                 <td class="p-4">
@@ -68,18 +77,58 @@
                                                         <span class="font-medium text-gray-500">{{ institution.get_status_display }}</span>
                                                     </td>
                                                 {% endif %}
-                                                
-                                                <!-- <td>
-                                                    <a href="{% url 'institution-details' institution.id %}" target="_blank" class="font-medium text-gray-500">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
-                                                            <path fill-rule="evenodd" d="M8.25 3.75H19.5a.75.75 0 0 1 .75.75v11.25a.75.75 0 0 1-1.5 0V6.31L5.03 20.03a.75.75 0 0 1-1.06-1.06L17.69 5.25H8.25a.75.75 0 0 1 0-1.5Z" clip-rule="evenodd" />
-                                                        </svg>                                                   
-                                                    </a>
-                                                </td> -->
                                             </tr>
                                             {% endfor %}
                                         </tbody>
                                     </table>
+
+                                    {% if page_obj %}
+                                        <div class="pagination-wrapper mt-4">
+                                            <nav class="flex items-center gap-x-1 justify-center" aria-label="Pagination">
+                                                {% if page_obj.has_previous %}
+                                                    <a href="?page={{ page_obj.previous_page_number }}" class="pagination-button" aria-label="Previous">
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m15 18-6-6 6-6"></path>
+                                                        </svg>
+                                                        <span>Previous</span>
+                                                    </a>
+                                                {% else %}
+                                                    <button type="button" class="pagination-button disabled" aria-label="Previous" disabled>
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m15 18-6-6 6-6"></path>
+                                                        </svg>
+                                                        <span>Previous</span>
+                                                    </button>
+                                                {% endif %}
+                                                    
+                                                <div class="flex items-center gap-x-1">
+                                                    {% for page in page_obj.paginator.page_range %}
+                                                        {% if page == page_obj.number %}
+                                                            <button type="button" class="pagination-button active" aria-current="page">{{ page }}</button>
+                                                        {% else %}
+                                                            <a href="?page={{ page }}" class="pagination-button">{{ page }}</a>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                    
+                                                {% if page_obj.has_next %}
+                                                    <a href="?page={{ page_obj.next_page_number }}" class="pagination-button" aria-label="Next">
+                                                        <span>Next</span>
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m9 18 6-6-6-6"></path>
+                                                        </svg>
+                                                    </a>
+                                                {% else %}
+                                                    <button type="button" class="pagination-button disabled" aria-label="Next" disabled>
+                                                        <span>Next</span>
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m9 18 6-6-6-6"></path>
+                                                        </svg>
+                                                    </button>
+                                                {% endif %}
+                                            </nav>
+                                        </div>
+                                    {% endif %}
                                 </div>									
                             </div>
                         </div>
@@ -143,6 +192,7 @@
         });
     </script>    
 	
+    <script src="{% static 'js/script.js' %}"></script>
     <script src="{% static 'js/dashboard.js' %}"></script>
 	<script src="{% static 'js/sidebarmenu.js' %}"></script>
 	<script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>

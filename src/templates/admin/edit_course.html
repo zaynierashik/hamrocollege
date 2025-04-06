@@ -40,20 +40,20 @@
                                         <div class="flex gap-x-3">
                                             <div class="flex-1 mb-6">
                                                 <label for="name" class="block mb-2 text-sm font-medium text-gray-700">Name <span class="text-red-600">*</span></label>
-                                                <input type="text" value="{{ course.name }}" name="name" id="name" class="border border-gray-400 text-sm rounded-md block w-full p-2.5 py-[10px] bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" placeholder="John Doe" required>
+                                                <input type="text" value="{{ course.name }}" name="name" id="name" class="border border-gray-400 text-sm rounded-md block w-full p-2.5 py-[10px] bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" placeholder="Mathematics 101" required>
                                             </div>
 
                                             <div class="mb-6">
                                                 <label for="abbreviation" class="block mb-2 text-sm font-medium text-gray-700">Abbreviation</label>
-                                                <input type="text" value="{{ course.abbreviation }}" name="abbreviation" id="abbreviation" class="border border-gray-400 text-sm rounded-md block w-full p-2.5 py-[10px] bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" placeholder="John Doe">
+                                                <input type="text" value="{{ course.abbreviation }}" name="abbreviation" id="abbreviation" class="border border-gray-400 text-sm rounded-md block w-full p-2.5 py-[10px] bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" placeholder="ABC">
                                             </div>
                                         </div>
 
                                         <div class="flex flex-grow gap-x-3">
                                             <div class="flex-1 mb-6">
-                                                <label for="field" class="block mb-2 text-sm font-medium text-gray-700">Field <span class="text-red-600">*</span></label>
+                                                <label for="field" class="block mb-2 text-sm font-medium text-gray-700">Field of Study <span class="text-red-600">*</span></label>
                                                 <select id="field" name="field" autocomplete="field-name" class="border border-gray-400 text-sm rounded-md block w-full p-2.5 bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" required>
-                                                    <option value="" {% if not course.field %}selected{% endif %}>Choose an field</option>
+                                                    <option value="" {% if not course.field %}selected{% endif %}>Choose a field of study</option>
                                                     {% for field in fields %}
                                                         <option value="{{ field.0 }}" {% if course.field == field.0 %}selected{% endif %}>{{ field.1 }}</option>
                                                     {% endfor %}
@@ -68,7 +68,7 @@
                                             <div class="flex-1 mb-6">
                                                 <label for="level" class="block mb-2 text-sm font-medium text-gray-700">Level <span class="text-red-600">*</span></label>
                                                 <select id="level" name="level" autocomplete="level-name" class="border border-gray-400 text-sm rounded-md block w-full p-2.5 bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" required>
-                                                    <option value="" {% if not course.level %}selected{% endif %}>Choose an level</option>
+                                                    <option value="" {% if not course.level %}selected{% endif %}>Choose a level</option>
                                                     {% for level in levels %}
                                                         <option value="{{ level.0 }}" {% if course.level == level.0 %}selected{% endif %}>{{ level.1 }}</option>
                                                     {% endfor %}
@@ -124,6 +124,7 @@
                                                     <option value="{{ institution.id }}" {% if institution in course.Offered_by.all %}selected{% endif %}>{{ institution.name }}</option>
                                                 {% endfor %}
                                             </select>
+                                            
                                             <p class="mt-2 text-xs text-gray-500">
                                                 Hold down the Ctrl (Windows) or Command (Mac) key to select multiple institutions.
                                             </p>

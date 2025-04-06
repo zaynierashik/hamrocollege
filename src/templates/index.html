@@ -161,9 +161,9 @@
 						<h2 class="text-pretty text-lg font-medium tracking-tight text-primary-text">Most Viewed<span class="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-tr from-indigo-600 to-violet-600"> Institutions</span></h2>
 					</div>
 
-					<div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-						{% for institution in trending_institutions|slice:":3" %}
-						<a href="{% url 'institution-details' institution.id %}" class="max-w-[384px] bg-white mx-auto transform transition-all duration-[800ms] rounded-2xl shadow-md shadow-gray-100 hover:translate-x-2 hover:-translate-y-2 hover:shadow-lg">
+					<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+						{% for institution in trending_institutions|slice:":5" %}
+						<a href="{% url 'institution-details' institution.id %}" class="max-w-96 bg-white mx-auto transform transition-all duration-[800ms] rounded-2xl shadow-md shadow-gray-100 hover:translate-x-2 hover:-translate-y-2 hover:shadow-lg">
 							<div class="w-full max-w-sm">
 								<img src="{% if institution.Cover_Photo %}{{ institution.Cover_Photo.url }}{% else %}{{ 'default-cover.jpg' }}{% endif %}" alt="cream image" class="min-h-[100px] rounded-t-xl object-cover">
 							</div>

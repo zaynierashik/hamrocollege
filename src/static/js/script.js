@@ -35,6 +35,7 @@ function toggleForeignUniversityField() {
     }
 }
 
+// Search filter for institutions
 function filterInstitutions() {
     const searchInput = document.getElementById("searchInput").value.toLowerCase();
     const institutionCards = document.querySelectorAll(".institution-card");
@@ -49,6 +50,7 @@ function filterInstitutions() {
     });
 }
 
+// Filter by province
 document.getElementById("provinceFilter").addEventListener("change", function() {
     let selectedProvince = this.value;
     let institutions = document.querySelectorAll(".institution-card");
@@ -63,6 +65,57 @@ document.getElementById("provinceFilter").addEventListener("change", function() 
         }
     });
 });
+
+// Search filter for institutions in admin portal
+function filterInstitution() {
+    const searchInput = document.getElementById("searchInput").value.toLowerCase();
+    const tableRows = document.querySelectorAll("table tbody tr");
+
+    tableRows.forEach(row => {
+        const nameCell = row.querySelector("td:nth-child(3) span");
+        const nameText = nameCell ? nameCell.textContent.toLowerCase() : "";
+
+        if (nameText.includes(searchInput)) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+}
+
+// Search filter for courses in admin portal
+function filterCourses() {
+    const searchInput = document.getElementById("searchInput").value.toLowerCase();
+    const tableRows = document.querySelectorAll("table tbody tr");
+
+    tableRows.forEach(row => {
+        const nameCell = row.querySelector("td:nth-child(2) span");
+        const nameText = nameCell ? nameCell.textContent.toLowerCase() : "";
+
+        if (nameText.includes(searchInput)) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+}
+
+// Search filter for admissions in institution portal
+function filterAdmissions() {
+    const searchInput = document.getElementById("searchInput").value.toLowerCase();
+    const tableRows = document.querySelectorAll("table tbody tr");
+
+    tableRows.forEach(row => {
+        const nameCell = row.querySelector("td:nth-child(2) span");
+        const nameText = nameCell ? nameCell.textContent.toLowerCase() : "";
+
+        if (nameText.includes(searchInput)) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+}
 
 // Call this function initially to check the current value and show/hide the field
 document.addEventListener('DOMContentLoaded', function () {

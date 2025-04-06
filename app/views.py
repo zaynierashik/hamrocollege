@@ -503,6 +503,7 @@ def update_institutionadminprofile(request, id):
 
     if request.method == 'POST':
         admin_institution.name = request.POST.get('name')
+        admin_institution.phone = request.POST.get('phone')
         admin_institution.email = request.POST.get('email')
 
         admin_institution.save()
@@ -887,8 +888,14 @@ def institution(request):
     admin_id = request.session.get('admin_id')
     admin = SuperAdmin.objects.get(id=admin_id)
 
-    institutions = InstitutionAdmin.objects.all().order_by('-id')
-    return render(request, 'institution.html', {'institutions': institutions, 'admin': admin})
+    institutions_list = InstitutionAdmin.objects.all().order_by('name')
+
+    paginator = Paginator(institutions_list, 10)  
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {'admin': admin, 'page_obj': page_obj}
+    return render(request, 'institution.html', context)
 
 def course(request):
     if 'admin_id' not in request.session:
@@ -920,10 +927,14 @@ def course(request):
         ('foreign', 'Foreign University'),
     ]
 
-    courses = Course.objects.all().order_by('-id')
+    courses_list = Course.objects.all().order_by('name')
     institutions = Institution.objects.all()
 
-    context = {'admin': admin, 'fields': FIELDS, 'levels': LEVELS, 'affiliation_choices': AFFILIATION_CHOICES, 'courses': courses, 'institutions': institutions}
+    paginator = Paginator(courses_list, 10)  
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {'admin': admin, 'fields': FIELDS, 'levels': LEVELS, 'affiliation_choices': AFFILIATION_CHOICES, 'page_obj': page_obj, 'institutions': institutions}
     return render(request, 'course.html', context)
 
 def add_course(request):

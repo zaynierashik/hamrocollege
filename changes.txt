@@ -1,14 +1,13 @@
-1. Pagination for tables - Doing it later
+1. Pagination not working in admin portal: user and feedback page; works if file name changed but highlight doesn't work
 2. Filtering in tables
-3. search feature in admission in institution
-4. Placeholder names in fields
-5. Error/Success message showing in some places due to Json
-6. Changes are not updating in admin portal
-7. Error and success message in admission form, institution course form, user profile
+3. Search filter implemented but doesn't work for pages; searched data in page 1 doesn't find data from page 2 or other
+4. Error and success message in admission form, institution course form, user profile;
+   Error/Success message showing in some places due to Json
 
-In Future:
-1. Algorithm
-
-Algorithm Implemented
-1. Time Decay Ranking - For ranking most viewed institutions
-2. Location Based Recommendation [Haversine Algorithm] and Filtering - For showing nearby institutions via coordinates and province
+To be done:
+1. Content-Based Recommendation (Matching Users with Institutions & Courses)
+ - Recommend institutions and courses based on user preferences (e.g., province, affiliation, past interactions).
+ - Implementation Steps:
+ - Track user interactions (e.g., views, ratings, searches).
+ - Use TF-IDF or cosine similarity to match users with similar institutions/courses.
+ - Show "Recommended Institutions" or "Courses You May Like."

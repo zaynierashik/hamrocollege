@@ -8,8 +8,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
     <link rel="stylesheet" href="{% static 'css/input.css' %}">
-    <link rel="stylesheet" href="{% static 'css/output.css' %}">
 	<link rel="stylesheet" href="{% static 'css/theme.css' %}">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 </head>
 <body class="bg-[#FAFAFA] dark:bg-[#121212]">
@@ -33,7 +33,7 @@
                                 {% if nearby_institutions %}
                                     <div class="grid lg:grid-cols-3 sm:grid-cols-1 gap-x-5 gap-y-10">
                                         {% for item in nearby_institutions %}
-                                            <a href="{% url 'institution-details' item.institution.id %}" class="min-w-[280px] max-w-96 mx-auto transform transition-all duration-[800ms] hover:translate-x-2 hover:-translate-y-2 hover:shadow-lg shadow-md shadow-gray-100 rounded-2xl">
+                                            <a href="{% url 'institution-details' item.institution.id %}" class="max-w-96 mx-auto transform transition-all duration-[800ms] hover:translate-x-2 hover:-translate-y-2 hover:shadow-lg shadow-md shadow-gray-100 rounded-2xl">
                                                 <div class="w-full max-w-sm">
                                                     <img src="{% if item.institution.Cover_Photo %}{{ item.institution.Cover_Photo.url }}{% else %}{{ 'default-cover.jpg' }}{% endif %}" alt="cream image" class="min-h-[100px] rounded-t-xl object-cover">
                                                 </div>
@@ -85,7 +85,7 @@
                 
                             <div id="institutionsGrid" class="grid lg:grid-cols-3 sm:grid-cols-1 gap-x-5 gap-y-10">
                                 {% for institution in institutions %}
-                                    <a href="{% url 'institution-details' institution.id %}" data-province="{{ institution.province }}" class="institution-card min-w-[280px] max-w-96 mx-auto transform transition-all duration-[800ms] hover:translate-x-2 hover:-translate-y-2 hover:shadow-lg shadow-md shadow-gray-100 rounded-2xl">
+                                    <a href="{% url 'institution-details' institution.id %}" data-province="{{ institution.province }}" class="institution-card max-w-96 mx-auto transform transition-all duration-[1000ms] hover:translate-x-2 hover:-translate-y-2 hover:shadow-lg shadow-md shadow-gray-100 rounded-2xl">
                                         <div class="w-full max-w-sm">
                                             <img src="{% if institution.Cover_Photo %}{{ institution.Cover_Photo.url }}{% else %}{{ 'default-cover.jpg' }}{% endif %}" alt="cream image" class="min-h-[100px] rounded-t-xl object-cover">
                                         </div>

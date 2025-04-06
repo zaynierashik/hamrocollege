@@ -34,12 +34,22 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                     </svg>
                                 </div>
+
+                                <div class="relative w-full mt-7 mb-10">
+                                    <input id="searchInput" name="search" class="text-sm shadow-md border-gray-200 pe-10 py-3 rounded-xl w-full transition-all outline-none focus:ring-0 focus:ring-gray-500 focus:border-gray-500" placeholder="Search for course name ..." onkeyup="filterCourses()"/>
+                                    <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+                                        <svg class="size-5 text-gray-500" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" stroke-linejoin="round" stroke-linecap="round"></path>
+                                        </svg>                                                                               
+                                    </div>
+                                </div>
+                                
                                 <div class="relative overflow-x-auto">
                                     <table class="text-left w-full whitespace-nowrap text-sm">
                                         <thead class="text-gray-700">
                                             <tr class="font-semibold text-gray-600">
                                                 <th scope="col" class="p-4">S.N.</th>
-                                                <th scope="col" class="p-4">Name</th>
+                                                <th scope="col" class="p-4">Course Name</th>
                                                 <th scope="col" class="p-4">Affiliation</th>
                                                 <th scope="col" class="p-4">Abbreviation</th>
                                                 <th scope="col" class="p-4"></th>
@@ -47,7 +57,7 @@
                                             </tr>
                                         </thead>                                                                                                                                                                                                                                                                                                                                                      
                                         <tbody>
-                                            {% for course in courses %}
+                                            {% for course in page_obj.object_list %}
                                             <tr>
                                                 <td class="p-4 font-medium text-gray-500">{{ forloop.counter }}</td>
                                                 <td class="p-4">
@@ -89,6 +99,54 @@
                                             {% endfor %}
                                         </tbody>
                                     </table>
+
+                                    {% if page_obj %}
+                                        <div class="pagination-wrapper mt-4">
+                                            <nav class="flex items-center gap-x-1 justify-center" aria-label="Pagination">
+                                                {% if page_obj.has_previous %}
+                                                    <a href="?page={{ page_obj.previous_page_number }}" class="pagination-button" aria-label="Previous">
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m15 18-6-6 6-6"></path>
+                                                        </svg>
+                                                        <span>Previous</span>
+                                                    </a>
+                                                {% else %}
+                                                    <button type="button" class="pagination-button disabled" aria-label="Previous" disabled>
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m15 18-6-6 6-6"></path>
+                                                        </svg>
+                                                        <span>Previous</span>
+                                                    </button>
+                                                {% endif %}
+                                                    
+                                                <div class="flex items-center gap-x-1">
+                                                    {% for page in page_obj.paginator.page_range %}
+                                                        {% if page == page_obj.number %}
+                                                            <button type="button" class="pagination-button active" aria-current="page">{{ page }}</button>
+                                                        {% else %}
+                                                            <a href="?page={{ page }}" class="pagination-button">{{ page }}</a>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                    
+                                                {% if page_obj.has_next %}
+                                                    <a href="?page={{ page_obj.next_page_number }}" class="pagination-button" aria-label="Next">
+                                                        <span>Next</span>
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m9 18 6-6-6-6"></path>
+                                                        </svg>
+                                                    </a>
+                                                {% else %}
+                                                    <button type="button" class="pagination-button disabled" aria-label="Next" disabled>
+                                                        <span>Next</span>
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m9 18 6-6-6-6"></path>
+                                                        </svg>
+                                                    </button>
+                                                {% endif %}
+                                            </nav>
+                                        </div>
+                                    {% endif %}
                                 </div>									
                             </div>
                         </div>
@@ -109,20 +167,20 @@
                                         <div class="flex gap-x-3">
                                             <div class="flex-1 mb-6">
                                                 <label for="name" class="block mb-2 text-sm font-medium text-gray-700">Name <span class="text-red-600">*</span></label>
-                                                <input type="text" name="name" id="name" class="border border-gray-400 text-sm rounded-md block w-full p-2.5 py-[10px] bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" placeholder="John Doe" required>
+                                                <input type="text" name="name" id="name" class="border border-gray-400 text-sm rounded-md block w-full p-2.5 py-[10px] bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" placeholder="Mathematics 101" required>
                                             </div>
 
                                             <div class="mb-6">
                                                 <label for="abbreviation" class="block mb-2 text-sm font-medium text-gray-700">Abbreviation</label>
-                                                <input type="text" name="abbreviation" id="abbreviation" class="border border-gray-400 text-sm rounded-md block w-full p-2.5 py-[10px] bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" placeholder="John Doe">
+                                                <input type="text" name="abbreviation" id="abbreviation" class="border border-gray-400 text-sm rounded-md block w-full p-2.5 py-[10px] bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" placeholder="ABC">
                                             </div>
                                         </div>
 
                                         <div class="flex flex-grow gap-x-3">
                                             <div class="flex-1 mb-6">
-                                                <label for="field" class="block mb-2 text-sm font-medium text-gray-700">Field <span class="text-red-600">*</span></label>
+                                                <label for="field" class="block mb-2 text-sm font-medium text-gray-700">Field of Study <span class="text-red-600">*</span></label>
                                                 <select id="field" name="field" autocomplete="field-name" class="border border-gray-400 text-sm rounded-md block w-full p-2.5 bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" required>
-                                                    <option value="" selected>Choose a field</option>
+                                                    <option value="" selected>Choose a field of study</option>
                                                     {% for field in fields %}
                                                         <option value="{{ field.0 }}">{{ field.1 }}</option>
                                                     {% endfor %}
@@ -162,27 +220,27 @@
 
                                         <div class="mb-6">
                                             <label for="about" class="block mb-2 text-sm/6 font-medium text-gray-900">About <span class="text-red-600">*</span></label>
-                                            <textarea name="about" id="about" rows="3" class="block w-full rounded-md bg-white px-3 py-1.5 text-sm text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6" required></textarea>
+                                            <textarea name="about" id="about" rows="5" class="block w-full rounded-md bg-white px-3 py-1.5 text-sm text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6" required></textarea>
                                         </div>
 
                                         <div class="mb-6">
                                             <label for="eligibility" class="block mb-2 text-sm/6 font-medium text-gray-900">Eligibility</label>
-                                            <textarea name="eligibility" id="eligibility" rows="3" class="block w-full rounded-md bg-white px-3 py-1.5 text-sm text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6"></textarea>
+                                            <textarea name="eligibility" id="eligibility" rows="5" class="block w-full rounded-md bg-white px-3 py-1.5 text-sm text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6"></textarea>
                                         </div>
 
                                         <div class="mb-6">
                                             <label for="admission_criteria" class="block mb-2 text-sm/6 font-medium text-gray-900">Admission Criteria</label>
-                                            <textarea name="admission_criteria" id="admission_criteria" rows="3" class="block w-full rounded-md bg-white px-3 py-1.5 text-sm text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6"></textarea>
+                                            <textarea name="admission_criteria" id="admission_criteria" rows="5" class="block w-full rounded-md bg-white px-3 py-1.5 text-sm text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6"></textarea>
                                         </div>
                                         
                                         <div class="mb-6">
                                             <label for="job_prospect" class="block mb-2 text-sm/6 font-medium text-gray-900">Job Prospect</label>
-                                            <textarea name="job_prospect" id="job_prospect" rows="3" class="block w-full rounded-md bg-white px-3 py-1.5 text-sm text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6"></textarea>
+                                            <textarea name="job_prospect" id="job_prospect" rows="5" class="block w-full rounded-md bg-white px-3 py-1.5 text-sm text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6"></textarea>
                                         </div>
 
                                         <div class="mb-6">
                                             <label for="prospect_career" class="block mb-2 text-sm/6 font-medium text-gray-900">Prospect Career</label>
-                                            <textarea name="prospect_career" id="prospect_career" rows="3" class="block w-full rounded-md bg-white px-3 py-1.5 text-sm text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6"></textarea>
+                                            <textarea name="prospect_career" id="prospect_career" rows="5" class="block w-full rounded-md bg-white px-3 py-1.5 text-sm text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6"></textarea>
                                         </div>
                                     </div>
     

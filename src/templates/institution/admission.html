@@ -99,6 +99,15 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="relative w-full mt-7 mb-10">
+                                    <input id="searchInput" name="search" class="text-sm shadow-md border-gray-200 pe-10 py-3 rounded-xl w-full transition-all outline-none focus:ring-0 focus:ring-gray-500 focus:border-gray-500" placeholder="Search for applicant name ..." onkeyup="filterAdmissions()"/>
+                                    <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+                                        <svg class="size-5 text-gray-500" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" stroke-linejoin="round" stroke-linecap="round"></path>
+                                        </svg>                                                                               
+                                    </div>
+                                </div>
                                     
                                 <div class="relative overflow-x-auto">
                                     <div x-data="{ openModal: null }">
@@ -106,7 +115,7 @@
                                             <thead class="text-gray-700">
                                                 <tr class="font-semibold text-gray-600">
                                                     <th scope="col" class="p-4">S.N.</th>
-                                                    <th scope="col" class="p-4">Name</th>
+                                                    <th scope="col" class="p-4">Applicant Name</th>
                                                     <th scope="col" class="p-4">Program</th>
                                                     <th scope="col" class="p-4">Status</th>
                                                     <th scope="col" class="p-4"></th>
@@ -352,6 +361,7 @@
     </script>    
 	
 	<script src="{% static 'js/index.js' %} "></script>
+	<script src="{% static 'js/script.js' %} "></script>
     <script src="{% static 'js/dashboard.js' %} "></script>
     <script src="//unpkg.com/alpinejs" defer></script>
     <script src="{% static 'libs/jquery/dist/jquery.min.js' %} "></script>
