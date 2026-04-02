@@ -27,14 +27,14 @@
   background: #ffffff;
 }
 ::-webkit-scrollbar-thumb {
-  background: #32b2a4;
+  background: #e79916;
   border-radius: 4px;
 }
 
 /* Outline text utility */
 .text-outline {
   color: transparent;
-  -webkit-text-stroke: 1.5px #32b2a4;
+  -webkit-text-stroke: 1.5px #e79916;
 }
 
 .text-outline-dark {

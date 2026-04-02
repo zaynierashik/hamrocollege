@@ -2,9 +2,9 @@
 
 export default function Methodology() {
   const features = [
-    "Visuelle Reizverarbeitung",
-    "Vestibuläres & propriozeptives System",
-    "Enge Zusammenarbeit mit Ärzten & Therapeuten Berlin",
+    "Visual Stimulus Processing",
+    "Vestibular & Proprioceptive System",
+    "Close Collaboration with Doctors & Therapists Berlin",
   ];
 
   return (
@@ -23,22 +23,20 @@ export default function Methodology() {
           {/* Content */}
           <div className="lg:pr-12">
             <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-gray-900 mb-8 leading-[1.1]">
-              Bessere Ergebnisse{" "}
-              <span className="text-outline">ohne Nebenwirkungen</span>
+              Better Results{" "}
+              <span className="text-outline">With No Side Effects</span>
             </h2>
 
             <p className="text-xl text-gray-600 font-light leading-relaxed mb-10">
-              Mein Angebot ist ein präzises Rehabilitations- und Trainingssystem
-              auf Grundlage neuronaler Prozesse. Fokussiert auf
-              Schmerzreduzierung und Verbesserung der Bewegungsabläufe wird die
-              Lebensqualität gesteigert.
+              My approach is a precise rehabilitation and training system based
+              on neural processes. Focused on pain reduction and improving
+              movement patterns, quality of life is enhanced.
             </p>
 
             <p className="text-xl text-gray-600 font-light leading-relaxed mb-10">
-              Natürliche Ansätze zur Behandlung fokussieren sich individuell
-              darauf, deine einzigartigen Bedürfnisse zu adressieren. Dies
-              beinhaltet neuronale Balance, effektives Stressmanagement und
-              Schmerzlinderung.
+              Natural treatment approaches focus individually on addressing your
+              unique needs. This includes neural balance, effective stress
+              management, and pain relief.
             </p>
 
             <ul className="space-y-6">

@@ -4,7 +4,7 @@ export default function Blog() {
   const posts = [
     {
       title:
-        "Gesunde Leistungsfähigkeit ohne Ausbrennen: Pausen, Sabbatical & Kälte mit Nina Kuhlmann",
+        "Healthy Performance Without Burnout: Breaks, Sabbaticals & Cold Exposure with Nina Kuhlmann",
       description:
         "Stress, Wellbeing, Depression, Sleep, Mindfulness, and Healing.",
       image:
@@ -12,7 +12,7 @@ export default function Blog() {
     },
     {
       title:
-        "Gesundheit als Identität: Soziale Fitness, Selbstreflexion & weniger Hype mit Dr. Anne Latz",
+        "Health as Identity: Social Fitness, Self-Reflection & Less Hype with Dr. Anne Latz",
       description:
         "Insomnia, Depression, Stress, Anxiety, and Emotional Balance.",
       image:
@@ -25,8 +25,8 @@ export default function Blog() {
       <div className="max-w-5xl mx-auto px-6 lg:px-12">
         <div className="text-center mb-16">
           <h2 className="font-display text-4xl sm:text-5xl font-medium tracking-tight text-gray-900">
-            Gönn Dir Gesundheit —{" "}
-            <span className="text-outline">Tipps & Updates</span>
+            Embrace Your Health —{" "}
+            <span className="text-outline">Tips & Updates</span>
           </h2>
         </div>
 

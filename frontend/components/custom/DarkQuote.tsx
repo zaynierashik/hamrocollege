@@ -16,15 +16,13 @@ export default function DarkQuote() {
       <div className="max-w-[90rem] mx-auto px-6 lg:px-12 relative z-10">
         <div className="max-w-3xl">
           <h2 className="font-display text-5xl md:text-7xl font-medium text-white tracking-tight leading-[1.1] mb-8">
-            Bewegung ist der Weg,
+            Movement is the Way
             <br />
-            <span className="text-outline">
-              wie dein Körper sich regeneriert.
-            </span>
+            <span className="text-outline">Your Body Regenerates.</span>
           </h2>
           <p className="text-xl md:text-2xl text-gray-300 font-light leading-relaxed max-w-2xl">
-            Neurozentriertes Training setzt dort an, wo Leistung wirklich
-            entsteht – im Gehirn.
+            Neuro-Centered Training addresses where performance truly emerges –
+            in the brain.
           </p>
         </div>
       </div>

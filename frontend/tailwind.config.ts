@@ -13,8 +13,8 @@ const config: Config = {
         display: ["Outfit", ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        primary: "#32B2A4",
-        "primary-hover": "#289287",
+        primary: "#e79916",
+        "primary-hover": "#00357a",
       },
     },
   },

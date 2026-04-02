@@ -1,7 +1,7 @@
 "use client";
 
 export default function Footer() {
-  const links = ["Home", "About", "Angebote", "Podcast", "Kontakt"];
+  const links = ["Home", "About", "Courses", "Colleges", "Contact"];
 
   return (
     <footer className="bg-[#111827] pt-16 relative overflow-hidden">
@@ -22,9 +22,7 @@ export default function Footer() {
 
           {/* Copyright */}
           <div className="text-gray-500 font-light text-sm text-center lg:text-right max-w-sm">
-            © 2025 Luise Walther · luisewalther.de · Berlin
-            <br />
-            LUI Neurozentriertes Training
+            © 2026 HAMROCOLLEGE
           </div>
         </div>
       </div>
@@ -32,7 +30,7 @@ export default function Footer() {
       {/* Huge Ghost Text Watermark */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none select-none flex justify-center translate-y-[20%] pointer-events-none">
         <span className="font-display font-medium text-[20vw] text-white/5 whitespace-nowrap tracking-tighter">
-          LUISE WALTHER
+          HAMROCOLLEGE
         </span>
       </div>
     </footer>

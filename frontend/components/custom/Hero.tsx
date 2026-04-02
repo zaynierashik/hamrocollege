@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+// import Image from "next/image";
 
 export default function Hero() {
   return (
@@ -9,19 +9,20 @@ export default function Hero() {
         {/* Hero Top Text */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-10">
           <h1 className="font-display text-6xl sm:text-7xl lg:text-[7.5rem] leading-[0.95] tracking-tight text-gray-900 z-10">
-            Struggling with <span className="text-outline">Schmerz</span>
-            <br />& Bewegung täglich?
+            Did you find your <span className="text-outline">desired</span>
+            <br />
+            college and course?
           </h1>
 
           <div className="flex flex-col items-start lg:items-end text-left lg:text-right mb-4">
             <p className="text-xl text-gray-600 font-light mb-8 max-w-[280px]">
-              Ich kann dir helfen – natürlich.
+              We can help you - easily.
             </p>
             <a
-              href="#kontakt"
-              className="inline-flex items-center justify-center px-10 py-4 rounded-full text-white bg-primary hover:bg-primary-hover text-lg font-medium transition-colors shadow-lg shadow-primary/20"
+              href="#contact"
+              className="inline-flex items-center justify-center px-10 py-4 rounded-full text-white bg-primary hover:bg-primary-hover text-lg font-medium transition-colors shadow-lg shadow-primary/20 whitespace-nowrap"
             >
-              JETZT STARTEN
+              GET STARTED
             </a>
           </div>
         </div>
@@ -59,12 +60,12 @@ export default function Hero() {
                 />
               </div>
               <span className="text-sm font-medium text-gray-900">
-                500+ Connections
+                7000+ Students Helped
               </span>
             </div>
 
             <h3 className="font-display text-2xl font-medium tracking-tight leading-tight mb-4">
-              7+ Jahre Erfahrung
+              3+ Years of Experience
             </h3>
 
             <div className="rounded-2xl overflow-hidden aspect-video mb-4 bg-gray-100">
@@ -75,13 +76,8 @@ export default function Hero() {
               />
             </div>
             <p className="text-base text-gray-500 font-light">
-              7.352 Followers
+              250+ Institutions
             </p>
-          </div>
-
-          {/* Floating Element Right */}
-          <div className="absolute top-8 right-8 text-white font-medium text-lg z-10 drop-shadow-md hidden sm:block">
-            1/3
           </div>
 
           <div className="absolute bottom-8 right-8 max-w-sm z-10 hidden lg:block">
@@ -91,11 +87,11 @@ export default function Hero() {
                 width="16"
                 height="16"
               ></iconify-icon>{" "}
-              Neuro Training
+              College Discovery
             </div>
             <p className="text-white/90 text-base font-light leading-relaxed drop-shadow-md">
-              Neurozentriertes Training setzt dort an, wo Leistung wirklich
-              entsteht – im Gehirn.
+              Find the perfect college and course that match your goals and
+              aspirations.
             </p>
           </div>
         </div>

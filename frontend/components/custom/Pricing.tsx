@@ -4,23 +4,23 @@ export default function Pricing() {
   const pricingPlans = [
     {
       type: "Starter",
-      title: "Erstgespräch",
-      price: "Kostenlos",
+      title: "Initial Consultation",
+      price: "Free",
       features: [
-        "30 Min. Kennenlerngespräch",
-        "Situationsanalyse",
-        "Individuelle Erstempfehlung",
+        "30 Min. Introductory Session",
+        "Situation Analysis",
+        "Personalized Initial Recommendation",
       ],
     },
     {
       type: "Premium",
       title: "Premium Coaching",
-      price: "Auf Anfrage",
+      price: "Upon Request",
       features: [
-        "Neurozentriertes 1:1 Training",
-        "Schmerzanalyse & Diagnostik",
-        "Visuelle & vestibuläre Integration",
-        "Remote & Berlin vor Ort",
+        "Neuro-Centered 1:1 Training",
+        "Pain Analysis & Diagnostics",
+        "Visual & Vestibular Integration",
+        "Remote & In-Person Berlin",
       ],
       isPremium: true,
     },
@@ -31,8 +31,8 @@ export default function Pricing() {
       <div className="max-w-[90rem] mx-auto px-6 lg:px-12">
         <div className="text-center mb-16">
           <h2 className="font-display text-4xl sm:text-5xl font-medium tracking-tight text-gray-900">
-            Dein Einstieg in{" "}
-            <span className="text-outline">Neurozentriertes Training</span>
+            Your Entry Into{" "}
+            <span className="text-outline">Neuro-Centered Training</span>
           </h2>
         </div>
 

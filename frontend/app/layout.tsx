@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Luise Walther | Neurozentriertes Training",
+  title: "Luise Walther | Neuro-Centered Training",
   description:
-    "Neurozentriertes Training für bessere Leistung und Bewegungsqualität. Ich helfe dir, dein volles Potenzial zu erreichen.",
+    "Neuro-Centered Training for better performance and movement quality. I help you reach your full potential.",
   keywords: ["neuro training", "coaching", "movement", "performance"],
   authors: [{ name: "Luise Walther" }],
   icons: {

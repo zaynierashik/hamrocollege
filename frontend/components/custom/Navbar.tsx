@@ -24,7 +24,7 @@ export default function Navbar() {
         {/* Desktop Links */}
         <div className="hidden lg:flex items-center space-x-2 bg-white rounded-full px-2 py-2 shadow-sm border border-gray-100">
           <a
-            href="#"
+            href="/"
             className="px-6 py-2.5 rounded-full bg-primary text-white text-base font-normal transition-colors"
           >
             Home
@@ -39,35 +39,29 @@ export default function Navbar() {
             href="#"
             className="px-6 py-2.5 rounded-full text-gray-600 hover:text-gray-900 text-base font-normal transition-colors"
           >
-            Was tue ich
+            Courses
           </a>
           <a
             href="#"
             className="px-6 py-2.5 rounded-full text-gray-600 hover:text-gray-900 text-base font-normal transition-colors"
           >
-            Angebote
+            Colleges
           </a>
           <a
             href="#"
             className="px-6 py-2.5 rounded-full text-gray-600 hover:text-gray-900 text-base font-normal transition-colors"
           >
-            Shop
-          </a>
-          <a
-            href="#"
-            className="px-6 py-2.5 rounded-full text-gray-600 hover:text-gray-900 text-base font-normal transition-colors"
-          >
-            Kontakt
+            Contact
           </a>
         </div>
 
         {/* CTA */}
         <div className="hidden lg:block">
           <a
-            href="#kontakt"
-            className="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-white bg-primary hover:bg-primary-hover text-base font-medium transition-colors"
+            href="#contact"
+            className="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-white uppercase bg-primary hover:bg-primary-hover text-base font-medium transition-colors"
           >
-            BOOK ONLINE
+            Login
           </a>
         </div>
 
@@ -104,13 +98,13 @@ export default function Navbar() {
             href="#"
             className="text-gray-600 hover:text-primary text-lg font-medium"
           >
-            Was tue ich
+            What I Do
           </a>
           <a
             href="#"
             className="text-gray-600 hover:text-primary text-lg font-medium"
           >
-            Angebote
+            Services
           </a>
           <a
             href="#"
@@ -119,7 +113,7 @@ export default function Navbar() {
             Shop
           </a>
           <a
-            href="#kontakt"
+            href="#contact"
             className="text-primary font-medium text-lg pt-2 border-t border-gray-100"
           >
             BOOK ONLINE

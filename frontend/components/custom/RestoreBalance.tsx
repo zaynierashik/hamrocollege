@@ -8,26 +8,26 @@ export default function RestoreBalance() {
           {/* Content */}
           <div className="lg:pr-12">
             <h2 className="font-display text-5xl lg:text-6xl font-medium tracking-tight text-gray-900 mb-8 leading-[1.1]">
-              Gönn Dir <span className="text-outline">Gesundheit</span>
+              Embrace <span className="text-outline">Health</span>
             </h2>
 
             <p className="text-xl text-gray-600 font-light leading-relaxed mb-6">
-              Ich gestalte Gesundheit, wo sie beginnt – im Nervensystem. Neue
-              wissenschaftliche Erkenntnisse und Trainingsmethoden fließen
-              kontinuierlich in meine Arbeit ein.
+              I design health where it begins – in the nervous system. New
+              scientific insights and training methods continuously flow into my
+              work.
             </p>
 
             <p className="text-xl text-gray-600 font-light leading-relaxed mb-10">
-              Natürliche Ansätze überdecken nicht einfach Symptome, sie stellen
-              das Gleichgewicht von Körper und Geist wieder her, um nicht nur
-              Schmerzfreiheit, sondern lebendige Gesundheit zu erreichen.
+              Natural approaches don't simply mask symptoms; they restore the
+              balance of body and mind to achieve not just pain-free living, but
+              vibrant health.
             </p>
 
             <a
-              href="#angebote"
+              href="#services"
               className="inline-flex items-center text-primary font-medium text-lg hover:text-primary-hover transition-colors gap-2"
             >
-              MEIN ANGEBOT{" "}
+              MY SERVICES{" "}
               <iconify-icon
                 icon="solar:arrow-right-linear"
                 width="20"

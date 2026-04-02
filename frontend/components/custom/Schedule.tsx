@@ -18,15 +18,15 @@ export default function Schedule() {
   };
 
   return (
-    <section id="kontakt" className="py-24 bg-[#FDFCFB]">
+    <section id="contact" className="py-24 bg-[#FDFCFB]">
       <div className="max-w-[90rem] mx-auto px-6 lg:px-12">
         <div className="flex flex-col lg:flex-row justify-between items-end mb-16 gap-8">
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-gray-900 leading-[1.1] max-w-2xl">
-            Richte deinen Terminplan nach{" "}
-            <span className="text-outline">deinen Zielen aus</span>
+            Align your schedule with{" "}
+            <span className="text-outline">your goals</span>
           </h2>
           <p className="text-xl text-gray-500 font-light max-w-sm lg:text-right">
-            Sei verbunden – für Energie und Wohlbefinden in deinem Alltag.
+            Stay connected – for energy and wellness in your daily life.
           </p>
         </div>
 
