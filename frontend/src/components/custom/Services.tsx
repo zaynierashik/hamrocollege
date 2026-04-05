@@ -29,7 +29,7 @@ export default function Services() {
   ];
 
   return (
-    <section className="py-24 bg-white">
+    <section id="courses" className="py-24 bg-white scroll-mt-24">
       <div className="max-w-[90rem] mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-16 lg:gap-24">
           {/* Left Text */}

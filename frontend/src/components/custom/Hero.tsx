@@ -14,16 +14,16 @@ export default function Hero() {
             college and course?
           </h1>
 
-          <div className="flex flex-col items-start lg:items-end text-left lg:text-right mb-4">
-            <p className="text-xl text-gray-600 font-light mb-8 max-w-[280px]">
+          <div className="flex flex-col items-start lg:items-end text-left lg:text-right ">
+            <p className="text-xl text-gray-600 font-light mb-2 max-w-[280px]">
               We can help you - easily.
             </p>
-            <a
+            {/* <a
               href="#contact"
               className="inline-flex items-center justify-center px-10 py-4 rounded-full text-white bg-primary hover:bg-primary-hover text-lg font-medium transition-colors shadow-lg shadow-primary/20 whitespace-nowrap"
             >
               GET STARTED
-            </a>
+            </a> */}
           </div>
         </div>
 

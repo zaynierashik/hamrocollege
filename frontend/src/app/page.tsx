@@ -1,5 +1,6 @@
 import Navbar from "@/components/custom/Navbar";
 import Hero from "@/components/custom/Hero";
+import About from "@/components/custom/About";
 import Services from "@/components/custom/Services";
 import DarkQuote from "@/components/custom/DarkQuote";
 import Methodology from "@/components/custom/Methodology";
@@ -13,9 +14,10 @@ import Footer from "@/components/custom/Footer";
 
 export default function Home() {
   return (
-    <div className="w-full relative">
+    <div id="home" className="w-full relative">
       <Navbar />
       <Hero />
+      <About />
       <Services />
       <DarkQuote />
       <Methodology />
