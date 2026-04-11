@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -54,7 +55,10 @@ export default function RootLayout({
         />
         <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
       </head>
-      <body className="w-full relative">{children}</body>
+      <body className="w-full relative">
+        {children}
+        <Toaster position="top-right" closeButton />
+      </body>
     </html>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -90,12 +91,12 @@ export default function Navbar() {
 
         {/* CTA */}
         <div className="hidden lg:block">
-          <a
-            href="#contact"
+          <Link
+            href="/login"
             className="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-white uppercase bg-primary hover:bg-primary-hover text-base font-medium transition-colors"
           >
             Login
-          </a>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -128,6 +129,13 @@ export default function Navbar() {
               {item.label}
             </a>
           ))}
+          <Link
+            href="/login"
+            className="inline-flex items-center justify-center px-6 py-3 rounded-full text-white uppercase bg-primary hover:bg-primary-hover text-sm font-medium transition-colors"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Login
+          </Link>
         </div>
       )}
     </nav>

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     # Local apps
     'core',
     'users',
+    'colleges',
 ]
 
 MIDDLEWARE = [
@@ -87,8 +88,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
-LANGUAGE_CODE = 'de-de'
-TIME_ZONE = 'Europe/Berlin'
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'Asia/Kathmandu'
 USE_I18N = True
 USE_TZ = True
 
@@ -100,6 +101,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Custom user model
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # DRF Configuration
 REST_FRAMEWORK = {

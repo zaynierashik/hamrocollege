@@ -6,6 +6,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 from django.contrib.auth import get_user_model
+from colleges.models import CollegeAdminProfile
 from .models import Booking
 
 User = get_user_model()
@@ -115,3 +116,103 @@ class AuthenticationTestCase(TestCase):
             format='json'
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class RoleRegistrationAndLoginTestCase(TestCase):
+    """Test role-specific registration and authentication endpoints."""
+
+    def setUp(self):
+        self.client = APIClient()
+
+    def test_user_registration(self):
+        response = self.client.post(
+            reverse('users:register_user'),
+            {
+                'username': 'normaluser',
+                'email': 'normal@example.com',
+                'first_name': 'Normal',
+                'last_name': 'User',
+                'password': 'strongpass123',
+            },
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        user = User.objects.get(username='normaluser')
+        self.assertEqual(user.role, 'user')
+
+    def test_college_admin_registration_creates_profile(self):
+        response = self.client.post(
+            reverse('users:register_college_admin'),
+            {
+                'username': 'collegeadmin',
+                'email': 'admin@college.com',
+                'first_name': 'College',
+                'last_name': 'Admin',
+                'password': 'strongpass123',
+                'college': 'Hamro College',
+            },
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        user = User.objects.get(username='collegeadmin')
+        self.assertEqual(user.role, 'college_admin')
+        self.assertTrue(CollegeAdminProfile.objects.filter(user=user, college='Hamro College').exists())
+
+    def test_college_admin_login_rejects_normal_user(self):
+        User.objects.create_user(
+            username='normaluser',
+            email='normal@example.com',
+            password='strongpass123',
+            role='user',
+        )
+
+        response = self.client.post(
+            reverse('users:college_admin_login'),
+            {
+                'username': 'normaluser',
+                'password': 'strongpass123',
+            },
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_college_admin_login_succeeds_for_college_admin(self):
+        User.objects.create_user(
+            username='collegeadmin',
+            email='admin@college.com',
+            password='strongpass123',
+            role='college_admin',
+        )
+
+        response = self.client.post(
+            reverse('users:college_admin_login'),
+            {
+                'username': 'collegeadmin',
+                'password': 'strongpass123',
+            },
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('access', response.data)
+        self.assertIn('refresh', response.data)
+        self.assertEqual(response.data['user']['role'], 'college_admin')
+
+    def test_user_login_with_email_only(self):
+        User.objects.create_user(
+            username='rashik',
+            email='rashik@example.com',
+            password='strongpass123',
+            role='user',
+        )
+
+        response = self.client.post(
+            reverse('users:login'),
+            {
+                'email': 'rashik@example.com',
+                'password': 'strongpass123',
+            },
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('access', response.data)
