@@ -1,0 +1,223 @@
+{% load static %}
+
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gurkha Cyber Force</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+    <link href="{% static 'css/output.css' %}" rel="stylesheet">
+    <link href="{% static 'css/input.css' %}" rel="stylesheet">
+	<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body class="bg-[#FAFAFA] dark:bg-[#121212]">
+	<main>
+		<div id="main-wrapper" class="flex">
+			<!-- Sidebar -->
+			{% include "components/admin_sidebar.html" %}
+
+			<div class="w-full page-wrapper overflow-hidden">
+				<!-- Header -->
+				{% include "components/admin_header.html" %}
+
+				<!-- Main Content -->
+				<main class="h-full overflow-y-auto max-w-full pt-[6px]">
+					<div class="container full-container py-5 flex flex-col gap-6">
+						<div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-x-6 gap-x-0 lg:gap-y-0 gap-y-6">
+							<div class="col-span-2 h-full flex">
+								<div class="card dark:bg-[#161618] dark:shadow-none dark:border border-gray-800 w-full flex flex-col">
+									<div class="card-body flex-1 flex flex-col">
+										<h4 class="text-gray-600 dark:text-gray-400 text-lg font-semibold">Users by Province</h4>
+										<div id="userChart" class="flex-1 flex items-center justify-center"></div>
+									</div>
+								</div>
+							</div>
+						 
+							<div class="flex flex-col gap-3">
+								<div class="card dark:bg-[#161618] dark:shadow-none dark:border border-gray-800">
+									<div class="card-body">
+										<h4 class="text-gray-600 dark:text-gray-400 text-lg font-semibold">Institution Status</h4>
+										<div id="institutionChart"></div>
+									</div>
+								</div>
+				
+								<div class="card dark:bg-[#161618] dark:shadow-none dark:border border-gray-800">
+									<div class="card-body">
+										<h4 class="text-gray-600 dark:text-gray-400 text-lg font-semibold">Feedback Chart</h4>
+										<div id="feedbackChart"></div>
+									</div>
+								</div>
+							</div>
+					   </div>
+					</div>
+				</main>
+			</div>
+		</div>
+	</main>
+
+	<script>
+		// Fetch User by Province (Bar Chart)
+		fetch('/api/user-distribution/')
+			.then(response => response.json())
+			.then(data => {
+				// Get provinces and counts
+				var provinces = data.map(item => item.province);
+				var counts = data.map(item => item.count);
+
+				// Define a color for each province
+				var provinceColors = {
+					'province_1': '#00E396',  // Green
+					'province_2': '#FF4560',  // Red
+					'bagmati': '#008FFB',     // Blue
+					'gandaki': '#FF9800',     // Orange
+					'lumbini': '#775DD0',     // Purple
+					'karnali': '#3E8E41',     // Dark Green
+					'sudurpashchim': '#FFB800' // Yellow
+				};
+
+				// Generate the colors array
+				var colors = provinces.map(function(province) {
+					return provinceColors[province] || '#808080';  // Default grey if no color is found
+				});
+
+				var options = {
+					chart: {
+						type: 'bar',
+						toolbar: { show: false }  // Disable the toolbar
+					},
+					series: [{
+						name: 'Users',
+						data: counts
+					}],
+					colors: colors,
+					xaxis: {
+						categories: provinces,  // Set provinces as x-axis labels
+						labels: {
+							formatter: function(value) {
+								return value.charAt(0).toUpperCase() + value.slice(1).replace(/_/g, ' '); // Capitalize
+							}
+						}
+					},
+					yaxis: {
+						labels: {
+							formatter: function(val) {
+								return Math.round(val);  // Format numbers as integers
+							}
+						},
+						forceNiceScale: true,
+						min: 0,
+						tickAmount: 5
+					},
+					plotOptions: {
+						bar: {
+							horizontal: false,  // Vertical bars
+							distributed: true,  // This ensures each bar gets its own color
+							columnWidth: '70%'
+						}
+					},
+					dataLabels: {
+						enabled: true,
+						formatter: function(val) {
+							return Math.round(val);  // Format the data labels as integers
+						},
+						style: {
+							fontSize: '12px',
+							colors: ["#304758"]
+						}
+					},
+					legend: {
+						show: false  // No need for legend with distributed bars
+					}
+				};
+
+				// Create the chart
+				new ApexCharts(document.querySelector("#userChart"), options).render();
+			});
+	
+		// Fetch Institution Approval Status (Bar Chart)
+		fetch('/api/institution-status/')
+			.then(response => response.json())
+			.then(data => {
+				var options = {
+					chart: {
+						type: 'bar',
+						toolbar: { show: false }
+					},
+					series: [{
+						name: 'Count',
+						data: data.map(item => item.count)
+					}],
+					xaxis: {
+						categories: ['Approved', 'Rejected'],
+						labels: {
+							formatter: function (value) {
+								return value.charAt(0).toUpperCase() + value.slice(1);
+							}
+						}
+					},
+					yaxis: {
+						labels: {
+							formatter: function(val) {
+								return Math.round(val);  // Format numbers as integers
+							}
+						},
+						forceNiceScale: true,
+						min: 0,
+						tickAmount: 5
+					},
+					dataLabels: {
+						enabled: true,
+						formatter: function(val) {
+							return Math.round(val);  // Format the data labels as integers
+						},
+						style: {
+							fontSize: '12px',
+							colors: ["#304758"]
+						}
+					},
+					plotOptions: {
+						bar: {
+							colors: {
+								ranges: [
+									{ from: 0, to: data.find(item => item.status === 'approved').count, color: '#00E396' },
+									{ from: 0, to: data.find(item => item.status === 'rejected').count, color: '#FF4560' }
+								]
+							}
+						}
+					}
+				};
+				new ApexCharts(document.querySelector("#institutionChart"), options).render();
+			});
+	
+		// Fetch Feedback Visibility Status (Donut Chart)
+		fetch('/api/feedback-status/')
+			.then(response => response.json())
+			.then(data => {
+				var options = {
+					chart: { type: 'donut' },
+					series: data.map(item => item.count),
+					labels: data.map(item => {
+						if (item.status === 'show') {
+							return 'Shown';  // Change 'show' to 'Shown'
+						} else if (item.status === 'hide') {
+							return 'Hidden';  // Change 'hide' to 'Hidden'
+						}
+						return item.status; // Default case, if any other status
+					})
+				};
+				new ApexCharts(document.querySelector("#feedbackChart"), options).render();
+			});
+	</script>
+	
+    <script src="{% static 'js/dashboard.js' %} "></script>
+	<script src="{% static 'libs/jquery/dist/jquery.min.js' %} "></script>
+	<script src="{% static 'js/sidebarmenu.js' %} "></script>
+	<script src="{% static 'libs/simplebar/dist/simplebar.min.js' %} "></script>
+	<script src="{% static 'libs/@preline/dropdown/index.js' %} "></script>
+	<script src="{% static 'libs/@preline/overlay/index.js' %} "></script>
+	<script src="{% static 'libs/apexcharts/dist/apexcharts.min.js' %} "></script>
+</body>
+</html>

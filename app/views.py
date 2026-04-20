@@ -1,0 +1,1320 @@
+import json
+
+from urllib.parse import unquote
+from app.models import *
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib import messages
+from django.contrib.auth.hashers import check_password, make_password
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import send_mail
+from django.core.paginator import Paginator
+from django.utils.crypto import get_random_string
+from django.db.models import Count
+from datetime import timedelta
+
+from app.utils import get_nearby_institutions, haversine
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+# Website
+def index(request):
+    if 'user_id' in request.session:
+        return redirect('userpage')
+    
+    institutions = Institution.objects.all()
+    trending_institutions = get_trending_institutions()
+    courses = Course.objects.all().order_by('?')[:5]
+    feedbacks = Feedback.objects.all().filter(status='show')
+
+    context = {'institutions': institutions, 'trending_institutions': trending_institutions, 'courses': courses, 'feedbacks': feedbacks}
+    return render(request, 'index.html', context)
+
+def authentication(request):
+    if 'user_id' in request.session:
+        return redirect('userpage')
+    
+    return render(request, 'authentication.html')
+
+def signup(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        email = request.POST.get("signup-email")
+
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Email already exists.")
+            return redirect('user')
+
+        password = make_password(request.POST.get("signup-password"))
+
+        user = User(name=name, email=email, password=password)
+        user.save()
+        messages.success(request, "Account created successfully.")
+
+        return redirect('authentication')
+
+    return render(request, "userpage.html")
+
+def login(request):
+    if 'user_id' in request.session:
+        return redirect('userpage')
+    
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('login-password')
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            messages.error(request, "Email does not exist.")
+            return render(request, 'authentication.html')
+
+        if not check_password(password, user.password):
+            messages.error(request, "Invalid password.")
+            return render(request, 'authentication.html')
+
+        if user.status != 'active':
+            messages.error(request, "Your account is suspended. Please contact support.")
+            return render(request, 'authentication.html')
+
+        request.session['user_id'] = user.id
+        request.session.set_expiry(7200) 
+        return redirect('userpage')
+
+    return render(request, 'authentication.html')
+
+def logout(request):
+    keys_to_remove = ['user_id']
+
+    for key in keys_to_remove:
+        if key in request.session:
+            del request.session[key]
+    
+    return redirect('index')
+
+def about_us(request):
+    feedbacks = Feedback.objects.filter(status='show').order_by('?')[:5]
+    return render(request, 'about.html', {'feedbacks': feedbacks})
+
+def all_institutions(request):
+    PROVINCES = [
+        ('province_1', 'Province No. 1'),
+        ('province_2', 'Province No. 2'),
+        ('bagmati', 'Bagmati Province'),
+        ('gandaki', 'Gandaki Province'),
+        ('lumbini', 'Lumbini Province'),
+        ('karnali', 'Karnali Province'),
+        ('sudurpashchim', 'Sudurpashchim Province'),
+    ]
+
+    institutions = Institution.objects.all().order_by('name')
+    return render(request, 'all_institution.html', {'institutions': institutions, 'provinces': Institution.PROVINCES})
+
+def institution_details(request, id):
+    try:
+        institution = Institution.objects.get(id=id)
+
+        # Ensure that average_rating is a float
+        institution.average_rating = float(institution.average_rating)
+        
+        # Calculate the number of full stars and the half-star condition
+        full_stars = int(institution.average_rating)
+        half_star = (institution.average_rating - full_stars) >= 0.5
+        
+        # Create a list for star display (full stars, half star, empty stars)
+        stars = ['filled'] * full_stars
+        if half_star:
+            stars.append('half')
+        stars.extend(['empty'] * (5 - len(stars)))  # Ensure 5 stars in total
+
+        InstitutionView.objects.create(institution=institution)
+        
+        context = {'institution': institution, 'stars': stars, 'gallery_images': institution.images.all(), 'offered_courses': InstitutionCourse.objects.filter(institution=institution)}
+        return render(request, 'institution_details.html', context)
+    except Institution.DoesNotExist:
+        return render(request, '404.html', {'error': 'Institution not found'})
+    
+def course_details(request, id):
+    try:
+        course = Course.objects.get(id=id)
+        courses = Course.objects.all().order_by('?')[:5]
+        offering_institutions = InstitutionCourse.objects.filter(course=course)
+
+        prospect_careers = course.Prospect_Career.split(',') if course.Prospect_Career else []
+        prospect_careers = [Prospect_Career.strip() for Prospect_Career in prospect_careers]  # Strip extra space
+        
+        context = {'course': course, 'courses': courses, 'prospect_careers': prospect_careers, 'offering_institutions': offering_institutions}
+        return render(request, 'course_details.html', context)
+    except Course.DoesNotExist:
+        return render(request, '404.html', {'error': 'Institution not found'})
+    
+    
+# User
+def userpage(request):
+    if 'user_id' not in request.session:
+        return redirect('authentication')
+    
+    user_id = request.session.get('user_id')
+    user = User.objects.get(id=user_id)
+
+    institutions = Institution.objects.all()
+
+    context = {'institutions': institutions, 'user': user}
+    return render(request, 'userpage.html', context)
+
+def profile(request):
+    if 'user_id' not in request.session:
+        return redirect('authentication')
+    
+    user_id = request.session.get('user_id')
+    user = User.objects.get(id=user_id)
+
+    PROVINCES = [
+        ('province_1', 'Province No. 1'),
+        ('province_2', 'Province No. 2'),
+        ('bagmati', 'Bagmati Province'),
+        ('gandaki', 'Gandaki Province'),
+        ('lumbini', 'Lumbini Province'),
+        ('karnali', 'Karnali Province'),
+        ('sudurpashchim', 'Sudurpashchim Province'),
+    ]
+
+    context = {'user': user, 'provinces': PROVINCES}
+    return render(request, 'profile.html', context)
+
+def update_profile(request, id):
+    if 'user_id' not in request.session:
+        return redirect('authentication')
+    
+    user = get_object_or_404(User, id=id)
+
+    if request.method == 'POST':
+        user.name = request.POST.get('name')
+        user.email = request.POST.get('email')
+        user.phone = request.POST.get('phone')
+        
+        province = request.POST.get('province')
+        if province:
+            user.province = province
+
+        user.save()
+        
+        messages.success(request, 'Profile details updated successfully.')
+        return redirect('profile')
+    
+    return redirect('profile')
+
+def institutions(request):
+    if 'user_id' not in request.session:
+        return redirect('authentication')
+    
+    user_id = request.session.get('user_id')
+    user = User.objects.get(id=user_id)
+
+    PROVINCES = [
+        ('province_1', 'Province No. 1'),
+        ('province_2', 'Province No. 2'),
+        ('bagmati', 'Bagmati Province'),
+        ('gandaki', 'Gandaki Province'),
+        ('lumbini', 'Lumbini Province'),
+        ('karnali', 'Karnali Province'),
+        ('sudurpashchim', 'Sudurpashchim Province'),
+    ]
+
+    institutions = Institution.objects.all().order_by('name')
+    nearby_institutions = get_nearby_institutions(user, radius_km=50)
+
+    return render(request, 'institutions.html', {'provinces': Institution.PROVINCES, 'institutions': institutions, 'nearby_institutions': nearby_institutions})
+
+def courses(request):
+    courses = Course.objects.all().order_by('name')
+    return render(request, 'courses.html', {'courses': courses})
+
+def applications(request):
+    if 'user_id' not in request.session:
+        return redirect('authentication')
+
+    user_id = request.session.get('user_id')
+    user = User.objects.get(id=user_id)
+
+    institutions = Institution.objects.filter(admission=True).order_by('name')
+    application_list = Application.objects.filter(user=user_id).order_by('-id')
+
+    paginator = Paginator(application_list, 7)  
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {'institutions': institutions, 'page_obj': page_obj, 'user': user}
+    return render(request, 'applications.html', context)
+
+def send_application(request):
+    if 'user_id' not in request.session:
+        return redirect('authentication')
+
+    user_id = request.session.get('user_id')
+    user = User.objects.get(id=user_id)
+
+    if request.method == 'POST':
+        # Retrieve form data
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        institution_id = request.POST.get('institution')
+        program_id = request.POST.get('program')
+        query = request.POST.get('query', '')  # Optional field
+
+        # Validate input
+        if not institution_id or not program_id:
+            messages.error(request, "Please select both an institution and a program.")
+            return redirect('applications')  # Replace with the name of the form view
+
+        # Get the related institution and program objects
+        institution = get_object_or_404(Institution, id=institution_id)
+        program = get_object_or_404(InstitutionCourse, id=program_id)
+
+        # Check if the user has already applied for the same institution and program
+        existing_application = Application.objects.filter(
+            user=user, institution=institution, program=program
+        ).exists()
+
+        if existing_application:
+            messages.warning(request, "You have already applied to this program at this institution.")
+            return redirect('applications')  # Replace with the name of the form view
+
+        # Create and save the application
+        application = Application(
+            user=user,
+            institution=institution,
+            program=program,
+            phone=phone,
+            email=email,
+            query=query,
+        )
+        application.save()
+
+        # messages.success(request, "Your application has been successfully submitted!")
+        return redirect('applications')  # Redirect to a success page
+
+    # If not a POST request, redirect to the application form
+    institutions = Institution.objects.all()  # Fetch all institutions for the form
+    context = {'user': user, 'institutions': institutions}
+    return render(request, 'applications.html', context)
+
+def feedbacks(request):
+    if 'user_id' not in request.session:
+        return redirect('authentication')
+    
+    user_id = request.session.get('user_id')
+    user = User.objects.get(id=user_id)
+
+    feedback_list = Feedback.objects.filter(user=user).order_by('-id')
+    paginator = Paginator(feedback_list, 5)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {'page_obj': page_obj, 'user': user}
+    return render(request, 'feedbacks.html', context)
+
+def send_feedback(request):
+    if 'user_id' not in request.session:
+        return redirect('authentication')
+    
+    user_id = request.session.get('user_id')
+    user = User.objects.get(id=user_id)
+
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        review = request.POST.get('review')
+
+        feedback = Feedback(user=user, email=email, phone=phone, review=review)
+        feedback.save()
+        messages.success(request, 'Feedback sent successfully.')
+
+        return redirect('feedbacks')
+
+    return render(request, 'feedbacks.html', {'user': user})
+
+
+# Institution
+def institution_authentication(request):
+    if 'institution_id' in request.session:
+        return redirect('institution-dashboard')
+    
+    return render(request, 'institution_authentication.html')
+
+def institution_signup(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        institution = request.POST.get("institution")
+        email = request.POST.get("signup-email")
+
+        if InstitutionAdmin.objects.filter(email=email).exists():
+            messages.error(request, "Email already exists.")
+            return redirect('institution-authentication')
+            
+        if InstitutionAdmin.objects.filter(institution=institution).exists():
+            messages.error(request, "Institution already exists.")
+            return redirect('institution-authentication')
+
+        password = make_password(request.POST.get("signup-password"))
+
+        user = InstitutionAdmin(name=name, institution=institution, email=email, password=password)
+        user.save()
+        messages.success(request, "Account created successfully.")
+
+        return redirect('institution-authentication')
+
+    return render(request, "institution_authentication.html")
+
+def institution_login(request):
+    if 'institution_id' in request.session:
+        return redirect('institution-dashboard')
+    
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('login-password')
+
+        try:
+            institution = InstitutionAdmin.objects.get(email=email)
+        except InstitutionAdmin.DoesNotExist:
+            messages.error(request, "Email does not exist.")
+            return render(request, 'institution_authentication.html')
+
+        if not check_password(password, institution.password):
+            messages.error(request, "Invalid password.")
+            return render(request, 'institution_authentication.html')
+
+        if institution.status == 'not_decided':
+            messages.error(request, "Your account is in verification phase.")
+            return render(request, 'institution_authentication.html')
+        
+        if institution.status == 'rejected':
+            messages.error(request, "Your account request has been rejected.")
+            return render(request, 'institution_authentication.html')
+
+        request.session['institution_id'] = institution.id
+        request.session.set_expiry(7200) 
+        return redirect('institution-profile')
+
+    return render(request, 'institution_authentication.html')
+
+def institution_logout(request):
+    # Check if the institution is logged in
+    if 'institution_id' in request.session:
+        del request.session['institution_id']
+    
+    # Redirect to the institution authentication page after logging out
+    return redirect('institution-authentication')
+
+def institution_dashboard(request):
+    if 'institution_id' not in request.session:
+        return redirect('institution-authentication')
+
+    institution_admin_id = request.session.get('institution_id')
+    try:
+        institution_admin = InstitutionAdmin.objects.get(id=institution_admin_id)
+        
+        # Check if the institution exists before proceeding
+        if not hasattr(institution_admin, 'managed_institution'):
+            return redirect('institution-profile')
+        
+        institution = institution_admin.managed_institution
+    except InstitutionAdmin.DoesNotExist:
+        return redirect('institution-authentication')
+
+    offered_courses_count = InstitutionCourse.objects.filter(institution=institution).count()
+    admissions_count = Application.objects.filter(institution=institution, status='accepted').count()
+
+    # Access the last_admissions field correctly
+    last_admissions = institution.last_admissions
+    current_admissions = admissions_count
+
+    # Avoid division by zero and calculate the percentage change
+    if last_admissions != 0:
+        percentage_change = ((current_admissions - last_admissions) / last_admissions) * 100
+    else:
+        percentage_change = 0  # Handle case where last_admissions is 0 (no data for last admissions)
+
+    percentage_change = round(percentage_change, 1)
+
+    # Determine if the change is positive or negative
+    if percentage_change > 0:
+        change_type = "increase"
+    elif percentage_change < 0:
+        change_type = "decrease"
+    else:
+        change_type = "no change"
+
+    context = {'institution': institution, 'offered_courses_count': offered_courses_count, 'admissions_count': admissions_count, 'percentage_change': percentage_change, 'change_type': change_type}
+    return render(request, 'institution_dashboard.html', context)
+
+def institution_profile(request):
+    if 'institution_id' not in request.session:
+        return redirect('institution-authentication')
+    
+    institution_id = request.session.get('institution_id')
+    institution = InstitutionAdmin.objects.get(id=institution_id)
+        
+    AFFILIATION_CHOICES = [
+        ('tribhuvan', 'Tribhuvan University'),
+        ('pokhara', 'Pokhara University'),
+        ('kathmandu', 'Kathmandu University'),
+        ('gandaki', 'Gandaki University'),
+        ('purbanchal', 'Purbanchal University'),
+        ('foreign', 'Foreign University'),
+    ]
+
+    PROVINCES = [
+        ('province_1', 'Province No. 1'),
+        ('province_2', 'Province No. 2'),
+        ('bagmati', 'Bagmati Province'),
+        ('gandaki', 'Gandaki Province'),
+        ('lumbini', 'Lumbini Province'),
+        ('karnali', 'Karnali Province'),
+        ('sudurpashchim', 'Sudurpashchim Province'),
+    ]
+
+    # admin_institution = institution.managed_institution
+    admin_institution = Institution.objects.filter(admin=institution).first()
+
+    if admin_institution:
+        return render(request, 'institution_profile.html', {'affiliation_choices': AFFILIATION_CHOICES, 'provinces': PROVINCES, 'institution': institution, 'admin_institution': admin_institution, 'edit_mode': True})
+    else:
+        return render(request, 'institution_profile.html', {'affiliation_choices': AFFILIATION_CHOICES, 'provinces': PROVINCES, 'institution': institution, 'edit_mode': False})
+
+def institutionadmin_profile(request):
+    if 'institution_id' not in request.session:
+        return redirect('institution-authentication')
+    
+    institution_id = request.session.get('institution_id')
+    institution = InstitutionAdmin.objects.get(id=institution_id)
+    admin_institution = Institution.objects.filter(admin=institution).first()
+
+    return render(request, 'institutionadmin_profile.html', {'institution': institution, 'admin_institution': admin_institution})
+
+def update_institutionadminprofile(request, id):
+    if 'institution_id' not in request.session:
+        return redirect('institution-authentication')
+    
+    admin_institution = get_object_or_404(InstitutionAdmin, id=id)
+
+    if request.method == 'POST':
+        admin_institution.name = request.POST.get('name')
+        admin_institution.phone = request.POST.get('phone')
+        admin_institution.email = request.POST.get('email')
+
+        admin_institution.save()
+        
+        messages.success(request, 'Profile details updated successfully.')
+        return redirect('institution-admin-profile')
+    
+    return redirect('institution-admin-profile')
+
+def add_institution(request):
+    if 'institution_id' not in request.session:
+        return redirect('institution-authentication')
+    
+    institution_id = request.session.get('institution_id')
+    institution = InstitutionAdmin.objects.get(id=institution_id)
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        affiliation = request.POST.get('affiliation')
+        foreign_university_name = request.POST.get('foreign_university_name')
+        overview = request.POST.get('overview')
+        message = request.POST.get('message')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        website = request.POST.get('website')
+        address = request.POST.get('address')
+        province = request.POST.get('province')
+        map = request.POST.get('map')
+        logo = request.FILES.get('file-upload')
+
+        institution = Institution(name=name, affiliation=affiliation, Foreign_University_Name=foreign_university_name, overview=overview, message=message, phone=phone, email=email, website=website, address=address, province=province, map=map, logo=logo, admin=institution)
+        institution.save()
+        messages.success(request, 'Institution added successfully.')
+
+        return redirect('institution-profile')
+    
+def update_institution(request, institution_id):
+    institution = get_object_or_404(Institution, id=institution_id)
+
+    if request.method == 'POST':
+        if 'file-upload' in request.FILES:
+            logo = request.FILES['file-upload']
+            institution.logo = logo
+
+        # Get the form data and update the institution fields
+        affiliation = request.POST.get('affiliation')
+        if affiliation == 'foreign':
+            foreign_university_name = request.POST.get('foreign_university_name')
+            institution.Foreign_University_Name = foreign_university_name
+        else:
+            institution.Foreign_University_Name = None
+
+        institution.name = request.POST.get('name')
+        institution.affiliation = affiliation
+        institution.email = request.POST.get('email')
+        institution.phone = request.POST.get('phone')
+        institution.website = request.POST.get('website')
+        institution.address = request.POST.get('address')
+
+        province = request.POST.get('province')
+        if province:
+            institution.province = province
+
+        institution.overview = request.POST.get('overview')
+        institution.message = request.POST.get('message')
+        institution.map = request.POST.get('map')
+        institution.save()
+
+        messages.success(request, 'Institution details updated successfully.')
+        return redirect('institution-profile')
+
+    return render(request, 'institution_profile.html', {'institution': institution, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES,})
+
+def programs(request):
+    if 'institution_id' not in request.session:
+        return redirect('institution-authentication')
+
+    institution_admin_id = request.session.get('institution_id')
+    try:
+        institution_admin = InstitutionAdmin.objects.get(id=institution_admin_id)
+        
+        # Check if the institution exists before proceeding
+        if not hasattr(institution_admin, 'managed_institution'):
+            return redirect('institution-profile')
+        
+        institution = institution_admin.managed_institution
+    except InstitutionAdmin.DoesNotExist:
+        return redirect('institution-authentication')
+
+    courses = Course.objects.all().order_by('name')
+    offered_courses = InstitutionCourse.objects.filter(institution=institution).order_by('course__name')
+
+    context = {'institution': institution, 'courses': courses, 'offered_courses': offered_courses}
+    return render(request, 'programs.html', context)
+
+def add_offered_course(request):
+    if 'institution_id' not in request.session:
+        return redirect('institution-authentication')
+    
+    institution_admin_id = request.session.get('institution_id')
+    try:
+        institution_admin = InstitutionAdmin.objects.get(id=institution_admin_id)
+    except InstitutionAdmin.DoesNotExist:
+        return redirect('institution-authentication')
+
+    institution = institution_admin.managed_institution
+    
+    if request.method == 'POST':
+        course_id = request.POST.get('course')
+        details = request.POST.get('overview')
+
+        try:
+            course = Course.objects.get(id=course_id)
+        except Course.DoesNotExist:
+            messages.error(request, "Invalid course selection.")
+            return redirect('programs')
+
+        if InstitutionCourse.objects.filter(institution=institution, course=course).exists():
+            messages.error(request, "This course is already offered by this institution.")
+            return redirect('programs')
+
+        InstitutionCourse.objects.create(institution=institution, course=course, details=details)
+
+        messages.success(request, f"{course.name} has been successfully added to {institution.name}.")
+        return redirect('programs')
+    
+    courses = Course.objects.all().order_by('name')
+
+    context = {'institution': institution, 'courses': courses}
+    return render(request, 'programs.html', context)
+
+def edit_offered_course(request, institution_course_id):
+    try:
+        offered_course = InstitutionCourse.objects.get(id=institution_course_id)
+    except InstitutionCourse.DoesNotExist:
+        return redirect('programs')
+
+    return render(request, 'edit_offered_course.html', {'offered_course': offered_course})
+
+def update_offered_course(request, institution_course_id):
+    if 'institution_id' not in request.session:
+        return redirect('institution-authentication')
+
+    offered_course = get_object_or_404(InstitutionCourse, id=institution_course_id)
+
+    if request.method == 'POST':
+        offered_course.details = request.POST.get('details', '').strip()
+        offered_course.save()
+        messages.success(request, "Course details updated successfully.")
+        return redirect('edit-offered-course', institution_course_id=institution_course_id)
+
+    return redirect('edit-offered-course', institution_course_id=institution_course_id)
+
+def delete_offered_course(request, course_id):
+    if request.method == "POST":
+        course = get_object_or_404(InstitutionCourse, id=course_id)
+        course.delete()
+        messages.success(request, "Course deleted successfully!")
+        return redirect("programs")  # Redirect to the course list page
+
+    return redirect("programs")
+
+def admission(request):
+    if 'institution_id' not in request.session:
+        return redirect('institution-authentication')
+
+    institution_id = request.session.get('institution_id')
+
+    try:
+        institution_admin = InstitutionAdmin.objects.get(id=institution_id)
+
+        if not hasattr(institution_admin, 'managed_institution'):
+            return redirect('institution-profile')
+
+        institution = institution_admin.managed_institution
+    except InstitutionAdmin.DoesNotExist:
+        return redirect('institution-authentication')
+
+    admissions_list = Application.objects.filter(institution=institution).order_by('-id')
+
+    paginator = Paginator(admissions_list, 7)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {'page_obj': page_obj, 'institution': institution}
+    return render(request, 'admission.html', context)
+
+@csrf_exempt
+def toggle_admission(request, institution_id):
+    if request.method == "POST":
+        try:
+            institution = Institution.objects.get(id=institution_id)
+            data = json.loads(request.body)
+            institution.admission = data.get("admission", False)
+            institution.save()
+            return JsonResponse({"success": True, "admission": institution.admission})
+        except Institution.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Institution not found"})
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
+
+    return JsonResponse({"success": False, "error": "Invalid request method"})
+
+def update_application_status(request, application_id):
+    """Approve or reject an application and track admissions."""
+    application = get_object_or_404(Application, id=application_id)
+
+    if request.method == "POST":
+        new_status = request.POST.get("status")
+
+        if new_status in ['accepted', 'rejected', 'pending']:
+            application.status = new_status
+            application.save()
+
+            if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+                return JsonResponse({"success": True, "status": new_status})
+
+    return redirect('admission')
+    
+
+# Admin
+def admin_authentication(request):
+    if 'admin_id' in request.session:
+        return redirect('dashboard')
+    
+    return render(request, 'admin_authentication.html')
+
+def admin_login(request):
+    if 'admin_id' in request.session:
+        return redirect('dashboard')
+    
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('login-password')
+
+        try:
+            admin = SuperAdmin.objects.get(email=email)
+        except SuperAdmin.DoesNotExist:
+            messages.error(request, "Email does not exist.")
+            return render(request, 'admin_authentication.html')
+
+        if not check_password(password, admin.password):
+            messages.error(request, "Invalid password.")
+            return render(request, 'admin_authentication.html')
+
+        if admin.status != 'active':
+            messages.error(request, "Your account is suspended. Please contact support.")
+            return render(request, 'admin_authentication.html')
+
+        request.session['admin_id'] = admin.id
+        request.session.set_expiry(7200) 
+        return redirect('dashboard')
+
+    return render(request, 'admin_authentication.html')
+
+def admin_signup(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        role = request.POST.get("role")
+        phone = request.POST.get("phone")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+
+        if SuperAdmin.objects.filter(phone=phone).exists():
+            messages.error(request, "Phone number already exists.")
+            return redirect('system-user')
+        
+        if SuperAdmin.objects.filter(email=email).exists():
+            messages.error(request, "Email already exists.")
+            return redirect('system-user')
+
+        password = make_password(request.POST.get("signup-password"))
+
+        admin = SuperAdmin(name=name, role=role, phone=phone, email=email, password=password)
+        admin.save()
+        messages.success(request, "Account created successfully.")
+
+        return redirect('system-user')
+
+    return render(request, "system_user.html")
+
+def admin_logout(request):
+    # Check if the admin is logged in
+    if 'admin_id' in request.session:
+        del request.session['admin_id']
+    
+    # Redirect to the admin authentication page after logging out
+    return redirect('admin-authentication')
+
+def dashboard(request):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+    
+    admin_id = request.session.get('admin_id')
+    admin = SuperAdmin.objects.get(id=admin_id)
+    
+    return render(request, 'dashboard.html', {'admin': admin})
+
+def admin_profile(request):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+    
+    admin_id = request.session.get('admin_id')
+    admin = SuperAdmin.objects.get(id=admin_id)
+
+    return render(request, 'admin_profile.html', {'admin': admin})
+
+def update_adminprofile(request, id):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+    
+    admin = get_object_or_404(SuperAdmin, id=id)
+
+    if request.method == 'POST':
+        admin.name = request.POST.get('name')
+        admin.email = request.POST.get('email')
+        admin.phone = request.POST.get('phone')
+
+        admin.save()
+        
+        messages.success(request, 'Profile details updated successfully.')
+        return redirect('admin-profile')
+    
+    return redirect('admin-profile')
+
+def system_user(request):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+
+    try:
+        admin = SuperAdmin.objects.get(id=request.session['admin_id'])
+    except SuperAdmin.DoesNotExist:
+        return redirect('admin_login')
+
+    if admin.role != 'admin':
+        return redirect('dashboard')
+
+    ROLES = [
+        ('admin', 'Admin'),
+        ('staff', 'Staff'),
+    ]
+
+    system_users = SuperAdmin.objects.all().order_by('name')
+
+    context = {'admin': admin, 'roles': ROLES, 'system_users': system_users}
+    return render(request, 'system_user.html', context)
+
+def delete_system_user(request, system_user_id):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+
+    try:
+        admin = SuperAdmin.objects.get(id=request.session['admin_id'])
+    except SuperAdmin.DoesNotExist:
+        return redirect('admin_login')
+
+    if admin.role != 'admin':
+        return redirect('dashboard')
+    
+    if request.method == "POST":
+        system_user = get_object_or_404(SuperAdmin, id=system_user_id)
+        system_user.delete()
+        messages.success(request, "User deleted successfully!")
+        return redirect("system-user")
+
+    return redirect("system-user")
+
+def user(request):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+    
+    admin_id = request.session.get('admin_id')
+    admin = SuperAdmin.objects.get(id=admin_id)
+
+    users = User.objects.all().order_by('-id')
+    return render(request, 'user.html', {'users': users, 'admin': admin})
+
+def institution(request):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+    
+    admin_id = request.session.get('admin_id')
+    admin = SuperAdmin.objects.get(id=admin_id)
+
+    institutions_list = InstitutionAdmin.objects.all().order_by('name')
+
+    paginator = Paginator(institutions_list, 10)  
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {'admin': admin, 'page_obj': page_obj}
+    return render(request, 'institution.html', context)
+
+def course(request):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+    
+    admin_id = request.session.get('admin_id')
+    admin = SuperAdmin.objects.get(id=admin_id)
+
+    FIELDS = [
+        ('engineering', 'Engineering'),
+        ('cit', 'Computer and Information Technology'),
+        ('management', 'Management'),
+        ('st', 'Science and Technology'),
+        ('medicine', 'Medicine'),
+        ('law', 'Law')
+    ]
+
+    LEVELS = [
+        ('bachelor', 'Bachelor'),
+        ('master', 'Master')
+    ]
+
+    AFFILIATION_CHOICES = [
+        ('tribhuvan', 'Tribhuvan University'),
+        ('pokhara', 'Pokhara University'),
+        ('kathmandu', 'Kathmandu University'),
+        ('gandaki', 'Gandaki University'),
+        ('purbanchal', 'Purbanchal University'),
+        ('foreign', 'Foreign University'),
+    ]
+
+    courses_list = Course.objects.all().order_by('name')
+    institutions = Institution.objects.all()
+
+    paginator = Paginator(courses_list, 10)  
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {'admin': admin, 'fields': FIELDS, 'levels': LEVELS, 'affiliation_choices': AFFILIATION_CHOICES, 'page_obj': page_obj, 'institutions': institutions}
+    return render(request, 'course.html', context)
+
+def add_course(request):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+    
+    admin_id = request.session.get('admin_id')
+    admin = SuperAdmin.objects.get(id=admin_id)
+
+    if request.method == "POST":
+        name = request.POST.get('name')
+        abbreviation = request.POST.get('abbreviation')
+        year = request.POST.get('year')
+        field = request.POST.get('field')
+        level = request.POST.get('level')
+        affiliation = request.POST.get('affiliation')
+        foreign_university_name = request.POST.get('foreign_university_name')
+        about = request.POST.get('about')
+        eligibility = request.POST.get('eligibility')
+        admission_criteria = request.POST.get('admission_criteria')
+        job_prospect = request.POST.get('job_prospect')
+        prospect_career = request.POST.get('prospect_career')
+
+        course = Course(name=name, abbreviation=abbreviation, year=year, field=field, level=level, affiliation=affiliation, Foreign_University_Name=foreign_university_name, about=about,
+            eligibility=eligibility, Admission_Criteria=admission_criteria, Job_Prospect=job_prospect, Prospect_Career=prospect_career)
+        course.save()
+        
+        return redirect("course")
+
+    institutions = Institution.objects.all()
+    return render(request, "course.html", {"institutions": institutions, 'admin': admin})
+
+def edit_course(request, course_id):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+    
+    admin_id = request.session.get('admin_id')
+    admin = SuperAdmin.objects.get(id=admin_id)
+
+    course = get_object_or_404(Course, id=course_id)
+    institutions = Institution.objects.all()
+
+    FIELDS = [
+        ('engineering', 'Engineering'),
+        ('cit', 'Computer and Information Technology'),
+        ('management', 'Management'),
+        ('st', 'Science and Technology'),
+        ('medicine', 'Medicine'),
+        ('law', 'Law')
+    ]
+
+    LEVELS = [
+        ('bachelor', 'Bachelor'),
+        ('master', 'Master')
+    ]
+
+    AFFILIATION_CHOICES = [
+        ('tribhuvan', 'Tribhuvan University'),
+        ('pokhara', 'Pokhara University'),
+        ('kathmandu', 'Kathmandu University'),
+        ('gandaki', 'Gandaki University'),
+        ('purbanchal', 'Purbanchal University'),
+        ('foreign', 'Foreign University'),
+    ]
+
+    context = {'admin': admin, 'course': course, 'institutions': institutions, 'fields': FIELDS, 'levels': LEVELS, 'affiliation_choices': AFFILIATION_CHOICES}
+    return render(request, 'edit_course.html', context)
+
+def update_course(request, course_id):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+    
+    admin_id = request.session.get('admin_id')
+    admin = SuperAdmin.objects.get(id=admin_id)
+
+    course = get_object_or_404(Course, id=course_id)
+
+    if request.method == 'POST':
+        affiliation = request.POST.get('affiliation')
+        if affiliation == 'foreign':
+            foreign_university_name = request.POST.get('foreign_university_name')
+            course.Foreign_University_Name = foreign_university_name
+        else:
+            course.Foreign_University_Name = None
+
+        course.name = request.POST.get('name')
+        course.affiliation = affiliation
+        course.abbreviation = request.POST.get('abbreviation')
+        course.year = request.POST.get('year')
+        course.field = request.POST.get('field')
+        course.level = request.POST.get('level')
+        course.about = request.POST.get('about')
+        course.eligibility = request.POST.get('eligibility')
+        course.Admission_Criteria = request.POST.get('admission_criteria')
+        course.Job_Prospect = request.POST.get('job_prospect')
+        course.Prospect_Career = request.POST.get('prospect_career')
+        offered_by_ids = request.POST.getlist('offered_by')
+        if offered_by_ids:
+            course.Offered_by.set(offered_by_ids)
+        course.save()
+
+        messages.success(request, 'Course details updated successfully.')
+        return redirect('edit-course', course_id=course.id)
+
+    return render(request, 'edit_course.html', {'course': course, 'admin': admin})
+
+def feedback(request):
+    if 'admin_id' not in request.session:
+        return redirect('admin-authentication')
+    
+    try:
+        admin = SuperAdmin.objects.get(id=request.session['admin_id'])
+    except SuperAdmin.DoesNotExist:
+        return redirect('admin_login')
+
+    if admin.role != 'admin':
+        return redirect('dashboard')
+    
+    feedbacks = Feedback.objects.all().order_by('-id')
+    return render(request, 'feedback.html', {'feedbacks': feedbacks, 'admin': admin})
+
+
+# Algorithm
+# Time Decay Ranking
+def get_trending_institutions():
+    """Fetch institutions with the most views in the last 7 days."""
+    last_week = now() - timedelta(days=7)
+
+    trending_institutions = Institution.objects.annotate(
+        recent_views=Count('views', filter=models.Q(views__timestamp__gte=last_week))
+    ).order_by('-recent_views')
+
+    return trending_institutions
+
+# Haversine Formula
+def nearby_institutions_view(request, user_id, radius=50):
+    user = get_object_or_404(User, id=user_id)
+    institutions = get_nearby_institutions(user, radius_km=radius)
+    
+    data = [{
+        "name": inst.name, 
+        "address": inst.address, 
+        "distance": haversine(user.latitude, user.longitude, inst.latitude, inst.longitude)
+    } for inst in institutions]
+
+    return JsonResponse({"nearby_institutions": data})
+
+# Update user coordinates
+@csrf_exempt
+def update_location(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+
+            latitude = data.get("latitude")
+            longitude = data.get("longitude")
+            user_id = data.get("user_id")  # Get user_id from request body
+
+            if not latitude or not longitude or not user_id:
+                return JsonResponse({"error": "Latitude, longitude, and user_id are required"}, status=400)
+
+            try:
+                user = User.objects.get(id=user_id)
+            except User.DoesNotExist:
+                return JsonResponse({"error": "User not found"}, status=404)
+
+            user.latitude = latitude
+            user.longitude = longitude
+            user.save()
+
+            return JsonResponse({"message": "Location updated successfully"})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+# Update institution coordinates
+@csrf_exempt
+def update_institution_location(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            institution_id = data.get("institution_id")
+            admin_id = data.get("admin_id")
+            latitude = data.get("latitude")
+            longitude = data.get("longitude")
+
+            if not institution_id or not admin_id or not latitude or not longitude:
+                return JsonResponse({"error": "Institution ID, Admin ID, latitude, and longitude are required"}, status=400)
+
+            institution = get_object_or_404(Institution, id=institution_id)
+            admin = get_object_or_404(InstitutionAdmin, id=admin_id)
+
+            # Ensure the institution belongs to the given admin
+            if institution.admin != admin:
+                return JsonResponse({"error": "You do not have permission to update this institution's location"}, status=403)
+
+            institution.latitude = latitude
+            institution.longitude = longitude
+            institution.save()
+
+            return JsonResponse({"message": "Institution location updated successfully"})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+
+# Ajax
+# Update the status of an institution admin account
+@csrf_exempt
+def update_status(request, institution_id):
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        try:
+            institution = InstitutionAdmin.objects.get(id=institution_id)
+            
+            if institution.status != status:  # Check if status has changed
+                institution.status = status
+                institution.save()
+                institution.send_status_notification()  # Send email notification
+
+            return JsonResponse({'success': True, 'message': 'Status updated successfully.'})
+        except InstitutionAdmin.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Institution not found.'}, status=404)
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=400)
+
+# Pass offered courses by specific college to admission form
+def get_programs(request, institution_id):
+    """Return programs for a specific institution as JSON."""
+    programs = InstitutionCourse.objects.filter(institution_id=institution_id)
+    
+    # Format the data for the response
+    programs_data = [
+        {
+            'id': program.id,
+            'course_name': program.course.name,  # Just the course name
+            'full_name': str(program)  # Keep the full string for backend reference if needed
+        }
+        for program in programs
+    ]
+    
+    return JsonResponse({'programs': programs_data})
+
+
+# Forget password
+def password_setting(request):
+    return render(request, 'request_otp.html')
+
+def change_setting(request):
+    return render(request, 'change_password.html')
+
+def send_otp(email):
+    user = None
+
+    if SuperAdmin.objects.filter(email=email).exists():
+        user = SuperAdmin.objects.get(email=email)
+    elif User.objects.filter(email=email).exists():
+        user = User.objects.get(email=email)
+    elif InstitutionAdmin.objects.filter(email=email).exists():
+        user = InstitutionAdmin.objects.get(email=email)
+    
+    if user:
+        # Generate an OTP
+        otp = get_random_string(length=6, allowed_chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890')
+        
+        OTP.objects.create(email=email, otp=otp)
+
+        send_mail(
+            'Your OTP for password change',
+            f'Your OTP to change the password is: {otp}',
+            'zaynierashik@gmail.com',  # Replace with your own email
+            [email],
+            fail_silently=False,
+        )
+        return True
+    return False
+
+def request_otp(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        
+        if send_otp(email):
+            return render(request, 'change_password.html', {'message': 'OTP sent to your email. Please check the inbox.'})
+        else:
+            return render(request, 'request_otp.html', {'error': 'Email not found. Please check and try again.'})
+
+def change_user_password(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        otp = request.POST.get('otp')
+        new_password = request.POST.get('new_password')
+        
+        success, message = change_password(email, otp, new_password)
+        
+        if success:
+            return render(request, 'change_password.html', {"message": message})
+        else:
+            return render(request, 'change_password.html', {"message": message})
+
+def change_password(email, otp, new_password):
+    if SuperAdmin.objects.filter(email=email).exists():
+        user = SuperAdmin.objects.get(email=email)
+    elif User.objects.filter(email=email).exists():
+        user = User.objects.get(email=email)
+    elif InstitutionAdmin.objects.filter(email=email).exists():
+        user = InstitutionAdmin.objects.get(email=email)
+    else:
+        return False, "Email not found"
+    
+    try:
+        otp_entry = OTP.objects.get(email=email, otp=otp)
+    except OTP.DoesNotExist:
+        return False, "Invalid OTP"
+    
+    if not otp_entry.is_valid():
+        return False, "OTP has expired"
+    
+    user.password = make_password(new_password)
+    user.save()
+    
+    otp_entry.delete()
+    
+    return True, "Password changed successfully"
+
+
+# ChatBot
+def chatbot_institutions(request):
+    institutions = Institution.objects.all()
+    data = [{"name": institution.name} for institution in institutions]
+    return JsonResponse(data, safe=False)
+
+def chatbot_courses(request):
+    courses = Course.objects.all()
+    data = [{"name": course.name} for course in courses]
+    return JsonResponse(data, safe=False)
+
+def chatbot_institution_details(request, name):
+    name = unquote(name)  # Decode URL encoding (import `from urllib.parse import unquote`)
+    institution = Institution.objects.filter(name__iexact=name).first()
+    if institution:
+        data = {
+            "name": institution.name,
+            "overview": institution.overview,
+            "address": institution.address,
+            "programs": institution.program
+        }
+    else:
+        data = {"error": "Institution not found!"}
+    return JsonResponse(data)
+
+def chatbot_course_details(request, name):
+    course = Course.objects.filter(name=name).first()
+    if course:
+        data = {
+            "name": course.name,
+            "about": course.about,
+            "eligibility": course.eligibility,
+            "admission_criteria": course.Admission_Criteria
+        }
+    else:
+        data = None
+    return JsonResponse(data)
+
+def chat(request):
+    return render(request, 'chatbot.html')
+
+
+# Graphs
+@api_view(['GET'])
+def user_distribution_by_province(request):
+    data = User.objects.values('province').annotate(count=Count('id'))
+    return Response(data)
+
+@api_view(['GET'])
+def institution_status_count(request):
+    data = InstitutionAdmin.objects.values('status').annotate(count=Count('id'))
+    return Response(data)
+
+@api_view(['GET'])
+def feedback_status_count(request):
+    data = Feedback.objects.values('status').annotate(count=Count('id'))
+    return Response(data)

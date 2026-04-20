@@ -1,0 +1,203 @@
+{% load static %}
+
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gurkha Cyber Force</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+    <link href="{% static 'css/input.css' %}" rel="stylesheet">
+    <link href="{% static 'css/output.css' %}" rel="stylesheet">
+	<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="bg-[#FAFAFA] dark:bg-[#121212]">
+	<main>
+		<div id="main-wrapper" class="flex">
+			<!-- Sidebar -->
+			{% include "components/admin_sidebar.html" %}
+
+			<div class="w-full page-wrapper overflow-hidden">
+				<!-- Header -->
+				{% include "components/admin_header.html" %}
+
+				<!-- Main Content -->
+				<main class="h-full overflow-y-auto max-w-full pt-[6px]">
+					<div class="container full-container py-5 flex flex-col gap-6">
+						<div class="card min-h-[613px]">
+                            <div class="card-body">
+                                <h4 class="text-gray-600 text-lg tracking-wider font-semibold mb-6 uppercase">Institutions</h4>
+
+                                <div class="relative w-full mt-7 mb-10">
+                                    <input id="searchInput" name="search" class="text-sm shadow-md border-gray-200 pe-10 py-3 rounded-xl w-full transition-all outline-none focus:ring-0 focus:ring-gray-500 focus:border-gray-500" placeholder="Search for institution name ..." onkeyup="filterInstitution()"/>
+                                    <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+                                        <svg class="size-5 text-gray-500" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" stroke-linejoin="round" stroke-linecap="round"></path>
+                                        </svg>                                                                               
+                                    </div>
+                                </div>
+                                
+                                <div class="relative overflow-x-auto">
+                                    <table class="text-left w-full whitespace-nowrap text-sm">
+                                        <thead class="text-gray-700">
+                                            <tr class="font-semibold text-gray-600">
+                                                <th scope="col" class="p-4">S.N.</th>
+                                                <th scope="col" class="p-4">Institution Admin</th>
+                                                <th scope="col" class="p-4">Institution Name</th>
+                                                <th scope="col" class="p-4">Email</th>
+                                                <th scope="col" class="ps-6">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for institution in page_obj.object_list %}
+                                            <tr>
+                                                <td class="p-4 font-medium text-gray-500">{{ forloop.counter }}</td>
+                                                <td class="p-4">
+                                                    <span class="font-medium text-gray-500">{{ institution.name }}</span>
+                                                </td>
+                                                <td class="p-4">
+                                                    <span class="font-medium text-gray-500">{{ institution.institution }}</span>
+                                                </td>
+                                                <td class="p-4">
+                                                    <span class="font-medium text-gray-500">{{ institution.email }}</span>
+                                                </td>
+
+                                                {% if admin and admin.role == "admin" %}
+                                                    <td class="p-4">
+                                                        <select name="status" class="status-dropdown cursor-pointer rounded text-sm border-none ps-2 pr-8" data-institution-id="{{ institution.id }}">
+                                                            <option value="approved" {% if institution.status == 'approved' %}selected{% endif %}>Approved</option>
+                                                            <option value="rejected" {% if institution.status == 'rejected' %}selected{% endif %}>Rejected</option>
+                                                            <option value="not_decided" {% if institution.status == 'not_decided' %}selected{% endif %} {% if institution.status != 'not_decided' %}disabled{% endif %}>Not Decided</option>
+                                                        </select>
+                                                    </td>
+                                                {% else %}
+                                                    <td class="p-4">
+                                                        <span class="font-medium text-gray-500">{{ institution.get_status_display }}</span>
+                                                    </td>
+                                                {% endif %}
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                    {% if page_obj %}
+                                        <div class="pagination-wrapper mt-4">
+                                            <nav class="flex items-center gap-x-1 justify-center" aria-label="Pagination">
+                                                {% if page_obj.has_previous %}
+                                                    <a href="?page={{ page_obj.previous_page_number }}" class="pagination-button" aria-label="Previous">
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m15 18-6-6 6-6"></path>
+                                                        </svg>
+                                                        <span>Previous</span>
+                                                    </a>
+                                                {% else %}
+                                                    <button type="button" class="pagination-button disabled" aria-label="Previous" disabled>
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m15 18-6-6 6-6"></path>
+                                                        </svg>
+                                                        <span>Previous</span>
+                                                    </button>
+                                                {% endif %}
+                                                    
+                                                <div class="flex items-center gap-x-1">
+                                                    {% for page in page_obj.paginator.page_range %}
+                                                        {% if page == page_obj.number %}
+                                                            <button type="button" class="pagination-button active" aria-current="page">{{ page }}</button>
+                                                        {% else %}
+                                                            <a href="?page={{ page }}" class="pagination-button">{{ page }}</a>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                    
+                                                {% if page_obj.has_next %}
+                                                    <a href="?page={{ page_obj.next_page_number }}" class="pagination-button" aria-label="Next">
+                                                        <span>Next</span>
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m9 18 6-6-6-6"></path>
+                                                        </svg>
+                                                    </a>
+                                                {% else %}
+                                                    <button type="button" class="pagination-button disabled" aria-label="Next" disabled>
+                                                        <span>Next</span>
+                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="m9 18 6-6-6-6"></path>
+                                                        </svg>
+                                                    </button>
+                                                {% endif %}
+                                            </nav>
+                                        </div>
+                                    {% endif %}
+                                </div>									
+                            </div>
+                        </div>
+					</div>
+				</main>
+			</div>
+		</div>
+	</main>
+
+    <div id="toast-container" class="fixed top-5 right-5 z-50 space-y-2 text-xs hidden"></div>
+
+    <script>
+        function showToast(message, type = 'success') {
+            const bgColor = {success: 'bg-green-500', error: 'bg-red-500', info: 'bg-blue-500', warning: 'bg-yellow-500'};
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${bgColor[type]} text-white p-4 rounded shadow-lg flex items-center space-x-2 transition-opacity duration-300 ease-in-out`;
+            toast.innerHTML = `
+                <span>${message}</span>
+                <button class="text-white focus:outline-none" onclick="this.parentElement.remove()">✕</button>
+            `;
+
+            const container = document.getElementById('toast-container');
+            container.classList.remove('hidden');
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+                if (container.childElementCount === 0) {
+                    container.classList.add('hidden');
+                }
+            }, 3000);
+        }
+
+        $(document).ready(function () {
+            $('.status-dropdown').change(function () {
+                var institutionId = $(this).data('institution-id');
+                var newStatus = $(this).val();
+                var $dropdown = $(this);
+
+                $.ajax({
+                    url: '/update-status/' + institutionId + '/',
+                    type: 'POST',
+                    data: {
+                        'status': newStatus,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            showToast(response.message, 'success');
+                            $dropdown.find('option[value="not_decided"]').attr('disabled', true);
+                        } else {
+                            showToast(response.message, 'error');
+                        }
+                    },
+                    error: function (xhr, errmsg, err) {
+                        showToast('Error updating status.', 'error');
+                    }
+                });
+            });
+        });
+    </script>    
+	
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+	<script src="{% static 'js/sidebarmenu.js' %}"></script>
+	<script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
+	<script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %}"></script>
+	<script src="{% static 'libs/@preline/dropdown/index.js' %}"></script>
+	<script src="{% static 'libs/@preline/overlay/index.js' %}"></script>
+</body>
+</html>
