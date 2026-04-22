@@ -1,11 +1,81 @@
 import os
+from decimal import Decimal
+from datetime import timedelta
 
 from django.db import models
-from django.db.models import Avg
+from django.db import IntegrityError, transaction
+from django.db.models import Avg, Case, F, IntegerField, Value, When
 from django.core.mail import send_mail
+from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.utils.timezone import now
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import check_password, make_password
+
+
+class EmailIdentity(models.Model):
+    OWNER_TYPES = [
+        ('superadmin', 'Super Admin'),
+        ('user', 'User'),
+        ('institutionadmin', 'Institution Admin'),
+    ]
+
+    email = models.EmailField(unique=True)
+    owner_type = models.CharField(max_length=20, choices=OWNER_TYPES)
+    owner_id = models.BigIntegerField()
+    created_at = models.DateTimeField(default=now)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['owner_type', 'owner_id'], name='uniq_email_identity_owner')
+        ]
+        indexes = [
+            models.Index(fields=['owner_type', 'owner_id'], name='email_identity_owner_idx')
+        ]
+
+    def __str__(self):
+        return f"{self.email} ({self.owner_type}:{self.owner_id})"
+
+
+def owner_type_for_model(model_cls):
+    mapping = {
+        SuperAdmin: 'superadmin',
+        User: 'user',
+        InstitutionAdmin: 'institutionadmin',
+    }
+    return mapping.get(model_cls)
+
+
+def is_global_email_taken(email, exclude_model=None, exclude_pk=None):
+    if not email:
+        return False
+
+    normalized_email = email.strip().lower()
+    query = EmailIdentity.objects.filter(email=normalized_email)
+
+    if exclude_model is not None and exclude_pk is not None:
+        owner_type = owner_type_for_model(exclude_model)
+        if owner_type:
+            query = query.exclude(owner_type=owner_type, owner_id=exclude_pk)
+
+    return query.exists()
+
+
+def sync_email_identity(owner_type, owner_id, email):
+    normalized_email = email.strip().lower()
+
+    identity = EmailIdentity.objects.filter(owner_type=owner_type, owner_id=owner_id).first()
+    if identity:
+        if identity.email != normalized_email:
+            if EmailIdentity.objects.filter(email=normalized_email).exclude(pk=identity.pk).exists():
+                raise ValidationError({'email': 'This email is already used by another account.'})
+            identity.email = normalized_email
+            identity.save(update_fields=['email'])
+        return
+
+    try:
+        EmailIdentity.objects.create(email=normalized_email, owner_type=owner_type, owner_id=owner_id)
+    except IntegrityError as exc:
+        raise ValidationError({'email': 'This email is already used by another account.'}) from exc
 
 class SuperAdmin(models.Model):
     STATUS_CHOICES = [
@@ -30,10 +100,17 @@ class SuperAdmin(models.Model):
         return self.name
     
     def save(self, *args, **kwargs):
-        # Hash the password before saving if it's not already hashed
-        if self.password and not self.password.startswith(('pbkdf2_sha256$', 'bcrypt')):
-            self.password = make_password(self.password)
-        super(SuperAdmin, self).save(*args, **kwargs)
+        self.email = (self.email or '').strip().lower()
+        with transaction.atomic():
+            if is_global_email_taken(self.email, exclude_model=SuperAdmin, exclude_pk=self.pk):
+                raise ValidationError({'email': 'This email is already used by another account.'})
+
+            # Hash the password before saving if it's not already hashed
+            if self.password and not self.password.startswith(('pbkdf2_sha256$', 'bcrypt')):
+                self.password = make_password(self.password)
+
+            super(SuperAdmin, self).save(*args, **kwargs)
+            sync_email_identity('superadmin', self.pk, self.email)
 
 class User(models.Model):
     STATUS_CHOICES = [
@@ -58,17 +135,34 @@ class User(models.Model):
     province = models.CharField(max_length=100, choices=PROVINCES, blank=True, null=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
     
-    latitude = models.FloatField(blank=True, null=True)
-    longitude = models.FloatField(blank=True, null=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['latitude', 'longitude'], name='user_lat_lng_idx'),
+        ]
 
     def __str__(self):
         return self.name
     
     def save(self, *args, **kwargs):
-        # Hash the password before saving if it's not already hashed
-        if self.password and not self.password.startswith(('pbkdf2_sha256$', 'bcrypt')):
-            self.password = make_password(self.password)
-        super(User, self).save(*args, **kwargs)
+        self.email = (self.email or '').strip().lower()
+        with transaction.atomic():
+            if is_global_email_taken(self.email, exclude_model=User, exclude_pk=self.pk):
+                raise ValidationError({'email': 'This email is already used by another account.'})
+
+            if self.latitude is not None:
+                self.latitude = Decimal(self.latitude)
+            if self.longitude is not None:
+                self.longitude = Decimal(self.longitude)
+
+            # Hash the password before saving if it's not already hashed
+            if self.password and not self.password.startswith(('pbkdf2_sha256$', 'bcrypt')):
+                self.password = make_password(self.password)
+
+            super(User, self).save(*args, **kwargs)
+            sync_email_identity('user', self.pk, self.email)
 
 class InstitutionAdmin(models.Model):
     STATUS_CHOICES = [
@@ -93,7 +187,7 @@ class InstitutionAdmin(models.Model):
         message = f"""
         Dear {self.name},
 
-        Your institution registration status has been {self.status()}.
+        Your institution registration status has been {self.get_status_display()}.
 
         If you have any questions, feel free to reach out.
 
@@ -116,10 +210,17 @@ class InstitutionAdmin(models.Model):
             return False
     
     def save(self, *args, **kwargs):
-        # Hash the password before saving if it's not already hashed
-        if self.password and not self.password.startswith(('pbkdf2_sha256$', 'bcrypt')):
-            self.password = make_password(self.password)
-        super(InstitutionAdmin, self).save(*args, **kwargs)
+        self.email = (self.email or '').strip().lower()
+        with transaction.atomic():
+            if is_global_email_taken(self.email, exclude_model=InstitutionAdmin, exclude_pk=self.pk):
+                raise ValidationError({'email': 'This email is already used by another account.'})
+
+            # Hash the password before saving if it's not already hashed
+            if self.password and not self.password.startswith(('pbkdf2_sha256$', 'bcrypt')):
+                self.password = make_password(self.password)
+
+            super(InstitutionAdmin, self).save(*args, **kwargs)
+            sync_email_identity('institutionadmin', self.pk, self.email)
 
 def logo_upload_to(instance, filename):
     # Using the institution's name to create a folder structure
@@ -177,25 +278,37 @@ class Institution(models.Model):
 
     average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.0)
     
-    latitude = models.FloatField(blank=True, null=True)
-    longitude = models.FloatField(blank=True, null=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['latitude', 'longitude'], name='inst_lat_lng_idx'),
+        ]
 
     def increment_admission_count(self):
-        """Increase admission count if admission period is active."""
+        """Increase admission count atomically if admission period is active."""
         if self.admission:
-            self.current_admissions += 1
-            self.save()
+            Institution.objects.filter(pk=self.pk).update(current_admissions=F('current_admissions') + 1)
+            self.refresh_from_db(fields=['current_admissions'])
 
     def reset_admissions(self):
-        """Move current admissions to last_admissions and reset count."""
-        self.last_admissions = self.current_admissions
-        self.current_admissions = 0
-        self.save()
+        """Move current admissions to last_admissions and reset count atomically."""
+        with transaction.atomic():
+            locked = Institution.objects.select_for_update().get(pk=self.pk)
+            Institution.objects.filter(pk=self.pk).update(last_admissions=locked.current_admissions, current_admissions=0)
+            self.refresh_from_db(fields=['last_admissions', 'current_admissions'])
 
     def save(self, *args, **kwargs):
         # Ensure foreign_university_name is only populated when affiliation is 'foreign'
         if self.affiliation != 'foreign':
             self.Foreign_University_Name = None
+
+        if self.latitude is not None:
+            self.latitude = Decimal(self.latitude)
+        if self.longitude is not None:
+            self.longitude = Decimal(self.longitude)
+
         super().save(*args, **kwargs)
 
     def update_average_rating(self):
@@ -263,7 +376,9 @@ class InstitutionCourse(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ('institution', 'course')  # Prevent duplicate institution-course pairs
+        constraints = [
+            models.UniqueConstraint(fields=['institution', 'course'], name='uniq_institution_course')
+        ]
 
     def __str__(self):
         return f"{self.institution.name} - {self.course.name}"
@@ -293,15 +408,53 @@ class Feedback(models.Model):
         return self.user.name
     
 class OTP(models.Model):
-    email = models.EmailField()
-    otp = models.CharField(max_length=6)
+    MAX_FAILED_ATTEMPTS = 5
+    LOCK_MINUTES = 5
+
+    email = models.EmailField(db_index=True)
+    otp_hash = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField(db_index=True)
+    consumed_at = models.DateTimeField(blank=True, null=True, db_index=True)
+    failed_attempts = models.PositiveSmallIntegerField(default=0)
+    locked_until = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['email', 'expires_at'], name='otp_email_expires_idx'),
+            models.Index(fields=['email', 'consumed_at'], name='otp_email_consumed_idx'),
+        ]
 
     def __str__(self):
         return f"OTP for {self.email}"
+
+    def set_otp(self, raw_otp):
+        self.otp_hash = make_password(raw_otp)
+
+    def check_otp(self, raw_otp):
+        return check_password(raw_otp, self.otp_hash)
+
+    def can_attempt(self):
+        return self.locked_until is None or now() >= self.locked_until
+
+    def record_failed_attempt(self):
+        self.failed_attempts += 1
+        if self.failed_attempts >= self.MAX_FAILED_ATTEMPTS:
+            self.locked_until = now() + timedelta(minutes=self.LOCK_MINUTES)
+        self.save(update_fields=['failed_attempts', 'locked_until'])
+
+    def reset_attempts(self):
+        if self.failed_attempts or self.locked_until is not None:
+            self.failed_attempts = 0
+            self.locked_until = None
+            self.save(update_fields=['failed_attempts', 'locked_until'])
     
     def is_valid(self):
-        return (now() - self.created_at).seconds < 300
+        return self.consumed_at is None and now() <= self.expires_at and self.can_attempt()
+
+    def mark_consumed(self):
+        self.consumed_at = now()
+        self.save(update_fields=['consumed_at'])
     
 class Application(models.Model):
     STATUS_CHOICES = [
@@ -321,16 +474,43 @@ class Application(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
-        unique_together = ('user', 'institution', 'program')  # Prevent duplicate applications for the same user, institution, and program
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'institution', 'program'], name='uniq_user_institution_program_application')
+        ]
+        indexes = [
+            models.Index(fields=['institution', 'status'], name='app_institution_status_idx'),
+            models.Index(fields=['user', 'applied_at'], name='app_user_applied_at_idx'),
+        ]
     
     def save(self, *args, **kwargs):
-        """Automatically update admission count when status changes to accepted."""
-        if self.pk:
-            old_application = Application.objects.get(pk=self.pk)
-            if old_application.status != "accepted" and self.status == "accepted":
-                self.institution.increment_admission_count()
+        """Apply admission counter deltas transactionally on accepted status transitions."""
+        with transaction.atomic():
+            previous_status = None
+            if self.pk:
+                previous_status = Application.objects.select_for_update().only('status').get(pk=self.pk).status
 
-        super().save(*args, **kwargs)
+            super().save(*args, **kwargs)
+
+            institution = Institution.objects.select_for_update().only('admission').get(pk=self.institution_id)
+            if not institution.admission:
+                return
+
+            was_accepted = previous_status == 'accepted'
+            is_accepted = self.status == 'accepted'
+
+            if was_accepted == is_accepted:
+                return
+
+            if is_accepted:
+                Institution.objects.filter(pk=self.institution_id).update(current_admissions=F('current_admissions') + 1)
+            else:
+                Institution.objects.filter(pk=self.institution_id).update(
+                    current_admissions=Case(
+                        When(current_admissions__gt=0, then=F('current_admissions') - 1),
+                        default=Value(0),
+                        output_field=IntegerField(),
+                    )
+                )
 
     def __str__(self):
         return f"Application by {self.user.name} for {self.program.course.name} at {self.institution.name}"
@@ -341,12 +521,17 @@ class Rating(models.Model):
     rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])
     comment = models.TextField(blank=True, null=True)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'institution'], name='uniq_user_institution_rating')
+        ]
+
     def save(self, *args, **kwargs):
-        existing_rating = Rating.objects.filter(user=self.user, institution=self.institution).first()
-        if existing_rating:
-            # If a rating exists, delete the old one
-            existing_rating.delete()
-        # Now create a new rating
+        # Upsert behavior: overwrite the existing row for (user, institution) instead of inserting a duplicate.
+        if self.pk is None:
+            existing = Rating.objects.filter(user=self.user, institution=self.institution).only('pk').first()
+            if existing:
+                self.pk = existing.pk
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -355,6 +540,11 @@ class Rating(models.Model):
 class InstitutionView(models.Model):
     institution = models.ForeignKey('Institution', on_delete=models.CASCADE, related_name='views')
     timestamp = models.DateTimeField(default=now)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['institution', 'timestamp'], name='inst_view_institution_ts_idx'),
+        ]
 
     def __str__(self):
         return f"View for {self.institution.name} on {self.timestamp}"

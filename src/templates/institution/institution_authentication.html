@@ -2,56 +2,214 @@
 
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gurkha Cyber Force</title>
+    <title>Hamrocollege</title>
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
     <link href="{% static 'css/input.css' %}" rel="stylesheet">
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink-900: #0f1f29;
+            --ink-700: #27404d;
+            --ink-500: #5b707b;
+            --line: rgba(15, 31, 41, 0.22);
+            --accent-a: #0f766e;
+            --accent-b: #14b8a6;
+            --accent-c: #eab308;
+        }
+
+        .auth-page {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--ink-900);
+            background:
+                linear-gradient(90deg, rgba(15, 118, 110, 0.08) 0 6px, transparent 6px 100%),
+                radial-gradient(circle at 12% 14%, rgba(20, 184, 166, 0.18) 0%, rgba(20, 184, 166, 0) 42%),
+                radial-gradient(circle at 86% 78%, rgba(234, 179, 8, 0.2) 0%, rgba(234, 179, 8, 0) 40%),
+                #f8fbf8;
+            min-height: 100vh;
+        }
+
+        .auth-shell {
+            min-height: 100vh;
+            padding: 2.2rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-stage {
+            width: min(660px, 100%);
+            animation: stageReveal 0.65s ease-out forwards;
+            transform: translateY(10px);
+            opacity: 0;
+        }
+
+        .auth-logo {
+            height: 2.8rem;
+            width: auto;
+            margin: 0 0 2.1rem;
+        }
+
+        .auth-heading {
+            font-family: 'Sora', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.1rem);
+            line-height: 1.03;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.85rem;
+            max-width: 16ch;
+            color: var(--ink-900);
+        }
+
+        .auth-subheading {
+            font-size: 1rem;
+            line-height: 1.7;
+            max-width: 52ch;
+            color: var(--ink-500);
+            margin-bottom: 2.15rem;
+        }
+
+        .auth-form {
+            width: min(470px, 100%);
+        }
+
+        .auth-field-label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            color: var(--ink-700);
+        }
+
+        .auth-input-wrap {
+            border-bottom: 1px solid var(--line);
+            transition: border-color 0.25s ease;
+        }
+
+        .auth-input-wrap:focus-within {
+            border-bottom-color: var(--accent-a);
+        }
+
+        .auth-input {
+            border: none;
+            border-radius: 0;
+            background: transparent;
+            color: var(--ink-900);
+            padding: 0.75rem 0.35rem 0.75rem 2rem;
+            width: 100%;
+            outline: none;
+        }
+
+        .auth-input::placeholder {
+            color: #83969e;
+        }
+
+        .auth-submit {
+            width: 100%;
+            border: none;
+            color: #f7fffb;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 0.9rem 1rem;
+            background: linear-gradient(96deg, var(--accent-a) 0%, var(--accent-b) 100%);
+            border-radius: 0;
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+
+        .auth-submit:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.05);
+        }
+
+        .auth-link {
+            color: var(--accent-a);
+            font-weight: 700;
+            transition: color 0.2s ease;
+        }
+
+        .auth-link:hover {
+            color: #0b4f4a;
+        }
+
+        .auth-actions {
+            margin-top: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .auth-actions-line {
+            flex: 1;
+            height: 1px;
+            background: rgba(15, 31, 41, 0.18);
+        }
+
+        @media (min-width: 768px) {
+            .auth-shell {
+                padding: 3.5rem 2.5rem;
+            }
+        }
+
+        @keyframes stageReveal {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
-<body class="bg-[#FAFAFA] dark:bg-[#121212]">
-    <div class="relative isolate px-6 lg:px-8">
-        <section class="flex justify-center relative">
+<body class="auth-page">
+    <div class="auth-shell">
+        <section class="w-full flex justify-center relative">
             
             <!-- Login Form -->
-            <div class="mx-auto max-w-lg px-6 lg:px-8 absolute pt-12" id="login-form">
+            <div class="w-full" id="login-form">
+                <div class="auth-stage mx-auto">
+                    <div class="auth-form-panel">
                 <a href="{% url 'index' %}">
-                    <img src="{% static 'images/logos/logo-light.png' %}" alt="Gurkha Cyber Force" class="mx-auto lg:mb-11 mb-8 h-11 w-auto">
+                    <img src="{% static 'images/logos/logo-light.png' %}" alt="Hamrocollege" class="auth-logo">
                 </a>
-                
-                <div class="relative py-7 sm:max-w-xl sm:mx-auto">
-                    <div class="relative px-4 py-10 mx-8 md:mx-0 shadow-lg rounded-3xl sm:py-10 sm:px-7 backdrop-blur-sm">
-                        <div class="max-w-md mx-auto w-[375px]">
-                            <form action="{% url 'institution-login' %}" method="POST">
+
+                        <div class="auth-form-card max-w-none">
+                            <h2 class="auth-heading">Welcome back to your institution dashboard.</h2>
+                            <p class="auth-subheading">Log in to manage admissions, update institution details, and respond to student interest in one place.</p>
+
+                            <form action="{% url 'institution-login' %}" method="POST" class="space-y-6 auth-form">
                                 {% csrf_token %}
                                 <div>
                                     <div>
-                                        <label for="email" class="block mb-2 text-sm font-medium text-gray-700">Email Address</label>
-                                        <div class="relative mb-6">
+                                        <label for="email" class="auth-field-label">Email Address</label>
+                                        <div class="relative auth-input-wrap">
                                             <div class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
-                                                <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                                <svg class="w-4 h-4 text-[#4d656a]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                                                     <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
                                                     <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
                                                 </svg>                                 
                                             </div>
-                                            <input type="email" name="email" id="email" class="border border-gray-400 text-sm rounded-md block w-full ps-8 p-2.5 bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" placeholder="john@example.com" required>
+                                            <input type="email" name="email" id="email" class="auth-input text-sm" placeholder="john@example.com" required>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <label for="login-password" class="block mb-2 text-sm font-medium text-gray-700">Password</label>
-                                        <div class="relative mb-6">
+                                        <label for="login-password" class="auth-field-label mt-6">Password</label>
+                                        <div class="relative auth-input-wrap">
                                             <div class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
-                                                <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                                <svg class="w-4 h-4 text-[#4d656a]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                                                     <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z" clip-rule="evenodd" />
                                                 </svg>                                  
                                             </div>
                                             
-                                            <input type="password" name="login-password" id="login-password" class="border border-gray-400 text-sm rounded-md block w-full ps-8 pe-8 p-2.5 bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" placeholder="••••••••" required>
+                                            <input type="password" name="login-password" id="login-password" class="auth-input text-sm pe-8" placeholder="••••••••" required>
                                             
                                             <div class="absolute inset-y-0 end-0 flex items-center pe-2.5" id="login-password-toggle-container" style="display: none;">
-                                                <button type="button" id="login-toggle-password" class="flex items-center justify-center w-6 h-6 text-gray-700 focus:outline-none">
+                                                <button type="button" id="login-toggle-password" class="flex items-center justify-center w-6 h-6 text-[#294147] focus:outline-none">
                                                     <svg id="login-eye-icon-closed" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                                                         <path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM22.676 12.553a11.249 11.249 0 0 1-2.631 4.31l-3.099-3.099a5.25 5.25 0 0 0-6.71-6.71L7.759 4.577a11.217 11.217 0 0 1 4.242-.827c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113Z" />
                                                         <path d="M15.75 12c0 .18-.013.357-.037.53l-4.244-4.243A3.75 3.75 0 0 1 15.75 12ZM12.53 15.713l-4.243-4.244a3.75 3.75 0 0 0 4.244 4.243Z" />
@@ -68,22 +226,22 @@
                                     </div>
                                 </div>
 
-                                <div class="text-right mb-3">
-                                    <a class="text-xs font-display font-semibold text-gray-500 hover:text-gray-700 duration-300 cursor-pointer" href="{% url 'password-setting' %}">
+                                <div class="text-right -mt-2">
+                                    <a class="text-xs font-semibold auth-link duration-300 cursor-pointer" href="{% url 'password-setting' %}">
                                         Forgot Password?
                                     </a>
                                 </div>
 
-                                <div class="mb-4">
-                                    <button type="submit" class="tracking-wide py-2.5 px-4 bg-gradient-to-tr from-indigo-600 to-violet-600 hover:bg-gradient-to-tr hover:from-indigo-700 hover:to-violet-700 text-white w-full transition ease-in duration-200 text-center text-sm font-medium shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg" type="submit">
+                                <div>
+                                    <button type="submit" class="auth-submit text-center">
                                         Login
                                     </button>
                                 </div>
 
-                                <div class="flex items-center justify-between mt-10">
-                                    <span class="w-1/5 border-b dark:border-gray-400 md:w-1/4"></span>
-                                    <a id="toggleSignup" class="cursor-pointer uppercase text-sm font-semibold text-gray-700 hover:tracking-widest dark:text-gray-400 hover:text-hover-text duration-500">Sign Up</a>
-                                    <span class="w-1/5 border-b dark:border-gray-400 md:w-1/4"></span>
+                                <div class="auth-actions">
+                                    <span class="auth-actions-line"></span>
+                                    <a id="toggleSignup" class="cursor-pointer uppercase text-xs font-semibold tracking-[0.14em] text-[#294147] hover:tracking-[0.18em] hover:text-[#0f766e] duration-500">Sign Up</a>
+                                    <span class="auth-actions-line"></span>
                                 </div>
                             </form>
                         </div>
@@ -92,66 +250,71 @@
             </div>
 
             <!-- Signup Form -->
-            <div class="mx-auto max-w-3xl px-6 lg:px-8 absolute pt-12 hidden" id="signup-form">
-                <img src="{% static 'images/logos/logo-light.png' %}" alt="Gurkha Cyber Force" class="mx-auto mb-3 h-11 w-auto">
+            <div class="w-full hidden" id="signup-form">
+                <div class="auth-stage mx-auto">
+                    <div class="auth-form-panel">
+                        <a href="{% url 'index' %}">
+                            <img src="{% static 'images/logos/logo-light.png' %}" alt="Hamrocollege" class="auth-logo">
+                        </a>
 
-                <div class="relative py-3 sm:max-w-2xl sm:mx-auto">
-                    <div class="relative px-4 py-10 mx-8 md:mx-0 shadow-lg rounded-3xl sm:py-10 sm:px-7 backdrop-blur-sm">
-                        <div class="max-w-md mx-auto w-[375px]">
-                            <form action="{% url 'institution-signup' %}" method="POST">
+                        <div class="auth-form-card max-w-none">
+                            <h2 class="auth-heading">List your institution and start connecting.</h2>
+                            <p class="auth-subheading">Create an institution account to publish details, manage admissions, and reach more students.</p>
+
+                            <form action="{% url 'institution-signup' %}" method="POST" class="space-y-6 auth-form">
                                 {% csrf_token %}
                                 <div>
                                     <div>
-                                        <label for="name" class="block mb-2 text-sm font-medium text-gray-700">Name <span class="text-red-600">*</span></label>
-                                        <div class="relative mb-6">
+                                        <label for="name" class="auth-field-label">Name</label>
+                                        <div class="relative auth-input-wrap">
                                             <div class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
-                                                <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                                <svg class="w-4 h-4 text-[#4d656a]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                                     <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
                                                 </svg>                                                                               
                                             </div>
-                                            <input type="text" name="name" id="name" class="border border-gray-400 text-sm rounded-md block w-full ps-8 p-2.5 bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" placeholder="John Doe" required>
+                                            <input type="text" name="name" id="name" class="auth-input text-sm" placeholder="John Doe" required>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <label for="institution" class="block mb-2 text-sm font-medium text-gray-700">Institution Name <span class="text-red-600">*</span></label>
-                                        <div class="relative mb-6">
+                                        <label for="institution" class="auth-field-label mt-6">Institution Name</label>
+                                        <div class="relative auth-input-wrap">
                                             <div class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
-                                                <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                                <svg class="w-4 h-4 text-[#4d656a]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                                                     <path fill-rule="evenodd" d="M3 2.25a.75.75 0 0 0 0 1.5v16.5h-.75a.75.75 0 0 0 0 1.5H15v-18a.75.75 0 0 0 0-1.5H3ZM6.75 19.5v-2.25a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-.75.75h-3a.75.75 0 0 1-.75-.75ZM6 6.75A.75.75 0 0 1 6.75 6h.75a.75.75 0 0 1 0 1.5h-.75A.75.75 0 0 1 6 6.75ZM6.75 9a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75ZM6 12.75a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 0 1.5h-.75a.75.75 0 0 1-.75-.75ZM10.5 6a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75Zm-.75 3.75A.75.75 0 0 1 10.5 9h.75a.75.75 0 0 1 0 1.5h-.75a.75.75 0 0 1-.75-.75ZM10.5 12a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75ZM16.5 6.75v15h5.25a.75.75 0 0 0 0-1.5H21v-12a.75.75 0 0 0 0-1.5h-4.5Zm1.5 4.5a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm.75 2.25a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75v-.008a.75.75 0 0 0-.75-.75h-.008ZM18 17.25a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Z" clip-rule="evenodd" />
                                                 </svg>                                                                                                                      
                                             </div>
-                                            <input type="text" name="institution" id="institution" class="border border-gray-400 text-sm rounded-md block w-full ps-8 p-2.5 bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" placeholder="Ace Pvt. Ltd." required>
+                                            <input type="text" name="institution" id="institution" class="auth-input text-sm" placeholder="Ace Pvt. Ltd." required>
                                         </div>
                                     </div>
 
-                                    <div class="relative mb-6">
-                                        <label for="email" class="block mb-2 text-sm font-medium text-gray-700">Email Address <span class="text-red-600">*</span></label>
-                                        <div class="relative">
+                                    <div>
+                                        <label for="signup-email" class="auth-field-label mt-6">Email Address</label>
+                                        <div class="relative auth-input-wrap">
                                             <div class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
-                                                <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                                <svg class="w-4 h-4 text-[#4d656a]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                                                     <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
                                                     <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
                                                 </svg>
                                             </div>
-                                            <input type="email" name="signup-email" id="signup-email" class="border border-gray-400 text-sm rounded-md block w-full ps-8 p-2.5 bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" placeholder="john@example.com" required>
+                                            <input type="email" name="signup-email" id="signup-email" class="auth-input text-sm" placeholder="john@example.com" required>
                                         </div>
                                         <div id="email-error" class="text-xs text-red-500 mt-1 hidden">This email already exists.</div>
                                     </div>
                                     
                                     <div>
-                                        <label for="password" class="block mb-2 text-sm font-medium text-gray-700">Password <span class="text-red-600">*</span></label>
-                                        <div class="relative mb-6">
+                                        <label for="signup-password" class="auth-field-label mt-6">Password</label>
+                                        <div class="relative auth-input-wrap">
                                             <div class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
-                                                <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                                <svg class="w-4 h-4 text-[#4d656a]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                                                     <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z" clip-rule="evenodd" />
                                                 </svg>                                  
                                             </div>
                                             
-                                            <input type="password" name="signup-password" id="signup-password" class="border border-gray-400 text-sm rounded-md block w-full ps-8 pe-8 p-2.5 bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" minlength="7" maxlength="20" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,20}" title="Password must be 7-20 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character" placeholder="••••••••" required>
+                                            <input type="password" name="signup-password" id="signup-password" class="auth-input text-sm pe-8" minlength="7" maxlength="20" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,20}" title="Password must be 7-20 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character" placeholder="••••••••" required>
                                             
                                             <div class="absolute inset-y-0 end-0 flex items-center pe-2.5" id="password-toggle-container" style="display: none;">
-                                                <button type="button" id="toggle-password" class="flex items-center justify-center w-6 h-6 text-gray-700 focus:outline-none">
+                                                <button type="button" id="toggle-password" class="flex items-center justify-center w-6 h-6 text-[#294147] focus:outline-none">
                                                     <svg id="eye-icon-closed" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                                                         <path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM22.676 12.553a11.249 11.249 0 0 1-2.631 4.31l-3.099-3.099a5.25 5.25 0 0 0-6.71-6.71L7.759 4.577a11.217 11.217 0 0 1 4.242-.827c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113Z" />
                                                         <path d="M15.75 12c0 .18-.013.357-.037.53l-4.244-4.243A3.75 3.75 0 0 1 15.75 12ZM12.53 15.713l-4.243-4.244a3.75 3.75 0 0 0 4.244 4.243Z" />
@@ -168,19 +331,19 @@
                                     </div>
                                 </div>
 
-                                <div class="mt-7 mb-4">
-                                    <button class="tracking-wide py-2.5 px-4 bg-gradient-to-tr from-indigo-600 to-violet-600 hover:bg-gradient-to-tr hover:from-indigo-700 hover:to-violet-700 text-white w-full transition ease-in duration-200 text-center text-sm font-medium shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg" type="submit">
+                                <div>
+                                    <button class="auth-submit text-center" type="submit">
                                         Sign Up
                                     </button>
                                 </div>
 
-                                <div class="flex items-center justify-between mt-10">
-                                    <span class="w-1/5 border-b dark:border-gray-400 md:w-1/4"></span>
-                                    <a id="toggleLogin" class="cursor-pointer uppercase text-sm font-semibold text-gray-700 hover:tracking-widest dark:text-gray-400 hover:text-hover-text duration-500">Login</a>
-                                    <span class="w-1/5 border-b dark:border-gray-400 md:w-1/4"></span>
+                                <div class="auth-actions">
+                                    <span class="auth-actions-line"></span>
+                                    <a id="toggleLogin" class="cursor-pointer uppercase text-xs font-semibold tracking-[0.14em] text-[#294147] hover:tracking-[0.18em] hover:text-[#0f766e] duration-500">Login</a>
+                                    <span class="auth-actions-line"></span>
                                 </div>
                             </form>
-                        </div>                               
+                        </div>
                     </div>
                 </div>
             </div>

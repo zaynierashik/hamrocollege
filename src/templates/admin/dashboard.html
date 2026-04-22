@@ -1,223 +1,258 @@
 {% load static %}
 
-<meta charset="UTF-8">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gurkha Cyber Force</title>
+    <title>Admin Dashboard</title>
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
-    <link href="{% static 'css/output.css' %}" rel="stylesheet">
     <link href="{% static 'css/input.css' %}" rel="stylesheet">
-	<link href="{% static 'css/theme.css' %}" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
-	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link href="{% static 'css/output.css' %}" rel="stylesheet">
+    <link href="{% static 'css/theme.css' %}" rel="stylesheet">
+    <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
-<body class="bg-[#FAFAFA] dark:bg-[#121212]">
-	<main>
-		<div id="main-wrapper" class="flex">
-			<!-- Sidebar -->
-			{% include "components/admin_sidebar.html" %}
+<body class="studio-body">
+    <main class="studio-main">
+        <div id="main-wrapper" class="flex">
+            {% include "components/admin_sidebar.html" %}
 
-			<div class="w-full page-wrapper overflow-hidden">
-				<!-- Header -->
-				{% include "components/admin_header.html" %}
+            <div class="w-full page-wrapper overflow-hidden xl:pl-[250px]">
+                {% include "components/admin_header.html" %}
 
-				<!-- Main Content -->
-				<main class="h-full overflow-y-auto max-w-full pt-[6px]">
-					<div class="container full-container py-5 flex flex-col gap-6">
-						<div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-x-6 gap-x-0 lg:gap-y-0 gap-y-6">
-							<div class="col-span-2 h-full flex">
-								<div class="card dark:bg-[#161618] dark:shadow-none dark:border border-gray-800 w-full flex flex-col">
-									<div class="card-body flex-1 flex flex-col">
-										<h4 class="text-gray-600 dark:text-gray-400 text-lg font-semibold">Users by Province</h4>
-										<div id="userChart" class="flex-1 flex items-center justify-center"></div>
-									</div>
-								</div>
-							</div>
-						 
-							<div class="flex flex-col gap-3">
-								<div class="card dark:bg-[#161618] dark:shadow-none dark:border border-gray-800">
-									<div class="card-body">
-										<h4 class="text-gray-600 dark:text-gray-400 text-lg font-semibold">Institution Status</h4>
-										<div id="institutionChart"></div>
-									</div>
-								</div>
-				
-								<div class="card dark:bg-[#161618] dark:shadow-none dark:border border-gray-800">
-									<div class="card-body">
-										<h4 class="text-gray-600 dark:text-gray-400 text-lg font-semibold">Feedback Chart</h4>
-										<div id="feedbackChart"></div>
-									</div>
-								</div>
-							</div>
-					   </div>
-					</div>
-				</main>
-			</div>
-		</div>
-	</main>
+                <main class="h-full overflow-y-auto max-w-full pb-6">
+                    <div class="container full-container xl:px-5 px-4">
+                        <section class="studio-content-wrap space-y-5">
+                            <header>
+                                <h1 class="studio-title">Good morning, {{ admin.name|default:'Admin' }}</h1>
+                                <p class="studio-subtitle">Here is what is happening with your platform today.</p>
+                            </header>
 
-	<script>
-		// Fetch User by Province (Bar Chart)
-		fetch('/api/user-distribution/')
-			.then(response => response.json())
-			.then(data => {
-				// Get provinces and counts
-				var provinces = data.map(item => item.province);
-				var counts = data.map(item => item.count);
+                            <section class="studio-kpi-grid">
+                                <div class="studio-kpi">
+                                    <h4>Total Users</h4>
+                                    <p id="metricUsers">0</p>
+                                    <span>Live distribution summary</span>
+                                </div>
+                                <div class="studio-kpi">
+                                    <h4>Approved Institutions</h4>
+                                    <p id="metricApproved">0</p>
+                                    <span>Verification pipeline output</span>
+                                </div>
+                                <div class="studio-kpi">
+                                    <h4>Visible Feedback</h4>
+                                    <p id="metricVisibleFeedback">0</p>
+                                    <span>Moderation quality snapshot</span>
+                                </div>
+                            </section>
 
-				// Define a color for each province
-				var provinceColors = {
-					'province_1': '#00E396',  // Green
-					'province_2': '#FF4560',  // Red
-					'bagmati': '#008FFB',     // Blue
-					'gandaki': '#FF9800',     // Orange
-					'lumbini': '#775DD0',     // Purple
-					'karnali': '#3E8E41',     // Dark Green
-					'sudurpashchim': '#FFB800' // Yellow
-				};
+                            <section class="grid grid-cols-1 2xl:grid-cols-5 gap-4">
+                                <article class="studio-panel 2xl:col-span-2">
+                                    <div class="studio-panel-head">
+                                        <h2 class="studio-panel-title">Top Performing Provinces</h2>
+                                        <span class="studio-tag">Weekly</span>
+                                    </div>
+                                    <div id="userChart" class="min-h-[320px]"></div>
+                                </article>
 
-				// Generate the colors array
-				var colors = provinces.map(function(province) {
-					return provinceColors[province] || '#808080';  // Default grey if no color is found
-				});
+                                <article class="studio-panel 2xl:col-span-3">
+                                    <div class="studio-panel-head">
+                                        <h2 class="studio-panel-title">Institution Review Trend</h2>
+                                        <span class="studio-tag">Status Mix</span>
+                                    </div>
+                                    <div id="institutionChart" class="min-h-[320px]"></div>
+                                </article>
+                            </section>
 
-				var options = {
-					chart: {
-						type: 'bar',
-						toolbar: { show: false }  // Disable the toolbar
-					},
-					series: [{
-						name: 'Users',
-						data: counts
-					}],
-					colors: colors,
-					xaxis: {
-						categories: provinces,  // Set provinces as x-axis labels
-						labels: {
-							formatter: function(value) {
-								return value.charAt(0).toUpperCase() + value.slice(1).replace(/_/g, ' '); // Capitalize
-							}
-						}
-					},
-					yaxis: {
-						labels: {
-							formatter: function(val) {
-								return Math.round(val);  // Format numbers as integers
-							}
-						},
-						forceNiceScale: true,
-						min: 0,
-						tickAmount: 5
-					},
-					plotOptions: {
-						bar: {
-							horizontal: false,  // Vertical bars
-							distributed: true,  // This ensures each bar gets its own color
-							columnWidth: '70%'
-						}
-					},
-					dataLabels: {
-						enabled: true,
-						formatter: function(val) {
-							return Math.round(val);  // Format the data labels as integers
-						},
-						style: {
-							fontSize: '12px',
-							colors: ["#304758"]
-						}
-					},
-					legend: {
-						show: false  // No need for legend with distributed bars
-					}
-				};
+                            <section class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+                                <article class="studio-panel xl:col-span-1">
+                                    <div class="studio-panel-head">
+                                        <h2 class="studio-panel-title">Feedback Visibility</h2>
+                                        <span class="studio-tag">Moderation</span>
+                                    </div>
+                                    <div id="feedbackChart" class="min-h-[270px]"></div>
+                                </article>
 
-				// Create the chart
-				new ApexCharts(document.querySelector("#userChart"), options).render();
-			});
-	
-		// Fetch Institution Approval Status (Bar Chart)
-		fetch('/api/institution-status/')
-			.then(response => response.json())
-			.then(data => {
-				var options = {
-					chart: {
-						type: 'bar',
-						toolbar: { show: false }
-					},
-					series: [{
-						name: 'Count',
-						data: data.map(item => item.count)
-					}],
-					xaxis: {
-						categories: ['Approved', 'Rejected'],
-						labels: {
-							formatter: function (value) {
-								return value.charAt(0).toUpperCase() + value.slice(1);
-							}
-						}
-					},
-					yaxis: {
-						labels: {
-							formatter: function(val) {
-								return Math.round(val);  // Format numbers as integers
-							}
-						},
-						forceNiceScale: true,
-						min: 0,
-						tickAmount: 5
-					},
-					dataLabels: {
-						enabled: true,
-						formatter: function(val) {
-							return Math.round(val);  // Format the data labels as integers
-						},
-						style: {
-							fontSize: '12px',
-							colors: ["#304758"]
-						}
-					},
-					plotOptions: {
-						bar: {
-							colors: {
-								ranges: [
-									{ from: 0, to: data.find(item => item.status === 'approved').count, color: '#00E396' },
-									{ from: 0, to: data.find(item => item.status === 'rejected').count, color: '#FF4560' }
-								]
-							}
-						}
-					}
-				};
-				new ApexCharts(document.querySelector("#institutionChart"), options).render();
-			});
-	
-		// Fetch Feedback Visibility Status (Donut Chart)
-		fetch('/api/feedback-status/')
-			.then(response => response.json())
-			.then(data => {
-				var options = {
-					chart: { type: 'donut' },
-					series: data.map(item => item.count),
-					labels: data.map(item => {
-						if (item.status === 'show') {
-							return 'Shown';  // Change 'show' to 'Shown'
-						} else if (item.status === 'hide') {
-							return 'Hidden';  // Change 'hide' to 'Hidden'
-						}
-						return item.status; // Default case, if any other status
-					})
-				};
-				new ApexCharts(document.querySelector("#feedbackChart"), options).render();
-			});
-	</script>
-	
-    <script src="{% static 'js/dashboard.js' %} "></script>
-	<script src="{% static 'libs/jquery/dist/jquery.min.js' %} "></script>
-	<script src="{% static 'js/sidebarmenu.js' %} "></script>
-	<script src="{% static 'libs/simplebar/dist/simplebar.min.js' %} "></script>
-	<script src="{% static 'libs/@preline/dropdown/index.js' %} "></script>
-	<script src="{% static 'libs/@preline/overlay/index.js' %} "></script>
-	<script src="{% static 'libs/apexcharts/dist/apexcharts.min.js' %} "></script>
+                                <article class="studio-panel xl:col-span-2">
+                                    <div class="studio-panel-head">
+                                        <h2 class="studio-panel-title">Province Highlights</h2>
+                                        <span class="studio-tag">Top 4</span>
+                                    </div>
+                                    <div id="topProvinceList" class="space-y-4"></div>
+                                </article>
+                            </section>
+                        </section>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const ui = {
+            metricUsers: document.getElementById('metricUsers'),
+            metricApproved: document.getElementById('metricApproved'),
+            metricVisibleFeedback: document.getElementById('metricVisibleFeedback'),
+            topProvinceList: document.getElementById('topProvinceList')
+        };
+
+        function numberFormat(value) {
+            return new Intl.NumberFormat().format(value || 0);
+        }
+
+        function statusCount(data, key) {
+            const item = data.find(entry => entry.status === key);
+            return item ? item.count : 0;
+        }
+
+        fetch('/api/user-distribution/')
+            .then(response => response.json())
+            .then(data => {
+                const provinces = data.map(item => item.province || 'unknown');
+                const counts = data.map(item => item.count || 0);
+                const totalUsers = counts.reduce((sum, count) => sum + count, 0);
+
+                ui.metricUsers.textContent = numberFormat(totalUsers);
+
+                const sorted = [...data].sort((a, b) => (b.count || 0) - (a.count || 0)).slice(0, 4);
+                ui.topProvinceList.innerHTML = sorted.map((item, idx) => {
+                    const value = item.count || 0;
+                    const pct = totalUsers > 0 ? Math.round((value / totalUsers) * 100) : 0;
+                    const label = (item.province || 'unknown').replaceAll('_', ' ');
+                    return `
+                        <div>
+                            <div class="flex items-center justify-between text-sm mb-1">
+                                <p class="font-semibold text-gray-700">${idx + 1}. ${label}</p>
+                                <p class="text-gray-500">${numberFormat(value)} users</p>
+                            </div>
+                            <div class="h-2 rounded-full bg-gray-200 overflow-hidden">
+                                <div class="h-full rounded-full bg-blue-600" style="width: ${pct}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                const options = {
+                    chart: {
+                        type: 'bar',
+                        toolbar: { show: false },
+                        height: 300
+                    },
+                    series: [{ name: 'Users', data: counts }],
+                    xaxis: {
+                        categories: provinces.map(p => p.replaceAll('_', ' ')),
+                        labels: { style: { colors: '#6b7280' } }
+                    },
+                    yaxis: {
+                        labels: {
+                            style: { colors: '#6b7280' },
+                            formatter: val => Math.round(val)
+                        },
+                        min: 0,
+                        forceNiceScale: true
+                    },
+                    colors: ['#2563eb'],
+                    plotOptions: {
+                        bar: { borderRadius: 6, columnWidth: '58%' }
+                    },
+                    dataLabels: { enabled: false },
+                    grid: {
+                        borderColor: '#e5e7eb',
+                        strokeDashArray: 3
+                    }
+                };
+
+                new ApexCharts(document.querySelector('#userChart'), options).render();
+            });
+
+        fetch('/api/institution-status/')
+            .then(response => response.json())
+            .then(data => {
+                const approved = statusCount(data, 'approved');
+                const rejected = statusCount(data, 'rejected');
+                const pending = statusCount(data, 'not_decided');
+
+                ui.metricApproved.textContent = numberFormat(approved);
+
+                const options = {
+                    chart: {
+                        type: 'bar',
+                        stacked: true,
+                        toolbar: { show: false },
+                        height: 300
+                    },
+                    series: [
+                        { name: 'Approved', data: [approved] },
+                        { name: 'Pending', data: [pending] },
+                        { name: 'Rejected', data: [rejected] }
+                    ],
+                    xaxis: {
+                        categories: ['Institution Verification'],
+                        labels: { style: { colors: '#6b7280' } }
+                    },
+                    yaxis: {
+                        labels: {
+                            style: { colors: '#6b7280' },
+                            formatter: val => Math.round(val)
+                        },
+                        min: 0,
+                        forceNiceScale: true
+                    },
+                    colors: ['#16a34a', '#6b7280', '#dc2626'],
+                    legend: {
+                        position: 'top',
+                        labels: { colors: '#374151' }
+                    },
+                    plotOptions: {
+                        bar: { borderRadius: 6, columnWidth: '46%' }
+                    },
+                    dataLabels: { enabled: false },
+                    grid: {
+                        borderColor: '#e5e7eb',
+                        strokeDashArray: 3
+                    }
+                };
+
+                new ApexCharts(document.querySelector('#institutionChart'), options).render();
+            });
+
+        fetch('/api/feedback-status/')
+            .then(response => response.json())
+            .then(data => {
+                const shown = statusCount(data, 'show');
+                const hidden = statusCount(data, 'hide');
+                ui.metricVisibleFeedback.textContent = numberFormat(shown);
+
+                const options = {
+                    chart: {
+                        type: 'donut',
+                        height: 260
+                    },
+                    series: [shown, hidden],
+                    labels: ['Shown', 'Hidden'],
+                    colors: ['#2563eb', '#9ca3af'],
+                    legend: {
+                        position: 'bottom',
+                        labels: { colors: '#374151' }
+                    },
+                    dataLabels: { enabled: true },
+                    stroke: { colors: ['#ffffff'] }
+                };
+
+                new ApexCharts(document.querySelector('#feedbackChart'), options).render();
+            });
+    </script>
+
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'js/sidebarmenu.js' %}"></script>
+    <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
+    <script src="{% static 'libs/@preline/dropdown/index.js' %}"></script>
+    <script src="{% static 'libs/@preline/overlay/index.js' %}"></script>
 </body>
 </html>

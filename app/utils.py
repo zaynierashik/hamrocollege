@@ -12,20 +12,34 @@ def haversine(lat1, lon1, lat2, lon2):
     return R * c  # Distance in km
 
 def get_nearby_institutions(user, radius_km=50):
-    """Return institutions within a given radius (default 50 km) of the user with distances."""
-    if not user.latitude or not user.longitude:
-        return []  # No location set for user
-    
-    institutions = Institution.objects.all()
+    """Return institutions within radius_km of user, sorted nearest-first."""
+    if user.latitude is None or user.longitude is None:
+        return []
+
+    user_lat = float(user.latitude)
+    user_lon = float(user.longitude)
+
+    # Coarse DB prefilter to reduce rows before exact haversine computation.
+    lat_delta = radius_km / 111.32
+    lon_divisor = 111.32 * max(cos(radians(user_lat)), 0.01)
+    lon_delta = radius_km / lon_divisor
+
+    institutions = Institution.objects.filter(
+        latitude__isnull=False,
+        longitude__isnull=False,
+        latitude__gte=user_lat - lat_delta,
+        latitude__lte=user_lat + lat_delta,
+        longitude__gte=user_lon - lon_delta,
+        longitude__lte=user_lon + lon_delta,
+    )
+
     nearby = []
     
     for institution in institutions:
-        if institution.latitude and institution.longitude:
-            distance = haversine(user.latitude, user.longitude, institution.latitude, institution.longitude)
-            if distance <= radius_km:
-                nearby.append({'institution': institution, 'distance': round(distance, 2)})  # Round to 2 decimal places
+        distance = haversine(user_lat, user_lon, float(institution.latitude), float(institution.longitude))
+        if distance <= radius_km:
+            nearby.append({'institution': institution, 'distance': round(distance, 2)})
     
-    # Sort by nearest distance
     nearby.sort(key=lambda x: x['distance'])
     
     return nearby

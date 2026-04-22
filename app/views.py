@@ -1,4 +1,6 @@
 import json
+import random
+from decimal import Decimal, InvalidOperation
 
 from urllib.parse import unquote
 from app.models import *
@@ -9,14 +11,96 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
+from django.core.exceptions import ValidationError
+from django.core.cache import cache
 from django.utils.crypto import get_random_string
 from django.db.models import Count
 from datetime import timedelta
 
-from app.utils import get_nearby_institutions, haversine
+from app.utils import get_nearby_institutions
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+
+
+MAX_LOGIN_ATTEMPTS = 5
+LOGIN_WINDOW_SECONDS = 300
+LOGIN_BLOCK_SECONDS = 300
+
+MAX_OTP_SEND_ATTEMPTS = 3
+OTP_SEND_WINDOW_SECONDS = 600
+
+
+def get_client_ip(request):
+    forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if forwarded_for:
+        return forwarded_for.split(',')[0].strip()
+    return request.META.get('REMOTE_ADDR', 'unknown')
+
+
+def _login_fail_key(scope, email, ip):
+    return f"login_fail:{scope}:{email.lower()}:{ip}"
+
+
+def _login_block_key(scope, email, ip):
+    return f"login_block:{scope}:{email.lower()}:{ip}"
+
+
+def is_login_rate_limited(request, scope, email):
+    ip = get_client_ip(request)
+    return bool(cache.get(_login_block_key(scope, email, ip)))
+
+
+def record_login_failure(request, scope, email):
+    ip = get_client_ip(request)
+    fail_key = _login_fail_key(scope, email, ip)
+    block_key = _login_block_key(scope, email, ip)
+
+    current = cache.get(fail_key)
+    if current is None:
+        current = 1
+    else:
+        current += 1
+
+    cache.set(fail_key, current, timeout=LOGIN_WINDOW_SECONDS)
+    if current >= MAX_LOGIN_ATTEMPTS:
+        cache.set(block_key, True, timeout=LOGIN_BLOCK_SECONDS)
+
+
+def clear_login_failures(request, scope, email):
+    ip = get_client_ip(request)
+    cache.delete(_login_fail_key(scope, email, ip))
+    cache.delete(_login_block_key(scope, email, ip))
+
+
+def _otp_send_key(email, ip):
+    return f"otp_send:{email.lower()}:{ip}"
+
+
+def is_otp_send_rate_limited(request, email):
+    ip = get_client_ip(request)
+    return (cache.get(_otp_send_key(email, ip)) or 0) >= MAX_OTP_SEND_ATTEMPTS
+
+
+def record_otp_send_attempt(request, email):
+    ip = get_client_ip(request)
+    key = _otp_send_key(email, ip)
+    current = cache.get(key)
+    if current is None:
+        current = 1
+    else:
+        current += 1
+    cache.set(key, current, timeout=OTP_SEND_WINDOW_SECONDS)
+
+
+def get_random_sample(queryset, limit=5):
+    """Return up to `limit` random rows without using SQL ORDER BY RANDOM()."""
+    ids = list(queryset.values_list('id', flat=True))
+    if not ids:
+        return queryset.none()
+
+    sampled_ids = ids if len(ids) <= limit else random.sample(ids, limit)
+    return queryset.filter(id__in=sampled_ids)
 
 # Website
 def index(request):
@@ -25,8 +109,8 @@ def index(request):
     
     institutions = Institution.objects.all()
     trending_institutions = get_trending_institutions()
-    courses = Course.objects.all().order_by('?')[:5]
-    feedbacks = Feedback.objects.all().filter(status='show')
+    courses = get_random_sample(Course.objects.all(), 5)
+    feedbacks = Feedback.objects.filter(status='show')
 
     context = {'institutions': institutions, 'trending_institutions': trending_institutions, 'courses': courses, 'feedbacks': feedbacks}
     return render(request, 'index.html', context)
@@ -42,14 +126,15 @@ def signup(request):
         name = request.POST.get("name")
         email = request.POST.get("signup-email")
 
-        if User.objects.filter(email=email).exists():
-            messages.error(request, "Email already exists.")
-            return redirect('user')
-
         password = make_password(request.POST.get("signup-password"))
 
         user = User(name=name, email=email, password=password)
-        user.save()
+        try:
+            user.save()
+        except ValidationError as exc:
+            messages.error(request, exc.message_dict.get('email', ['Email already exists.'])[0])
+            return redirect('authentication')
+
         messages.success(request, "Account created successfully.")
 
         return redirect('authentication')
@@ -61,23 +146,31 @@ def login(request):
         return redirect('userpage')
     
     if request.method == 'POST':
-        email = request.POST.get('email')
+        email = (request.POST.get('email') or '').strip().lower()
         password = request.POST.get('login-password')
+
+        if is_login_rate_limited(request, 'user', email):
+            messages.error(request, "Too many failed login attempts. Please try again in a few minutes.")
+            return render(request, 'authentication.html')
 
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
+            record_login_failure(request, 'user', email)
             messages.error(request, "Email does not exist.")
             return render(request, 'authentication.html')
 
         if not check_password(password, user.password):
+            record_login_failure(request, 'user', email)
             messages.error(request, "Invalid password.")
             return render(request, 'authentication.html')
 
         if user.status != 'active':
+            record_login_failure(request, 'user', email)
             messages.error(request, "Your account is suspended. Please contact support.")
             return render(request, 'authentication.html')
 
+        clear_login_failures(request, 'user', email)
         request.session['user_id'] = user.id
         request.session.set_expiry(7200) 
         return redirect('userpage')
@@ -94,7 +187,7 @@ def logout(request):
     return redirect('index')
 
 def about_us(request):
-    feedbacks = Feedback.objects.filter(status='show').order_by('?')[:5]
+    feedbacks = get_random_sample(Feedback.objects.filter(status='show'), 5)
     return render(request, 'about.html', {'feedbacks': feedbacks})
 
 def all_institutions(request):
@@ -113,7 +206,7 @@ def all_institutions(request):
 
 def institution_details(request, id):
     try:
-        institution = Institution.objects.get(id=id)
+        institution = Institution.objects.prefetch_related('images').get(id=id)
 
         # Ensure that average_rating is a float
         institution.average_rating = float(institution.average_rating)
@@ -130,7 +223,12 @@ def institution_details(request, id):
 
         InstitutionView.objects.create(institution=institution)
         
-        context = {'institution': institution, 'stars': stars, 'gallery_images': institution.images.all(), 'offered_courses': InstitutionCourse.objects.filter(institution=institution)}
+        context = {
+            'institution': institution,
+            'stars': stars,
+            'gallery_images': institution.images.all(),
+            'offered_courses': InstitutionCourse.objects.filter(institution=institution).select_related('course'),
+        }
         return render(request, 'institution_details.html', context)
     except Institution.DoesNotExist:
         return render(request, '404.html', {'error': 'Institution not found'})
@@ -138,8 +236,8 @@ def institution_details(request, id):
 def course_details(request, id):
     try:
         course = Course.objects.get(id=id)
-        courses = Course.objects.all().order_by('?')[:5]
-        offering_institutions = InstitutionCourse.objects.filter(course=course)
+        courses = get_random_sample(Course.objects.all(), 5)
+        offering_institutions = InstitutionCourse.objects.filter(course=course).select_related('institution')
 
         prospect_careers = course.Prospect_Career.split(',') if course.Prospect_Career else []
         prospect_careers = [Prospect_Career.strip() for Prospect_Career in prospect_careers]  # Strip extra space
@@ -190,15 +288,20 @@ def update_profile(request, id):
     user = get_object_or_404(User, id=id)
 
     if request.method == 'POST':
+        new_email = request.POST.get('email')
         user.name = request.POST.get('name')
-        user.email = request.POST.get('email')
+        user.email = new_email
         user.phone = request.POST.get('phone')
         
         province = request.POST.get('province')
         if province:
             user.province = province
 
-        user.save()
+        try:
+            user.save()
+        except ValidationError as exc:
+            messages.error(request, exc.message_dict.get('email', ['Email already exists.'])[0])
+            return redirect('profile')
         
         messages.success(request, 'Profile details updated successfully.')
         return redirect('profile')
@@ -239,7 +342,7 @@ def applications(request):
     user = User.objects.get(id=user_id)
 
     institutions = Institution.objects.filter(admission=True).order_by('name')
-    application_list = Application.objects.filter(user=user_id).order_by('-id')
+    application_list = Application.objects.filter(user=user_id).select_related('institution', 'program', 'program__course').order_by('-id')
 
     paginator = Paginator(application_list, 7)  
     page_number = request.GET.get('page')
@@ -351,10 +454,6 @@ def institution_signup(request):
         institution = request.POST.get("institution")
         email = request.POST.get("signup-email")
 
-        if InstitutionAdmin.objects.filter(email=email).exists():
-            messages.error(request, "Email already exists.")
-            return redirect('institution-authentication')
-            
         if InstitutionAdmin.objects.filter(institution=institution).exists():
             messages.error(request, "Institution already exists.")
             return redirect('institution-authentication')
@@ -362,7 +461,12 @@ def institution_signup(request):
         password = make_password(request.POST.get("signup-password"))
 
         user = InstitutionAdmin(name=name, institution=institution, email=email, password=password)
-        user.save()
+        try:
+            user.save()
+        except ValidationError as exc:
+            messages.error(request, exc.message_dict.get('email', ['Email already exists.'])[0])
+            return redirect('institution-authentication')
+
         messages.success(request, "Account created successfully.")
 
         return redirect('institution-authentication')
@@ -374,27 +478,36 @@ def institution_login(request):
         return redirect('institution-dashboard')
     
     if request.method == 'POST':
-        email = request.POST.get('email')
+        email = (request.POST.get('email') or '').strip().lower()
         password = request.POST.get('login-password')
+
+        if is_login_rate_limited(request, 'institution', email):
+            messages.error(request, "Too many failed login attempts. Please try again in a few minutes.")
+            return render(request, 'institution_authentication.html')
 
         try:
             institution = InstitutionAdmin.objects.get(email=email)
         except InstitutionAdmin.DoesNotExist:
+            record_login_failure(request, 'institution', email)
             messages.error(request, "Email does not exist.")
             return render(request, 'institution_authentication.html')
 
         if not check_password(password, institution.password):
+            record_login_failure(request, 'institution', email)
             messages.error(request, "Invalid password.")
             return render(request, 'institution_authentication.html')
 
         if institution.status == 'not_decided':
+            record_login_failure(request, 'institution', email)
             messages.error(request, "Your account is in verification phase.")
             return render(request, 'institution_authentication.html')
         
         if institution.status == 'rejected':
+            record_login_failure(request, 'institution', email)
             messages.error(request, "Your account request has been rejected.")
             return render(request, 'institution_authentication.html')
 
+        clear_login_failures(request, 'institution', email)
         request.session['institution_id'] = institution.id
         request.session.set_expiry(7200) 
         return redirect('institution-profile')
@@ -502,11 +615,16 @@ def update_institutionadminprofile(request, id):
     admin_institution = get_object_or_404(InstitutionAdmin, id=id)
 
     if request.method == 'POST':
+        new_email = request.POST.get('email')
         admin_institution.name = request.POST.get('name')
         admin_institution.phone = request.POST.get('phone')
-        admin_institution.email = request.POST.get('email')
+        admin_institution.email = new_email
 
-        admin_institution.save()
+        try:
+            admin_institution.save()
+        except ValidationError as exc:
+            messages.error(request, exc.message_dict.get('email', ['Email already exists.'])[0])
+            return redirect('institution-admin-profile')
         
         messages.success(request, 'Profile details updated successfully.')
         return redirect('institution-admin-profile')
@@ -594,7 +712,7 @@ def programs(request):
         return redirect('institution-authentication')
 
     courses = Course.objects.all().order_by('name')
-    offered_courses = InstitutionCourse.objects.filter(institution=institution).order_by('course__name')
+    offered_courses = InstitutionCourse.objects.filter(institution=institution).select_related('course').order_by('course__name')
 
     context = {'institution': institution, 'courses': courses, 'offered_courses': offered_courses}
     return render(request, 'programs.html', context)
@@ -682,7 +800,7 @@ def admission(request):
     except InstitutionAdmin.DoesNotExist:
         return redirect('institution-authentication')
 
-    admissions_list = Application.objects.filter(institution=institution).order_by('-id')
+    admissions_list = Application.objects.filter(institution=institution).select_related('user', 'program', 'program__course').order_by('-id')
 
     paginator = Paginator(admissions_list, 7)
     page_number = request.GET.get('page')
@@ -736,23 +854,31 @@ def admin_login(request):
         return redirect('dashboard')
     
     if request.method == 'POST':
-        email = request.POST.get('email')
+        email = (request.POST.get('email') or '').strip().lower()
         password = request.POST.get('login-password')
+
+        if is_login_rate_limited(request, 'admin', email):
+            messages.error(request, "Too many failed login attempts. Please try again in a few minutes.")
+            return render(request, 'admin_authentication.html')
 
         try:
             admin = SuperAdmin.objects.get(email=email)
         except SuperAdmin.DoesNotExist:
+            record_login_failure(request, 'admin', email)
             messages.error(request, "Email does not exist.")
             return render(request, 'admin_authentication.html')
 
         if not check_password(password, admin.password):
+            record_login_failure(request, 'admin', email)
             messages.error(request, "Invalid password.")
             return render(request, 'admin_authentication.html')
 
         if admin.status != 'active':
+            record_login_failure(request, 'admin', email)
             messages.error(request, "Your account is suspended. Please contact support.")
             return render(request, 'admin_authentication.html')
 
+        clear_login_failures(request, 'admin', email)
         request.session['admin_id'] = admin.id
         request.session.set_expiry(7200) 
         return redirect('dashboard')
@@ -771,14 +897,15 @@ def admin_signup(request):
             messages.error(request, "Phone number already exists.")
             return redirect('system-user')
         
-        if SuperAdmin.objects.filter(email=email).exists():
-            messages.error(request, "Email already exists.")
-            return redirect('system-user')
-
         password = make_password(request.POST.get("signup-password"))
 
         admin = SuperAdmin(name=name, role=role, phone=phone, email=email, password=password)
-        admin.save()
+        try:
+            admin.save()
+        except ValidationError as exc:
+            messages.error(request, exc.message_dict.get('email', ['Email already exists.'])[0])
+            return redirect('system-user')
+
         messages.success(request, "Account created successfully.")
 
         return redirect('system-user')
@@ -818,11 +945,16 @@ def update_adminprofile(request, id):
     admin = get_object_or_404(SuperAdmin, id=id)
 
     if request.method == 'POST':
+        new_email = request.POST.get('email')
         admin.name = request.POST.get('name')
-        admin.email = request.POST.get('email')
+        admin.email = new_email
         admin.phone = request.POST.get('phone')
 
-        admin.save()
+        try:
+            admin.save()
+        except ValidationError as exc:
+            messages.error(request, exc.message_dict.get('email', ['Email already exists.'])[0])
+            return redirect('admin-profile')
         
         messages.success(request, 'Profile details updated successfully.')
         return redirect('admin-profile')
@@ -1053,7 +1185,7 @@ def feedback(request):
     if admin.role != 'admin':
         return redirect('dashboard')
     
-    feedbacks = Feedback.objects.all().order_by('-id')
+    feedbacks = Feedback.objects.select_related('user').order_by('-id')
     return render(request, 'feedback.html', {'feedbacks': feedbacks, 'admin': admin})
 
 
@@ -1072,13 +1204,13 @@ def get_trending_institutions():
 # Haversine Formula
 def nearby_institutions_view(request, user_id, radius=50):
     user = get_object_or_404(User, id=user_id)
-    institutions = get_nearby_institutions(user, radius_km=radius)
+    nearby = get_nearby_institutions(user, radius_km=radius)
     
     data = [{
-        "name": inst.name, 
-        "address": inst.address, 
-        "distance": haversine(user.latitude, user.longitude, inst.latitude, inst.longitude)
-    } for inst in institutions]
+        "name": item['institution'].name,
+        "address": item['institution'].address,
+        "distance": item['distance'],
+    } for item in nearby]
 
     return JsonResponse({"nearby_institutions": data})
 
@@ -1100,6 +1232,12 @@ def update_location(request):
                 user = User.objects.get(id=user_id)
             except User.DoesNotExist:
                 return JsonResponse({"error": "User not found"}, status=404)
+
+            try:
+                latitude = Decimal(str(latitude))
+                longitude = Decimal(str(longitude))
+            except (InvalidOperation, TypeError):
+                return JsonResponse({"error": "Invalid latitude/longitude format"}, status=400)
 
             user.latitude = latitude
             user.longitude = longitude
@@ -1127,6 +1265,12 @@ def update_institution_location(request):
 
             institution = get_object_or_404(Institution, id=institution_id)
             admin = get_object_or_404(InstitutionAdmin, id=admin_id)
+
+            try:
+                latitude = Decimal(str(latitude))
+                longitude = Decimal(str(longitude))
+            except (InvalidOperation, TypeError):
+                return JsonResponse({"error": "Invalid latitude/longitude format"}, status=400)
 
             # Ensure the institution belongs to the given admin
             if institution.admin != admin:
@@ -1165,7 +1309,7 @@ def update_status(request, institution_id):
 # Pass offered courses by specific college to admission form
 def get_programs(request, institution_id):
     """Return programs for a specific institution as JSON."""
-    programs = InstitutionCourse.objects.filter(institution_id=institution_id)
+    programs = InstitutionCourse.objects.filter(institution_id=institution_id).select_related('course')
     
     # Format the data for the response
     programs_data = [
@@ -1187,7 +1331,10 @@ def password_setting(request):
 def change_setting(request):
     return render(request, 'change_password.html')
 
-def send_otp(email):
+def send_otp(email, request=None):
+    if request is not None and is_otp_send_rate_limited(request, email):
+        return False, 'Too many OTP requests. Please wait a few minutes before trying again.'
+
     user = None
 
     if SuperAdmin.objects.filter(email=email).exists():
@@ -1200,8 +1347,15 @@ def send_otp(email):
     if user:
         # Generate an OTP
         otp = get_random_string(length=6, allowed_chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890')
-        
-        OTP.objects.create(email=email, otp=otp)
+
+        # Keep only one active OTP for an email.
+        OTP.objects.filter(email=email, consumed_at__isnull=True).delete()
+        otp_entry = OTP(email=email, expires_at=now() + timedelta(minutes=5))
+        otp_entry.set_otp(otp)
+        otp_entry.save()
+
+        if request is not None:
+            record_otp_send_attempt(request, email)
 
         send_mail(
             'Your OTP for password change',
@@ -1210,17 +1364,18 @@ def send_otp(email):
             [email],
             fail_silently=False,
         )
-        return True
-    return False
+        return True, None
+    return False, 'Email not found. Please check and try again.'
 
 def request_otp(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         
-        if send_otp(email):
+        sent, error_message = send_otp(email, request=request)
+        if sent:
             return render(request, 'change_password.html', {'message': 'OTP sent to your email. Please check the inbox.'})
         else:
-            return render(request, 'request_otp.html', {'error': 'Email not found. Please check and try again.'})
+            return render(request, 'request_otp.html', {'error': error_message})
 
 def change_user_password(request):
     if request.method == 'POST':
@@ -1245,18 +1400,28 @@ def change_password(email, otp, new_password):
     else:
         return False, "Email not found"
     
-    try:
-        otp_entry = OTP.objects.get(email=email, otp=otp)
-    except OTP.DoesNotExist:
+    otp_entry = OTP.objects.filter(email=email, consumed_at__isnull=True).order_by('-created_at').first()
+    if not otp_entry:
         return False, "Invalid OTP"
-    
+
+    if not otp_entry.can_attempt():
+        return False, "Too many incorrect OTP attempts. Please request a new OTP after 5 minutes."
+
     if not otp_entry.is_valid():
         return False, "OTP has expired"
+
+    if not otp_entry.check_otp(otp):
+        otp_entry.record_failed_attempt()
+        if not otp_entry.can_attempt():
+            return False, "Too many incorrect OTP attempts. Please request a new OTP after 5 minutes."
+        return False, "Invalid OTP"
+
+    otp_entry.reset_attempts()
     
     user.password = make_password(new_password)
     user.save()
     
-    otp_entry.delete()
+    otp_entry.mark_consumed()
     
     return True, "Password changed successfully"
 
