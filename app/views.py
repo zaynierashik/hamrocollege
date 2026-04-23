@@ -1011,7 +1011,7 @@ def user(request):
     admin = SuperAdmin.objects.get(id=admin_id)
 
     users = User.objects.all().order_by('-id')
-    return render(request, 'user.html', {'users': users, 'admin': admin})
+    return render(request, 'admin/user.html', {'users': users, 'admin': admin})
 
 def institution(request):
     if 'admin_id' not in request.session:
@@ -1186,7 +1186,7 @@ def feedback(request):
         return redirect('dashboard')
     
     feedbacks = Feedback.objects.select_related('user').order_by('-id')
-    return render(request, 'feedback.html', {'feedbacks': feedbacks, 'admin': admin})
+    return render(request, 'admin/feedback.html', {'feedbacks': feedbacks, 'admin': admin})
 
 
 # Algorithm

@@ -2,23 +2,17 @@
 
 <header class="container full-container w-full py-4 xl:px-5 px-4">
     <nav class="studio-topbar flex items-center justify-between gap-4" aria-label="Global">
-        <div class="flex items-center gap-3 w-full max-w-[520px]">
+        <div class="flex items-center gap-3">
             <button class="text-xl icon-hover cursor-pointer text-gray-600 xl:hidden" id="headerCollapse" data-hs-overlay="#application-sidebar-brand" aria-controls="application-sidebar-brand" aria-label="Toggle navigation" type="button">
                 <i class="ti ti-menu-2"></i>
             </button>
-            <div class="studio-search w-full">
-                <i class="ti ti-search text-gray-400"></i>
-                <input type="text" placeholder="Search...">
-                <span class="text-xs text-gray-400 font-semibold">⌘K</span>
-            </div>
+
+            <button id="sidebarModeToggle" class="studio-sidebar-toggle hidden xl:inline-flex" type="button" aria-label="Toggle sidebar compact mode" title="Toggle sidebar compact mode">
+                <i id="sidebarModeToggleIcon" class="ti ti-layout-sidebar-left-collapse text-lg"></i>
+            </button>
         </div>
 
         <div class="flex items-center gap-3">
-            <span class="studio-tag hidden md:inline-flex">
-                <i class="ti ti-sparkles text-blue-500"></i>
-                Admin Assistant
-            </span>
-
             <div class="hs-dropdown relative inline-flex [--placement:bottom-right]">
                 <button class="hs-dropdown-toggle cursor-pointer align-middle rounded-md flex items-center gap-2" type="button">
                     <img class="studio-avatar" src="{% static 'images/profile/user-1.jpg' %}" alt="Admin">

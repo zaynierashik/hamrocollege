@@ -3,12 +3,7 @@
 <aside id="application-sidebar-brand" class="studio-sidebar hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transform hidden xl:block xl:translate-x-0 xl:end-auto xl:bottom-0 fixed top-0 h-screen z-[999] flex-shrink-0 left-sidebar transition-all duration-300">
     <div class="px-6 py-6">
         <a href="{% url 'dashboard' %}" class="studio-logo">
-            <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-blue-600 text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 6 12h4.5l-1.5 7.5L18 12h-4.5l1.5-7.5Z" />
-                </svg>
-            </span>
-            <span>Hamrocollege</span>
+            <img src="{% static 'images/logos/logo-light.png' %}" alt="Hamrocollege" class="h-10 w-auto">
         </a>
     </div>
 
@@ -56,22 +51,6 @@
                     </a>
                 </li>
                 {% endif %}
-            </ul>
-
-            <p class="studio-nav-title">Account</p>
-            <ul class="space-y-1.5">
-                <li>
-                    <a href="{% url 'admin-profile' %}" class="studio-nav-link {% if request.path == '/admin-profile/' %}is-active{% endif %}">
-                        <i class="ti ti-user-circle text-base"></i>
-                        <span>Profile</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'admin-logout' %}" class="studio-nav-link">
-                        <i class="ti ti-logout text-base"></i>
-                        <span>Logout</span>
-                    </a>
-                </li>
             </ul>
         </div>
     </div>

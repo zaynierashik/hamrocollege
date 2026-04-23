@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	const themeToggle = document.getElementById("theme-toggle");
 	const moonIcon = document.getElementById("moon-icon");
 	const sunIcon = document.getElementById("sun-icon");
+	const sidebarModeToggle = document.getElementById("sidebarModeToggle");
+	const sidebarModeToggleIcon = document.getElementById("sidebarModeToggleIcon");
 
 	const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
 	const currentTheme = localStorage.getItem("theme") || (prefersDarkMode ? "dark" : "light");
@@ -14,14 +16,30 @@ document.addEventListener("DOMContentLoaded", () => {
 		document.documentElement.classList.remove("dark");
 	}
 
-	updateIcons();
-
-	themeToggle.addEventListener("click", () => {
-		const isDarkMode = document.documentElement.classList.toggle("dark");
-		localStorage.setItem("theme", isDarkMode ? "dark" : "light");
-
+	if (themeToggle && moonIcon && sunIcon) {
 		updateIcons();
-	});
+
+		themeToggle.addEventListener("click", () => {
+			const isDarkMode = document.documentElement.classList.toggle("dark");
+			localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+
+			updateIcons();
+		});
+	}
+
+	if (sidebarModeToggle && sidebarModeToggleIcon) {
+		const sidebarMode = localStorage.getItem("adminSidebarMode") || "full";
+		if (sidebarMode === "icon") {
+			document.body.classList.add("admin-sidebar-icon-only");
+		}
+		updateSidebarToggleIcon();
+
+		sidebarModeToggle.addEventListener("click", () => {
+			const isIconOnly = document.body.classList.toggle("admin-sidebar-icon-only");
+			localStorage.setItem("adminSidebarMode", isIconOnly ? "icon" : "full");
+			updateSidebarToggleIcon();
+		});
+	}
 
 	function updateIcons() {
 		const isDarkMode = document.documentElement.classList.contains("dark");
@@ -32,6 +50,13 @@ document.addEventListener("DOMContentLoaded", () => {
 			moonIcon.classList.add("hidden");
 			sunIcon.classList.remove("hidden");
 		}
+	}
+
+	function updateSidebarToggleIcon() {
+		const isIconOnly = document.body.classList.contains("admin-sidebar-icon-only");
+		sidebarModeToggleIcon.className = isIconOnly
+			? "ti ti-layout-sidebar-left-expand text-lg"
+			: "ti ti-layout-sidebar-left-collapse text-lg";
 	}
 });
 
