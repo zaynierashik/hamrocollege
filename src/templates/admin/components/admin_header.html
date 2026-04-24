@@ -3,13 +3,6 @@
 <header class="container full-container w-full py-4 xl:px-5 px-4">
     <nav class="studio-topbar flex items-center justify-between gap-4" aria-label="Global">
         <div class="flex items-center gap-3">
-            <button class="text-xl icon-hover cursor-pointer text-gray-600 xl:hidden" id="headerCollapse" data-hs-overlay="#application-sidebar-brand" aria-controls="application-sidebar-brand" aria-label="Toggle navigation" type="button">
-                <i class="ti ti-menu-2"></i>
-            </button>
-
-            <button id="sidebarModeToggle" class="studio-sidebar-toggle hidden xl:inline-flex" type="button" aria-label="Toggle sidebar compact mode" title="Toggle sidebar compact mode">
-                <i id="sidebarModeToggleIcon" class="ti ti-layout-sidebar-left-collapse text-lg"></i>
-            </button>
         </div>
 
         <div class="flex items-center gap-3">
@@ -20,7 +13,6 @@
                         <p class="text-sm font-semibold text-gray-700">{{ admin.name|default:'System Admin' }}</p>
                         <p class="text-xs text-gray-500">{{ admin.email|default:'admin@hamrocollege.com' }}</p>
                     </div>
-                    <i class="ti ti-chevron-down text-gray-500"></i>
                 </button>
 
                 <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 mt-2 min-w-max w-[210px] hidden z-[12] studio-content-wrap p-2" aria-labelledby="hs-dropdown-custom-icon-trigger">

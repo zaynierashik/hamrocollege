@@ -22,19 +22,19 @@
 
             <main class="h-full overflow-y-auto max-w-full pb-6" id="system-user-table">
                 <div class="container full-container xl:px-5 px-4">
-                    <section class="studio-content-wrap">
+                    <section class="studio-content-wrap" x-data="{ openModal: null }">
                         <div class="studio-panel-head mb-4">
                             <div>
                                 <h1 class="studio-panel-title">System Users</h1>
                                 <p class="studio-subtitle">Manage staff and admin users with role controls.</p>
                             </div>
-                            <button id="new-system-user" class="studio-btn-primary" type="button">
+                            <button @click="openModal = 'new-user'" class="studio-btn-primary" type="button">
                                 <i class="ti ti-plus mr-1"></i> New User
                             </button>
                         </div>
 
-                        <div class="studio-table-wrap relative overflow-x-auto" x-data="{ openModal: null }">
-                            <table class="studio-table">
+                        <div class="studio-table-wrap relative overflow-x-auto">
+                            <table class="studio-table text-left">
                                 <thead>
                                 <tr>
                                     <th>S.N.</th>
@@ -64,8 +64,8 @@
                             </table>
 
                             {% for system_user in system_users %}
-                                <div x-show="openModal === '{{ system_user.id }}'" class="fixed inset-0 flex items-center justify-center bg-gray-900/40 z-50">
-                                    <div class="studio-content-wrap w-full max-w-md">
+                                <div x-show="openModal === '{{ system_user.id }}'" class="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50" style="display: none;">
+                                    <div class="studio-content-wrap w-full max-w-md shadow-2xl border border-gray-200">
                                         <h3 class="text-lg font-semibold text-gray-800">Delete user?</h3>
                                         <p class="text-sm text-gray-500 mt-2">Are you sure you want to remove {{ system_user.name }}?</p>
                                         <div class="mt-5 flex justify-end gap-2">
@@ -78,59 +78,62 @@
                                     </div>
                                 </div>
                             {% endfor %}
-                        </div>
-                    </section>
-                </div>
-            </main>
 
-            <main class="h-full overflow-y-auto max-w-full pb-6 hidden" id="system-user-form">
-                <div class="container full-container xl:px-5 px-4">
-                    <section class="studio-content-wrap">
-                        <div class="studio-panel-head mb-5">
-                            <div>
-                                <h1 class="studio-panel-title">Create System User</h1>
-                                <p class="studio-subtitle">Add admin or staff account credentials.</p>
-                            </div>
-                            <button id="back-button" class="studio-btn-ghost" type="button">
-                                <i class="ti ti-arrow-left mr-1"></i> Back
-                            </button>
-                        </div>
+                            <!-- New System User Modal -->
+                            <div x-show="openModal === 'new-user'" class="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50" style="display: none;">
+                                <div class="studio-content-wrap w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200">
+                                    <div class="studio-panel-head mb-4">
+                                        <div>
+                                            <h3 class="text-lg font-semibold text-gray-800">Create System User</h3>
+                                            <p class="text-sm text-gray-500 mt-1">Add admin or staff account credentials.</p>
+                                        </div>
+                                        <button @click="openModal = null" type="button" class="text-gray-400 hover:text-gray-600">
+                                            <i class="ti ti-x text-xl"></i>
+                                        </button>
+                                    </div>
 
-                        <form action="{% url 'admin-signup' %}" method="POST" class="space-y-4">
-                            {% csrf_token %}
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="name" class="text-sm font-medium text-gray-700">Name <span class="text-red-600">*</span></label>
-                                    <input type="text" name="name" id="name" class="studio-input mt-1" placeholder="John Doe" required>
+                                    <form action="{% url 'admin-signup' %}" method="POST" class="space-y-4">
+                                        {% csrf_token %}
+                                        <div class="grid grid-cols-4 gap-4">
+                                            <div class="col-span-3">
+                                                <label for="modal-name" class="text-sm font-medium text-gray-700">Name <span class="text-red-600">*</span></label>
+                                                <input type="text" name="name" id="modal-name" class="studio-input mt-1" placeholder="John Doe" required>
+                                            </div>
+                                            <div class="col-span-1">
+                                                <label for="modal-role" class="text-sm font-medium text-gray-700">Role <span class="text-red-600">*</span></label>
+                                                <select id="modal-role" name="role" class="studio-select mt-1" required>
+                                                    <option value="" selected>Choose role</option>
+                                                    {% for role in roles %}
+                                                        <option value="{{ role.0 }}">{{ role.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label for="modal-phone" class="text-sm font-medium text-gray-700">Phone <span class="text-red-600">*</span></label>
+                                                <input type="number" name="phone" id="modal-phone" class="studio-input mt-1" placeholder="98XXXXXXXX" required>
+                                            </div>
+                                            <div>
+                                                <label for="modal-email" class="text-sm font-medium text-gray-700">Email <span class="text-red-600">*</span></label>
+                                                <input type="email" name="email" id="modal-email" class="studio-input mt-1" placeholder="john@example.com" required>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label for="modal-password" class="text-sm font-medium text-gray-700">Password <span class="text-red-600">*</span></label>
+                                            <input type="text" name="password" id="modal-password" class="studio-input mt-1" minlength="7" maxlength="20" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,20}" title="Password must be 7-20 chars with uppercase, lowercase, number, special character" placeholder="Strong password" required>
+                                        </div>
+
+                                        <div class="flex justify-end gap-2 pt-4">
+                                            <button @click="openModal = null" type="button" class="studio-btn-ghost">Cancel</button>
+                                            <button type="submit" class="studio-btn-primary">Create</button>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div>
-                                    <label for="role" class="text-sm font-medium text-gray-700">Role <span class="text-red-600">*</span></label>
-                                    <select id="role" name="role" class="studio-select mt-1" required>
-                                        <option value="" selected>Choose role</option>
-                                        {% for role in roles %}
-                                            <option value="{{ role.0 }}">{{ role.1 }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
                             </div>
-
-                            <div>
-                                <label for="phone" class="text-sm font-medium text-gray-700">Phone <span class="text-red-600">*</span></label>
-                                <input type="number" name="phone" id="phone" class="studio-input mt-1" placeholder="98XXXXXXXX" required>
-                            </div>
-
-                            <div>
-                                <label for="email" class="text-sm font-medium text-gray-700">Email <span class="text-red-600">*</span></label>
-                                <input type="email" name="email" id="email" class="studio-input mt-1" placeholder="john@example.com" required>
-                            </div>
-
-                            <div>
-                                <label for="password" class="text-sm font-medium text-gray-700">Password <span class="text-red-600">*</span></label>
-                                <input type="text" name="password" id="password" class="studio-input mt-1" minlength="7" maxlength="20" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,20}" title="Password must be 7-20 chars with uppercase, lowercase, number, special character" placeholder="Strong password" required>
-                            </div>
-
-                            <button class="studio-btn-primary w-full" type="submit">Create User</button>
-                        </form>
+                        </div>
                     </section>
                 </div>
             </main>
@@ -149,18 +152,6 @@
 {% endif %}
 
 <script>
-    document.getElementById('new-system-user').addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('system-user-table').classList.add('hidden');
-        document.getElementById('system-user-form').classList.remove('hidden');
-    });
-
-    document.getElementById('back-button').addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('system-user-table').classList.remove('hidden');
-        document.getElementById('system-user-form').classList.add('hidden');
-    });
-
     setTimeout(function() {
         const toastContainer = document.getElementById('toast-container');
         if (toastContainer) {

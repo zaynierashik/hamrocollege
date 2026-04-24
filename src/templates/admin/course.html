@@ -1,4 +1,4 @@
-{% load static %}
+    {% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,24 +23,24 @@
 
             <main class="h-full overflow-y-auto max-w-full pb-6" id="course-table">
                 <div class="container full-container xl:px-5 px-4">
-                    <section class="studio-content-wrap">
+                    <section class="studio-content-wrap" x-data="{ openModal: null }">
                         <div class="studio-panel-head mb-4">
                             <div>
                                 <h1 class="studio-panel-title">Courses</h1>
                                 <p class="studio-subtitle">Manage course catalog, affiliations and edit details.</p>
                             </div>
-                            <button id="new-course" class="studio-btn-primary" type="button">
+                            <button @click="openModal = 'new-course'" class="studio-btn-primary" type="button">
                                 <i class="ti ti-plus mr-1"></i> New Course
                             </button>
                         </div>
 
-                        <div class="studio-search mb-4">
+                        <div class="studio-search mb-4 h-11">
                             <i class="ti ti-search text-gray-400"></i>
-                            <input id="searchInput" name="search" placeholder="Search course name..." onkeyup="filterCourses()">
+                            <input id="searchInput" name="search" placeholder="Search course name..." onkeyup="filterCourses()" class="h-8 focus:ring-0">
                         </div>
 
                         <div class="studio-table-wrap relative overflow-x-auto">
-                            <table class="studio-table">
+                            <table class="studio-table text-left">
                                 <thead>
                                 <tr>
                                     <th>S.N.</th>
@@ -103,102 +103,141 @@
                                 {% endif %}
                             </div>
                         {% endif %}
-                    </section>
-                </div>
-            </main>
 
-            <main class="h-full overflow-y-auto max-w-full pb-6 hidden" id="course-form">
-                <div class="container full-container xl:px-5 px-4">
-                    <section class="studio-content-wrap">
-                        <div class="studio-panel-head mb-5">
-                            <div>
-                                <h1 class="studio-panel-title">Create Course</h1>
-                                <p class="studio-subtitle">Add a new course to the platform catalog.</p>
+                        <div x-show="openModal === 'new-course'" class="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50" style="display: none;">
+                            <div class="studio-content-wrap w-full max-w-4xl h-[85vh] overflow-y-auto shadow-2xl border border-gray-200 mx-4">
+                                <div class="studio-panel-head mb-4">
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-800">Create Course</h3>
+                                        <p class="text-sm text-gray-500 mt-1">Add a new course to the platform catalog.</p>
+                                    </div>
+                                    <button @click="openModal = null" type="button" class="text-gray-400 hover:text-gray-600">
+                                        <i class="ti ti-x text-xl"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Progress Indicator -->
+                                <div class="mb-6">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">1</div>
+                                            <div class="ml-3">
+                                                <h4 class="text-sm font-medium text-gray-900">Basic Details</h4>
+                                                <p class="text-xs text-gray-500">Course information</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex-1 mx-4">
+                                            <div class="h-1 bg-gray-200 rounded-full">
+                                                <div class="h-1 bg-blue-600 rounded-full transition-all duration-300" :style="currentStep === 2 ? 'width: 100%' : 'width: 0%'"></div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors duration-300" :class="currentStep === 2 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'">2</div>
+                                            <div class="ml-3">
+                                                <h4 class="text-sm font-medium text-gray-900">Additional Information</h4>
+                                                <p class="text-xs text-gray-500">Course details</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <form action="{% url 'add-course' %}" method="POST" class="space-y-4" x-data="{ currentStep: 1 }">
+                                    {% csrf_token %}
+                                    
+                                    <!-- Step 1: Basic Details -->
+                                    <div x-show="currentStep === 1" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-4" x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 -translate-x-4">
+                                        <div class="space-y-4">
+                                            <div class="grid grid-cols-4 gap-4">
+                                                <div class="col-span-3">
+                                                    <label for="modal-name" class="text-sm font-medium text-gray-700">Name <span class="text-red-600">*</span></label>
+                                                    <input type="text" name="name" id="modal-name" class="studio-input mt-1" placeholder="Mathematics 101" required>
+                                                </div>
+                                                <div>
+                                                    <label for="modal-abbreviation" class="text-sm font-medium text-gray-700">Abbreviation</label>
+                                                    <input type="text" name="abbreviation" id="modal-abbreviation" class="studio-input mt-1" placeholder="MTH-101">
+                                                </div>
+                                            </div>
+
+                                            <div class="grid grid-cols-4 gap-4">
+                                                <div class="col-span-2">
+                                                    <label for="modal-field" class="text-sm font-medium text-gray-700">Field <span class="text-red-600">*</span></label>
+                                                    <select id="modal-field" name="field" class="studio-select mt-1" required>
+                                                        <option value="" selected>Choose field</option>
+                                                        {% for field in fields %}
+                                                            <option value="{{ field.0 }}">{{ field.1 }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label for="modal-year" class="text-sm font-medium text-gray-700">Duration (Years) <span class="text-red-600">*</span></label>
+                                                    <input type="number" name="year" id="modal-year" class="studio-input mt-1" placeholder="4" required>
+                                                </div>
+                                                <div>
+                                                    <label for="modal-level" class="text-sm font-medium text-gray-700">Level <span class="text-red-600">*</span></label>
+                                                    <select id="modal-level" name="level" class="studio-select mt-1" required>
+                                                        <option value="" selected>Choose level</option>
+                                                        {% for level in levels %}
+                                                            <option value="{{ level.0 }}">{{ level.1 }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <label for="modal-affiliation" class="text-sm font-medium text-gray-700">Affiliation <span class="text-red-600">*</span></label>
+                                                <select id="modal-affiliation" name="affiliation" class="studio-select mt-1" onchange="toggleModalForeignUniversityField()" required>
+                                                    <option value="" selected>Choose affiliation</option>
+                                                    {% for affiliation in affiliation_choices %}
+                                                        <option value="{{ affiliation.0 }}">{{ affiliation.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+
+                                            <div class="hidden" id="modal-foreign-university-field">
+                                                <label for="modal-foreign_university_name" class="text-sm font-medium text-gray-700">Foreign University Name</label>
+                                                <input type="text" name="foreign_university_name" id="modal-foreign_university_name" class="studio-input mt-1" placeholder="University name">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Step 2: Additional Information -->
+                                    <div x-show="currentStep === 2" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-4" x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 -translate-x-4">
+                                        <div class="space-y-4">
+                                            <div>
+                                                <label for="modal-about" class="text-sm font-medium text-gray-700">About <span class="text-red-600">*</span></label>
+                                                <textarea name="about" id="modal-about" rows="4" class="studio-textarea mt-1" required></textarea>
+                                            </div>
+
+                                            <div>
+                                                <label for="modal-eligibility" class="text-sm font-medium text-gray-700">Eligibility</label>
+                                                <textarea name="eligibility" id="modal-eligibility" rows="3" class="studio-textarea mt-1"></textarea>
+                                            </div>
+
+                                            <div>
+                                                <label for="modal-prospect_career" class="text-sm font-medium text-gray-700">Prospect Career</label>
+                                                <textarea name="prospect_career" id="modal-prospect_career" rows="3" class="studio-textarea mt-1"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Navigation Buttons -->
+                                    <div class="flex justify-between pt-4 border-t">
+                                        <div>
+                                            <button x-show="currentStep === 2" @click="currentStep = 1" type="button" class="studio-btn-ghost">
+                                                Previous
+                                            </button>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <button @click="openModal = null" type="button" class="studio-btn-ghost">Cancel</button>
+                                            <button x-show="currentStep === 1" @click="currentStep = 2" type="button" class="studio-btn-primary">
+                                                Next
+                                            </button>
+                                            <button x-show="currentStep === 2" type="submit" class="studio-btn-primary">Create</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                            <button id="back-button" class="studio-btn-ghost" type="button">
-                                <i class="ti ti-arrow-left mr-1"></i> Back
-                            </button>
                         </div>
-
-                        <form action="{% url 'add-course' %}" method="POST" class="space-y-4">
-                            {% csrf_token %}
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div class="md:col-span-2">
-                                    <label for="name" class="text-sm font-medium text-gray-700">Name <span class="text-red-600">*</span></label>
-                                    <input type="text" name="name" id="name" class="studio-input mt-1" placeholder="Mathematics 101" required>
-                                </div>
-                                <div>
-                                    <label for="abbreviation" class="text-sm font-medium text-gray-700">Abbreviation</label>
-                                    <input type="text" name="abbreviation" id="abbreviation" class="studio-input mt-1" placeholder="MTH-101">
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div>
-                                    <label for="field" class="text-sm font-medium text-gray-700">Field <span class="text-red-600">*</span></label>
-                                    <select id="field" name="field" class="studio-select mt-1" required>
-                                        <option value="" selected>Choose field</option>
-                                        {% for field in fields %}
-                                            <option value="{{ field.0 }}">{{ field.1 }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="year" class="text-sm font-medium text-gray-700">Duration (Years) <span class="text-red-600">*</span></label>
-                                    <input type="number" name="year" id="year" class="studio-input mt-1" placeholder="4" required>
-                                </div>
-                                <div>
-                                    <label for="level" class="text-sm font-medium text-gray-700">Level <span class="text-red-600">*</span></label>
-                                    <select id="level" name="level" class="studio-select mt-1" required>
-                                        <option value="" selected>Choose level</option>
-                                        {% for level in levels %}
-                                            <option value="{{ level.0 }}">{{ level.1 }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="affiliation" class="text-sm font-medium text-gray-700">Affiliation <span class="text-red-600">*</span></label>
-                                    <select id="affiliation" name="affiliation" class="studio-select mt-1" onchange="toggleForeignUniversityField()" required>
-                                        <option value="" selected>Choose affiliation</option>
-                                        {% for affiliation in affiliation_choices %}
-                                            <option value="{{ affiliation.0 }}">{{ affiliation.1 }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="hidden" id="foreign-university-field">
-                                <label for="foreign_university_name" class="text-sm font-medium text-gray-700">Foreign University Name</label>
-                                <input type="text" name="foreign_university_name" id="foreign_university_name" class="studio-input mt-1" placeholder="University name">
-                            </div>
-
-                            <div>
-                                <label for="about" class="text-sm font-medium text-gray-700">About <span class="text-red-600">*</span></label>
-                                <textarea name="about" id="about" rows="4" class="studio-textarea mt-1" required></textarea>
-                            </div>
-
-                            <div>
-                                <label for="eligibility" class="text-sm font-medium text-gray-700">Eligibility</label>
-                                <textarea name="eligibility" id="eligibility" rows="3" class="studio-textarea mt-1"></textarea>
-                            </div>
-
-                            <div>
-                                <label for="admission_criteria" class="text-sm font-medium text-gray-700">Admission Criteria</label>
-                                <textarea name="admission_criteria" id="admission_criteria" rows="3" class="studio-textarea mt-1"></textarea>
-                            </div>
-
-                            <div>
-                                <label for="job_prospect" class="text-sm font-medium text-gray-700">Job Prospect</label>
-                                <textarea name="job_prospect" id="job_prospect" rows="3" class="studio-textarea mt-1"></textarea>
-                            </div>
-
-                            <div>
-                                <label for="prospect_career" class="text-sm font-medium text-gray-700">Prospect Career</label>
-                                <textarea name="prospect_career" id="prospect_career" rows="3" class="studio-textarea mt-1"></textarea>
-                            </div>
-
-                            <button type="submit" class="studio-btn-primary w-full">Add Course</button>
-                        </form>
                     </section>
                 </div>
             </main>
@@ -227,21 +266,19 @@
         foreignUniversityField.classList.toggle('hidden', affiliationSelect.value !== 'foreign');
     }
 
+    function toggleModalForeignUniversityField() {
+        const affiliationSelect = document.getElementById('modal-affiliation');
+        const foreignUniversityField = document.getElementById('modal-foreign-university-field');
+        if (!affiliationSelect || !foreignUniversityField) {
+            return;
+        }
+        foreignUniversityField.classList.toggle('hidden', affiliationSelect.value !== 'foreign');
+    }
+
     toggleForeignUniversityField();
-
-    document.getElementById('new-course').addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('course-table').classList.add('hidden');
-        document.getElementById('course-form').classList.remove('hidden');
-    });
-
-    document.getElementById('back-button').addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('course-table').classList.remove('hidden');
-        document.getElementById('course-form').classList.add('hidden');
-    });
 </script>
 
+<script src="//unpkg.com/alpinejs" defer></script>
 <script src="{% static 'js/dashboard.js' %}"></script>
 <script src="{% static 'js/sidebarmenu.js' %}"></script>
 <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>

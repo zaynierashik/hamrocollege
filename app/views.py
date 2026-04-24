@@ -1086,12 +1086,10 @@ def add_course(request):
         foreign_university_name = request.POST.get('foreign_university_name')
         about = request.POST.get('about')
         eligibility = request.POST.get('eligibility')
-        admission_criteria = request.POST.get('admission_criteria')
-        job_prospect = request.POST.get('job_prospect')
         prospect_career = request.POST.get('prospect_career')
 
         course = Course(name=name, abbreviation=abbreviation, year=year, field=field, level=level, affiliation=affiliation, Foreign_University_Name=foreign_university_name, about=about,
-            eligibility=eligibility, Admission_Criteria=admission_criteria, Job_Prospect=job_prospect, Prospect_Career=prospect_career)
+            eligibility=eligibility, Prospect_Career=prospect_career)
         course.save()
         
         return redirect("course")
@@ -1160,8 +1158,6 @@ def update_course(request, course_id):
         course.level = request.POST.get('level')
         course.about = request.POST.get('about')
         course.eligibility = request.POST.get('eligibility')
-        course.Admission_Criteria = request.POST.get('admission_criteria')
-        course.Job_Prospect = request.POST.get('job_prospect')
         course.Prospect_Career = request.POST.get('prospect_career')
         offered_by_ids = request.POST.getlist('offered_by')
         if offered_by_ids:
@@ -1457,8 +1453,7 @@ def chatbot_course_details(request, name):
         data = {
             "name": course.name,
             "about": course.about,
-            "eligibility": course.eligibility,
-            "admission_criteria": course.Admission_Criteria
+            "eligibility": course.eligibility
         }
     else:
         data = None

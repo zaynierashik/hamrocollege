@@ -130,23 +130,11 @@
 									</li>
 								{% endif %}
 
-								{% if course.Admission_Criteria %}
-									<li>
-										<a onclick="scrollToSection('admission-criteria')" class="cursor-pointer tracking-wide font-medium text-sm text-gray-600 transition-all duration-500 hover:tracking-wider hover:font-semibold hover:text-gray-900">Admission Criteria</a>
-									</li>
-								{% endif %}
-
-                                {% if course.Job_Prospect %}
-									<li>
-										<a onclick="scrollToSection('job-prospects')" class="cursor-pointer tracking-wide font-medium text-sm text-gray-600 transition-all duration-500 hover:tracking-wider hover:font-semibold hover:text-gray-900">Job Prospects</a>
-									</li>
-								{% endif %}
-
                                 {% if course.Prospect_Career %}
-									<li>
-										<a onclick="scrollToSection('prospect-career')" class="cursor-pointer tracking-wide font-medium text-sm text-gray-600 transition-all duration-500 hover:tracking-wider hover:font-semibold hover:text-gray-900">Prospect Careers</a>
-									</li>
-								{% endif %}
+                                    <li>
+                                        <a onclick="scrollToSection('prospect-career')" class="cursor-pointer tracking-wide font-medium text-sm text-gray-600 transition-all duration-500 hover:tracking-wider hover:font-semibold hover:text-gray-900">Prospect Careers</a>
+                                    </li>
+                                {% endif %}
 
                                 {% if offering_institutions %}
 									<li>
@@ -179,17 +167,7 @@
 								<p class="font-medium text-sm text-justify leading-8 text-gray-600 lg:mb-10 mb-8">{{ course.eligibility }}</p>
 							{% endif %}
 
-                            {% if course.Admission_Criteria %}
-								<h2 class="font-manrope font-bold lg:text-xl text-3xl text-[#121212] mb-4" id="admission-criteria">Admission Criteria</h2>
-								<p class="font-medium text-sm text-justify leading-8 text-gray-600 lg:mb-10 mb-8">{{ course.Admission_Criteria }}</p>
-							{% endif %}
-
-                            {% if course.Job_Prospect %}
-								<h2 class="font-manrope font-bold lg:text-xl text-3xl text-[#121212] mb-4" id="job-prospects">Job Prospects</h2>
-								<p class="font-medium text-sm text-justify leading-8 text-gray-600 lg:mb-10 mb-8">{{ course.Job_Prospect }}</p>
-							{% endif %}
-
-							{% if offering_institutions %}
+                            {% if offering_institutions %}
 								<h2 class="font-manrope font-bold lg:text-xl text-3xl text-[#121212] mb-4" id="offering-institutions">Offering Institutions</h2>
 								<ul class="font-medium text-sm text-justify leading-8 bg-[#f2f4f7] text-gray-600 lg:mb-10 mb-8 p-3 rounded-md">
 									{% for offering_institution in offering_institutions %}

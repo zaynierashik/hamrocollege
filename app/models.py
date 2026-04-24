@@ -353,8 +353,6 @@ class Course(models.Model):
     Foreign_University_Name = models.CharField(max_length=255, blank=True, null=True, help_text="If the affiliation is Foreign University, specify the university name here.")
     about = models.TextField()
     eligibility = models.TextField(blank=True, null=True)
-    Admission_Criteria = models.TextField(blank=True, null=True)
-    Job_Prospect = models.TextField(blank=True, null=True)
     Prospect_Career = models.TextField(blank=True, null=True)
     # Offered_by = models.ManyToManyField('Institution', blank=True, related_name='courses_offered')
 
