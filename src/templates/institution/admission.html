@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'css/input.css' %}">
 	<link rel="stylesheet" href="{% static 'css/theme.css' %}">
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 
     <style>
@@ -69,36 +70,42 @@
         }
     </style>
 </head>
-<body class="bg-[#FAFAFA] dark:bg-[#121212]">
-	<main>
+<body class="studio-body">
+	<main class="studio-main">
 		<div id="main-wrapper" class="flex">
 			<!-- Sidebar -->
 			{% include "components/institution_sidebar.html" %}
 
-			<div class="w-full page-wrapper overflow-hidden">
+			<div class="w-full page-wrapper overflow-hidden xl:pl-[250px]">
 				<!-- Header -->
 				{% include "components/institution_header.html" %}
 
                 <!-- Main Content -->
-				<main class="h-full overflow-y-auto max-w-full pt-[6px]" id="admissions-table">
-					<div class="container full-container py-5 flex flex-col gap-6">
-                        <div class="card min-h-[613px]">
-                            <div class="card-body">
-                                <div class="flex justify-between items-center mb-6">
-                                    <h4 class="text-gray-600 text-lg tracking-wider font-semibold uppercase">Admissions</h4>
-                                    <div class="relative inline-block group">
-                                        <label class="switch">
-                                            <input type="checkbox" id="admissionToggle" data-institution-id="{{ institution.id }}" {% if institution.admission %}checked{% endif %}>
-                                            <span class="slider border rounded-full"></span>
-                                        </label>
-                                    
-                                        <div role="tooltip" class="absolute hidden -right-32 transform -translate-x-1/2 mt-2 z-10 group-hover:block w-64 text-xs text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-md opacity-100 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
-                                            <div class="px-3 py-2">
-                                                <p>Toggles the admission period on and off.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+				<main class="h-full overflow-y-auto max-w-full pb-6" id="admissions-table">
+					<div class="container full-container xl:px-5 px-4">
+						<section class="studio-content-wrap">
+							<div class="studio-panel-head mb-6">
+								<div class="flex justify-between items-center w-full">
+									<div>
+										<h1 class="studio-panel-title">Admissions</h1>
+										<p class="studio-subtitle">Manage admission applications</p>
+									</div>
+									<div class="relative inline-block group">
+										<label class="switch">
+											<input type="checkbox" id="admissionToggle" data-institution-id="{{ institution.id }}" {% if institution.admission %}checked{% endif %}>
+											<span class="slider border rounded-full"></span>
+										</label>
+									
+										<div role="tooltip" class="absolute hidden -right-32 transform -translate-x-1/2 mt-2 z-10 group-hover:block w-64 text-xs text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-md opacity-100 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+											<div class="px-3 py-2">
+												<p>Toggles the admission period on and off.</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="studio-panel min-h-[500px]">
 
                                 <div class="relative w-full mt-7 mb-10">
                                     <input id="searchInput" name="search" class="text-sm shadow-md border-gray-200 pe-10 py-3 rounded-xl w-full transition-all outline-none focus:ring-0 focus:ring-gray-500 focus:border-gray-500" placeholder="Search for applicant name ..." onkeyup="filterAdmissions()"/>
@@ -290,14 +297,15 @@
                                         <p class="text-sm font-medium mb-3">Interested Program: <span id="admission-program" class="text-gray-500"></span></p>
                                         <p class="text-sm font-medium mb-3">Query: <span id="admission-query" class="text-gray-500"></span></p>
                                     </div>
-                                </div>									
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </main>
-			</div>
+						</div>
+					</section>
+				</div>
+			</main>
 		</div>
-	</main>
+	</div>
+</main>
 
     <!-- Toggle admission on/off -->
     <script>

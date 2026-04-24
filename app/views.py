@@ -451,23 +451,46 @@ def institution_authentication(request):
 def institution_signup(request):
     if request.method == "POST":
         name = request.POST.get("name")
-        institution = request.POST.get("institution")
+        institution_name = request.POST.get("institution")
         email = request.POST.get("signup-email")
 
-        if InstitutionAdmin.objects.filter(institution=institution).exists():
+        if InstitutionAdmin.objects.filter(email=email).exists():
+            messages.error(request, "Email already exists.")
+            return redirect('institution-authentication')
+
+        if Institution.objects.filter(name=institution_name).exists():
             messages.error(request, "Institution already exists.")
             return redirect('institution-authentication')
 
         password = make_password(request.POST.get("signup-password"))
 
-        user = InstitutionAdmin(name=name, institution=institution, email=email, password=password)
+        # Create the InstitutionAdmin user
+        admin_user = InstitutionAdmin(name=name, institution=institution_name, email=email, password=password)
         try:
-            user.save()
+            admin_user.save()
         except ValidationError as exc:
             messages.error(request, exc.message_dict.get('email', ['Email already exists.'])[0])
             return redirect('institution-authentication')
 
-        messages.success(request, "Account created successfully.")
+        # Create the Institution record and assign it to the admin
+        institution = Institution(
+            name=institution_name,
+            email=email,  # Use admin's email as institution email initially
+            phone="0000000000",  # Default phone, will be updated in profile
+            address="Please update address",  # Default address, will be filled in profile
+            affiliation="tribhuvan",  # Default affiliation, will be updated in profile
+            overview="Please provide institution overview",  # Default overview, will be filled in profile
+            admin=admin_user
+        )
+        try:
+            institution.save()
+        except ValidationError as exc:
+            # If institution creation fails, delete the admin user too
+            admin_user.delete()
+            messages.error(request, f"Failed to create institution: {exc}")
+            return redirect('institution-authentication')
+
+        messages.success(request, "Account created successfully. Please complete your institution profile.")
 
         return redirect('institution-authentication')
 
@@ -538,30 +561,61 @@ def institution_dashboard(request):
     except InstitutionAdmin.DoesNotExist:
         return redirect('institution-authentication')
 
-    offered_courses_count = InstitutionCourse.objects.filter(institution=institution).count()
-    admissions_count = Application.objects.filter(institution=institution, status='accepted').count()
+    # Fetch real data for KPI cards
+    total_students = Application.objects.filter(institution=institution, status='accepted').count()
+    total_courses = InstitutionCourse.objects.filter(institution=institution).count()
+    pending_admissions = Application.objects.filter(institution=institution, status='pending').count()
+    
+    # Calculate profile completion
+    profile_fields = [
+        institution.name, institution.overview, institution.phone, 
+        institution.email, institution.address, institution.affiliation
+    ]
+    completed_fields = sum(1 for field in profile_fields if field)
+    profile_completion = round((completed_fields / len(profile_fields)) * 100)
 
-    # Access the last_admissions field correctly
-    last_admissions = institution.last_admissions
-    current_admissions = admissions_count
+    # Fetch admissions data for the chart (last 12 months)
+    from django.db.models import Count
+    from datetime import datetime, timedelta
+    import calendar
 
-    # Avoid division by zero and calculate the percentage change
-    if last_admissions != 0:
-        percentage_change = ((current_admissions - last_admissions) / last_admissions) * 100
-    else:
-        percentage_change = 0  # Handle case where last_admissions is 0 (no data for last admissions)
+    admissions_data = []
+    current_date = datetime.now()
+    
+    for i in range(12):
+        month_date = current_date - timedelta(days=30 * i)
+        month_start = month_date.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        month_end = month_date.replace(day=calendar.monthrange(month_date.year, month_date.month)[1], 
+                                     hour=23, minute=59, second=59, microsecond=999999)
+        
+        month_admissions = Application.objects.filter(
+            institution=institution,
+            applied_at__gte=month_start,
+            applied_at__lte=month_end,
+            status='accepted'
+        ).count()
+        
+        admissions_data.append(month_admissions)
+    
+    # Reverse to get chronological order (oldest to newest)
+    admissions_data.reverse()
+    
+    # Generate month labels
+    month_labels = []
+    for i in range(12):
+        month_date = current_date - timedelta(days=30 * (11 - i))
+        month_labels.append(month_date.strftime('%b'))
 
-    percentage_change = round(percentage_change, 1)
-
-    # Determine if the change is positive or negative
-    if percentage_change > 0:
-        change_type = "increase"
-    elif percentage_change < 0:
-        change_type = "decrease"
-    else:
-        change_type = "no change"
-
-    context = {'institution': institution, 'offered_courses_count': offered_courses_count, 'admissions_count': admissions_count, 'percentage_change': percentage_change, 'change_type': change_type}
+    context = {
+        'institution': institution,
+        'total_students': total_students,
+        'total_courses': total_courses,
+        'pending_admissions': pending_admissions,
+        'profile_completion': profile_completion,
+        'admissions_data': admissions_data,
+        'month_labels': month_labels
+    }
+    
     return render(request, 'institution_dashboard.html', context)
 
 def institution_profile(request):
@@ -636,7 +690,10 @@ def add_institution(request):
         return redirect('institution-authentication')
     
     institution_id = request.session.get('institution_id')
-    institution = InstitutionAdmin.objects.get(id=institution_id)
+    admin_user = InstitutionAdmin.objects.get(id=institution_id)
+
+    # Check if institution already exists for this admin
+    existing_institution = Institution.objects.filter(admin=admin_user).first()
 
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -652,46 +709,93 @@ def add_institution(request):
         map = request.POST.get('map')
         logo = request.FILES.get('file-upload')
 
-        institution = Institution(name=name, affiliation=affiliation, Foreign_University_Name=foreign_university_name, overview=overview, message=message, phone=phone, email=email, website=website, address=address, province=province, map=map, logo=logo, admin=institution)
-        institution.save()
-        messages.success(request, 'Institution added successfully.')
+        if existing_institution:
+            # Update existing institution
+            existing_institution.name = name
+            existing_institution.affiliation = affiliation
+            existing_institution.Foreign_University_Name = foreign_university_name
+            existing_institution.overview = overview
+            existing_institution.message = message
+            existing_institution.phone = phone
+            existing_institution.email = email
+            existing_institution.website = website
+            existing_institution.address = address
+            existing_institution.province = province
+            existing_institution.map = map
+            if logo:
+                existing_institution.logo = logo
+            existing_institution.save()
+            messages.success(request, 'Institution updated successfully.')
+        else:
+            # Create new institution
+            institution = Institution(name=name, affiliation=affiliation, Foreign_University_Name=foreign_university_name, overview=overview, message=message, phone=phone, email=email, website=website, address=address, province=province, map=map, logo=logo, admin=admin_user)
+            institution.save()
+            messages.success(request, 'Institution added successfully.')
 
         return redirect('institution-profile')
+    
+    return render(request, 'institution_profile.html', {'institution': existing_institution, 'edit_mode': False, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
     
 def update_institution(request, institution_id):
     institution = get_object_or_404(Institution, id=institution_id)
 
     if request.method == 'POST':
-        if 'file-upload' in request.FILES:
-            logo = request.FILES['file-upload']
-            institution.logo = logo
+        try:
+            if 'file-upload' in request.FILES:
+                logo = request.FILES['file-upload']
+                institution.logo = logo
 
-        # Get the form data and update the institution fields
-        affiliation = request.POST.get('affiliation')
-        if affiliation == 'foreign':
-            foreign_university_name = request.POST.get('foreign_university_name')
-            institution.Foreign_University_Name = foreign_university_name
-        else:
-            institution.Foreign_University_Name = None
+            # Get the form data and update the institution fields
+            affiliation = request.POST.get('affiliation')
+            if affiliation == 'foreign':
+                foreign_university_name = request.POST.get('foreign_university_name')
+                institution.Foreign_University_Name = foreign_university_name
+            else:
+                institution.Foreign_University_Name = None
 
-        institution.name = request.POST.get('name')
-        institution.affiliation = affiliation
-        institution.email = request.POST.get('email')
-        institution.phone = request.POST.get('phone')
-        institution.website = request.POST.get('website')
-        institution.address = request.POST.get('address')
+            institution.name = request.POST.get('name')
+            institution.affiliation = affiliation
+            institution.email = request.POST.get('email')
+            institution.phone = request.POST.get('phone')
+            institution.website = request.POST.get('website')
+            institution.address = request.POST.get('address')
 
-        province = request.POST.get('province')
-        if province:
-            institution.province = province
+            province = request.POST.get('province')
+            if province:
+                institution.province = province
 
-        institution.overview = request.POST.get('overview')
-        institution.message = request.POST.get('message')
-        institution.map = request.POST.get('map')
-        institution.save()
+            institution.overview = request.POST.get('overview')
+            institution.message = request.POST.get('message')
+            institution.map = request.POST.get('map')
+            
+            # Validate required fields
+            if not institution.name:
+                messages.error(request, 'Institution name is required.')
+                return render(request, 'institution_profile.html', {'institution': institution, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
+            
+            if not institution.overview:
+                messages.error(request, 'Overview is required.')
+                return render(request, 'institution_profile.html', {'institution': institution, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
+                
+            if not institution.phone:
+                messages.error(request, 'Phone is required.')
+                return render(request, 'institution_profile.html', {'institution': institution, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
+                
+            if not institution.address:
+                messages.error(request, 'Address is required.')
+                return render(request, 'institution_profile.html', {'institution': institution, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
+            
+            institution.save()
 
-        messages.success(request, 'Institution details updated successfully.')
-        return redirect('institution-profile')
+            messages.success(request, 'Institution details updated successfully.')
+            return redirect('institution-profile')
+            
+        except ValidationError as e:
+            messages.error(request, f'Validation error: {e}')
+            return render(request, 'institution_profile.html', {'institution': institution, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
+        except Exception as e:
+            messages.error(request, f'Error updating institution: {e}')
+            return render(request, 'institution_profile.html', {'institution': institution, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
 
     return render(request, 'institution_profile.html', {'institution': institution, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES,})
 
