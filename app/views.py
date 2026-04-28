@@ -741,50 +741,70 @@ def update_institution(request, institution_id):
 
     if request.method == 'POST':
         try:
+            # Get form data first (without modifying institution yet)
+            name = request.POST.get('name', '').strip()
+            overview = request.POST.get('overview', '').strip()
+            phone = request.POST.get('phone', '').strip()
+            address = request.POST.get('address', '').strip()
+            email = request.POST.get('email', '').strip()
+            website = request.POST.get('website', '').strip()
+            affiliation = request.POST.get('affiliation', '').strip()
+            province = request.POST.get('province', '').strip()
+            message = request.POST.get('message', '').strip()
+            map_url = request.POST.get('map', '').strip()
+            foreign_university_name = request.POST.get('foreign_university_name', '').strip()
+            
+            # Validate required fields before modifying institution
+            form_data = {
+                'name': name,
+                'overview': overview,
+                'phone': phone,
+                'address': address,
+                'email': email,
+                'website': website,
+                'affiliation': affiliation,
+                'province': province,
+                'message': message,
+                'map': map_url,
+                'foreign_university_name': foreign_university_name,
+            }
+            
+            if not name:
+                messages.error(request, 'Institution name is required.')
+                return render(request, 'institution_profile.html', {'admin_institution': institution, 'institution': institution, 'form_data': form_data, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
+            
+            if not overview:
+                messages.error(request, 'Overview is required.')
+                return render(request, 'institution_profile.html', {'admin_institution': institution, 'institution': institution, 'form_data': form_data, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
+                
+            if not phone:
+                messages.error(request, 'Phone is required.')
+                return render(request, 'institution_profile.html', {'admin_institution': institution, 'institution': institution, 'form_data': form_data, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
+                
+            if not address:
+                messages.error(request, 'Address is required.')
+                return render(request, 'institution_profile.html', {'admin_institution': institution, 'institution': institution, 'form_data': form_data, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
+            
+            # Now update the institution object after validation passes
             if 'file-upload' in request.FILES:
-                logo = request.FILES['file-upload']
-                institution.logo = logo
+                institution.logo = request.FILES['file-upload']
 
-            # Get the form data and update the institution fields
-            affiliation = request.POST.get('affiliation')
+            institution.name = name
+            institution.affiliation = affiliation
+            institution.email = email
+            institution.phone = phone
+            institution.website = website if website else None
+            institution.address = address
+            institution.province = province if province else None
+            institution.overview = overview
+            institution.message = message if message else None
+            institution.map = map_url
+            
             if affiliation == 'foreign':
-                foreign_university_name = request.POST.get('foreign_university_name')
-                institution.Foreign_University_Name = foreign_university_name
+                institution.Foreign_University_Name = foreign_university_name if foreign_university_name else None
             else:
                 institution.Foreign_University_Name = None
 
-            institution.name = request.POST.get('name')
-            institution.affiliation = affiliation
-            institution.email = request.POST.get('email')
-            institution.phone = request.POST.get('phone')
-            institution.website = request.POST.get('website')
-            institution.address = request.POST.get('address')
-
-            province = request.POST.get('province')
-            if province:
-                institution.province = province
-
-            institution.overview = request.POST.get('overview')
-            institution.message = request.POST.get('message')
-            institution.map = request.POST.get('map')
-            
-            # Validate required fields
-            if not institution.name:
-                messages.error(request, 'Institution name is required.')
-                return render(request, 'institution_profile.html', {'institution': institution, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
-            
-            if not institution.overview:
-                messages.error(request, 'Overview is required.')
-                return render(request, 'institution_profile.html', {'institution': institution, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
-                
-            if not institution.phone:
-                messages.error(request, 'Phone is required.')
-                return render(request, 'institution_profile.html', {'institution': institution, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
-                
-            if not institution.address:
-                messages.error(request, 'Address is required.')
-                return render(request, 'institution_profile.html', {'institution': institution, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
-            
             institution.save()
 
             messages.success(request, 'Institution details updated successfully.')
@@ -792,12 +812,12 @@ def update_institution(request, institution_id):
             
         except ValidationError as e:
             messages.error(request, f'Validation error: {e}')
-            return render(request, 'institution_profile.html', {'institution': institution, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
+            return render(request, 'institution_profile.html', {'admin_institution': institution, 'institution': institution, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
         except Exception as e:
             messages.error(request, f'Error updating institution: {e}')
-            return render(request, 'institution_profile.html', {'institution': institution, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
+            return render(request, 'institution_profile.html', {'admin_institution': institution, 'institution': institution, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
 
-    return render(request, 'institution_profile.html', {'institution': institution, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES,})
+    return render(request, 'institution_profile.html', {'admin_institution': institution, 'institution': institution, 'edit_mode': True, 'affiliation_choices': Institution.AFFILIATION_CHOICES, 'provinces': Institution.PROVINCES})
 
 def programs(request):
     if 'institution_id' not in request.session:

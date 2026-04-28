@@ -251,7 +251,7 @@
                                                 
                                                 <div>
                                                     <label for="name" class="text-sm font-medium text-gray-700">Institution Name</label>
-                                                    <input type="text" name="name" id="name" value="{% if admin_institution %}{{ admin_institution.name }}{% endif %}" class="studio-input mt-1" required>
+                                                    <input type="text" name="name" id="name" value="{% if form_data %}{{ form_data.name }}{% elif admin_institution %}{{ admin_institution.name }}{% endif %}" class="studio-input mt-1" required>
                                                 </div>
                                                 
                                                 <div>
@@ -259,14 +259,14 @@
                                                     <select name="affiliation" id="affiliation" class="studio-select mt-1" onchange="toggleForeignUniversityField()" required>
                                                         <option value="">Choose affiliation</option>
                                                         {% for affiliation in affiliation_choices %}
-                                                            <option value="{{ affiliation.0 }}" {% if admin_institution and admin_institution.affiliation == affiliation.0 %}selected{% endif %}>{{ affiliation.1 }}</option>
+                                                            <option value="{{ affiliation.0 }}" {% if form_data and form_data.affiliation == affiliation.0 %}selected{% elif admin_institution and admin_institution.affiliation == affiliation.0 %}selected{% endif %}>{{ affiliation.1 }}</option>
                                                         {% endfor %}
                                                     </select>
                                                 </div>
 
                                                 <div id="foreign-university-field" class="hidden md:col-span-3">
                                                     <label for="foreign_university_name" class="text-sm font-medium text-gray-700">Foreign University Name</label>
-                                                    <input type="text" name="foreign_university_name" id="foreign_university_name" value="{% if admin_institution %}{{ admin_institution.Foreign_University_Name }}{% endif %}" class="studio-input mt-1">
+                                                    <input type="text" name="foreign_university_name" id="foreign_university_name" value="{% if form_data %}{{ form_data.foreign_university_name }}{% elif admin_institution %}{{ admin_institution.Foreign_University_Name }}{% endif %}" class="studio-input mt-1">
                                                 </div>
 
                                                 <div class="md:col-span-3">
@@ -274,7 +274,7 @@
                                                     <select name="province" id="province" class="studio-select mt-1" required>
                                                         <option value="">Choose province</option>
                                                         {% for province in provinces %}
-                                                            <option value="{{ province.0 }}" {% if admin_institution and admin_institution.province == province.0 %}selected{% endif %}>{{ province.1 }}</option>
+                                                            <option value="{{ province.0 }}" {% if form_data and form_data.province == province.0 %}selected{% elif admin_institution and admin_institution.province == province.0 %}selected{% endif %}>{{ province.1 }}</option>
                                                         {% endfor %}
                                                     </select>
                                                 </div>
@@ -288,22 +288,22 @@
                                             <div class="grid grid-cols-2 gap-4">
                                                 <div>
                                                     <label for="email" class="text-sm font-medium text-gray-700">Email</label>
-                                                    <input type="email" name="email" id="email" value="{% if admin_institution %}{{ admin_institution.email }}{% else %}{{ institution.email }}{% endif %}" class="studio-input mt-1" required>
+                                                    <input type="email" name="email" id="email" value="{% if form_data %}{{ form_data.email }}{% elif admin_institution %}{{ admin_institution.email }}{% else %}{{ institution.email }}{% endif %}" class="studio-input mt-1" required>
                                                 </div>
 
                                                 <div>
                                                     <label for="phone" class="text-sm font-medium text-gray-700">Phone</label>
-                                                    <input type="tel" name="phone" id="phone" value="{% if admin_institution %}{{ admin_institution.phone }}{% endif %}" class="studio-input mt-1" required>
+                                                    <input type="tel" name="phone" id="phone" value="{% if form_data %}{{ form_data.phone }}{% elif admin_institution %}{{ admin_institution.phone }}{% endif %}" class="studio-input mt-1" required>
                                                 </div>
 
                                                 <div class="col-span-2">
                                                     <label for="website" class="text-sm font-medium text-gray-700">Website</label>
-                                                    <input type="url" name="website" id="website" value="{% if admin_institution %}{{ admin_institution.website }}{% endif %}" class="studio-input mt-1">
+                                                    <input type="url" name="website" id="website" value="{% if form_data %}{{ form_data.website }}{% elif admin_institution %}{{ admin_institution.website }}{% endif %}" class="studio-input mt-1">
                                                 </div>
 
                                                 <div class="col-span-2">
                                                     <label for="address" class="text-sm font-medium text-gray-700">Address</label>
-                                                    <textarea name="address" id="address" rows="3" class="studio-textarea mt-1" required>{% if admin_institution %}{{ admin_institution.address }}{% endif %}</textarea>
+                                                    <textarea name="address" id="address" rows="3" class="studio-textarea mt-1" required>{% if form_data %}{{ form_data.address }}{% elif admin_institution %}{{ admin_institution.address }}{% endif %}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -315,17 +315,17 @@
                                             <div class="space-y-4">
                                                 <div>
                                                     <label for="overview" class="text-sm font-medium text-gray-700">About Institution</label>
-                                                    <textarea name="overview" id="overview" rows="4" class="studio-textarea mt-1" placeholder="Tell us about your institution...">{% if admin_institution %}{{ admin_institution.overview }}{% endif %}</textarea>
+                                                    <textarea name="overview" id="overview" rows="4" class="studio-textarea mt-1" placeholder="Tell us about your institution...">{% if form_data %}{{ form_data.overview }}{% elif admin_institution %}{{ admin_institution.overview }}{% endif %}</textarea>
                                                 </div>
 
                                                 <div>
                                                     <label for="message" class="text-sm font-medium text-gray-700">Principal Message</label>
-                                                    <textarea name="message" id="message" rows="4" class="studio-textarea mt-1" placeholder="Message from the principal...">{% if admin_institution %}{{ admin_institution.message }}{% endif %}</textarea>
+                                                    <textarea name="message" id="message" rows="4" class="studio-textarea mt-1" placeholder="Message from the principal...">{% if form_data %}{{ form_data.message }}{% elif admin_institution %}{{ admin_institution.message }}{% endif %}</textarea>
                                                 </div>
 
                                                 <div>
                                                     <label for="map" class="text-sm font-medium text-gray-700">Map Location</label>
-                                                    <textarea name="map" id="map" rows="3" class="studio-textarea mt-1" placeholder="Enter map coordinates or location details" required>{% if admin_institution %}{{ admin_institution.map }}{% endif %}</textarea>
+                                                    <textarea name="map" id="map" rows="3" class="studio-textarea mt-1" placeholder="Enter map coordinates or location details" required>{% if form_data %}{{ form_data.map }}{% elif admin_institution %}{{ admin_institution.map }}{% endif %}</textarea>
                                                 </div>
                                             </div>
                                         </div>
