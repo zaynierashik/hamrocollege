@@ -210,7 +210,7 @@
                             <div class="profile-form-wrap">
                                 
                                 <!-- Profile Form -->
-                                <form method="POST" enctype="multipart/form-data" action="{% if admin_institution %}{% url 'update-institution' admin_institution.id %}{% else %}{% url 'add-institution' %}{% endif %}" id="profileForm">
+                                <form id="profileForm" data-action="{% if admin_institution %}{% url 'update-institution' admin_institution.id %}{% else %}{% url 'add-institution' %}{% endif %}">
                                     {% csrf_token %}
 
                                     <nav class="step-breadcrumb" aria-label="Profile steps">
@@ -226,7 +226,7 @@
                                         <div>
                                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                 <div>
-                                                    <label for="logo" class="text-sm font-medium text-gray-700">Logo</label>
+                                                    <label for="logo" class="text-sm font-medium text-gray-700">Logo <span class="text-red-500">*</span></label>
                                                     <div class="logo-upload-field mt-1">
                                                         <div class="logo-upload-layout">
                                                             <div class="logo-upload-main">
@@ -250,12 +250,12 @@
                                                 </div>
                                                 
                                                 <div>
-                                                    <label for="name" class="text-sm font-medium text-gray-700">Institution Name</label>
+                                                    <label for="name" class="text-sm font-medium text-gray-700">Institution Name <span class="text-red-500">*</span></label>
                                                     <input type="text" name="name" id="name" value="{% if form_data %}{{ form_data.name }}{% elif admin_institution %}{{ admin_institution.name }}{% endif %}" class="studio-input mt-1" required>
                                                 </div>
                                                 
                                                 <div>
-                                                    <label for="affiliation" class="text-sm font-medium text-gray-700">Affiliation</label>
+                                                    <label for="affiliation" class="text-sm font-medium text-gray-700">Affiliation <span class="text-red-500">*</span></label>
                                                     <select name="affiliation" id="affiliation" class="studio-select mt-1" onchange="toggleForeignUniversityField()" required>
                                                         <option value="">Choose affiliation</option>
                                                         {% for affiliation in affiliation_choices %}
@@ -270,7 +270,7 @@
                                                 </div>
 
                                                 <div class="md:col-span-3">
-                                                    <label for="province" class="text-sm font-medium text-gray-700">Province</label>
+                                                    <label for="province" class="text-sm font-medium text-gray-700">Province <span class="text-red-500">*</span></label>
                                                     <select name="province" id="province" class="studio-select mt-1" required>
                                                         <option value="">Choose province</option>
                                                         {% for province in provinces %}
@@ -287,12 +287,12 @@
                                         <div>
                                             <div class="grid grid-cols-2 gap-4">
                                                 <div>
-                                                    <label for="email" class="text-sm font-medium text-gray-700">Email</label>
+                                                    <label for="email" class="text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
                                                     <input type="email" name="email" id="email" value="{% if form_data %}{{ form_data.email }}{% elif admin_institution %}{{ admin_institution.email }}{% else %}{{ institution.email }}{% endif %}" class="studio-input mt-1" required>
                                                 </div>
 
                                                 <div>
-                                                    <label for="phone" class="text-sm font-medium text-gray-700">Phone</label>
+                                                    <label for="phone" class="text-sm font-medium text-gray-700">Phone <span class="text-red-500">*</span></label>
                                                     <input type="tel" name="phone" id="phone" value="{% if form_data %}{{ form_data.phone }}{% elif admin_institution %}{{ admin_institution.phone }}{% endif %}" class="studio-input mt-1" required>
                                                 </div>
 
@@ -302,7 +302,7 @@
                                                 </div>
 
                                                 <div class="col-span-2">
-                                                    <label for="address" class="text-sm font-medium text-gray-700">Address</label>
+                                                    <label for="address" class="text-sm font-medium text-gray-700">Address <span class="text-red-500">*</span></label>
                                                     <textarea name="address" id="address" rows="3" class="studio-textarea mt-1" required>{% if form_data %}{{ form_data.address }}{% elif admin_institution %}{{ admin_institution.address }}{% endif %}</textarea>
                                                 </div>
                                             </div>
@@ -314,8 +314,8 @@
                                         <div>
                                             <div class="space-y-4">
                                                 <div>
-                                                    <label for="overview" class="text-sm font-medium text-gray-700">About Institution</label>
-                                                    <textarea name="overview" id="overview" rows="4" class="studio-textarea mt-1" placeholder="Tell us about your institution...">{% if form_data %}{{ form_data.overview }}{% elif admin_institution %}{{ admin_institution.overview }}{% endif %}</textarea>
+                                                    <label for="overview" class="text-sm font-medium text-gray-700">About Institution <span class="text-red-500">*</span></label>
+                                                    <textarea name="overview" id="overview" rows="4" class="studio-textarea mt-1" placeholder="Tell us about your institution..." required>{% if form_data %}{{ form_data.overview }}{% elif admin_institution %}{{ admin_institution.overview }}{% endif %}</textarea>
                                                 </div>
 
                                                 <div>
@@ -324,7 +324,7 @@
                                                 </div>
 
                                                 <div>
-                                                    <label for="map" class="text-sm font-medium text-gray-700">Map Location</label>
+                                                    <label for="map" class="text-sm font-medium text-gray-700">Map Location <span class="text-red-500">*</span></label>
                                                     <textarea name="map" id="map" rows="3" class="studio-textarea mt-1" placeholder="Enter map coordinates or location details" required>{% if form_data %}{{ form_data.map }}{% elif admin_institution %}{{ admin_institution.map }}{% endif %}</textarea>
                                                 </div>
                                             </div>
@@ -339,7 +339,7 @@
                                         <button type="button" id="nextBtn" class="studio-btn-primary" onclick="changeStep(1)">
                                             Next
                                         </button>
-                                        <button type="submit" id="submitBtn" class="studio-btn-primary" style="display: none;">
+                                        <button type="submit" id="submitBtn" class="studio-btn-primary" style="display: none;" onclick="return validateAllRequiredFields();">
                                             Save
                                         </button>
                                     </div>
@@ -362,35 +362,21 @@
             }
 
             const currentStepElement = document.querySelector(`.step-content[data-step="${currentStep}"]`);
-            
-            // Hide current step
             currentStepElement.classList.remove('active');
             
-            // Update current step
             currentStep += direction;
-
-            if (currentStep < 1) {
-                currentStep = 1;
-            }
-
-            if (currentStep > totalSteps) {
-                currentStep = totalSteps;
-            }
+            if (currentStep < 1) currentStep = 1;
+            if (currentStep > totalSteps) currentStep = totalSteps;
             
-            // Show new step
             const newStepElement = document.querySelector(`.step-content[data-step="${currentStep}"]`);
-            
             newStepElement.classList.add('active');
             
-            // Update navigation buttons
             updateNavigationButtons();
             updateStepBreadcrumb();
         }
 
         function goToStep(step) {
-            if (step < 1 || step > totalSteps || step === currentStep) {
-                return;
-            }
+            if (step < 1 || step > totalSteps || step === currentStep) return;
 
             const currentStepElement = document.querySelector(`.step-content[data-step="${currentStep}"]`);
             const targetStepElement = document.querySelector(`.step-content[data-step="${step}"]`);
@@ -416,10 +402,8 @@
             const nextBtn = document.getElementById('nextBtn');
             const submitBtn = document.getElementById('submitBtn');
             
-            // Show/hide previous button
             prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
             
-            // Show/hide next vs submit button
             if (currentStep === totalSteps) {
                 nextBtn.style.display = 'none';
                 submitBtn.style.display = 'block';
@@ -445,13 +429,10 @@
             const previewWrap = document.getElementById('logo-preview-wrap');
             const previewImage = document.getElementById('logo-preview-image');
 
-            if (!fileNameElement) {
-                return;
-            }
+            if (!fileNameElement) return;
 
             if (input.files && input.files.length > 0) {
                 fileNameElement.textContent = `Selected: ${input.files[0].name}`;
-
                 if (previewWrap && previewImage) {
                     const fileReader = new FileReader();
                     fileReader.onload = function(event) {
@@ -462,7 +443,6 @@
                 }
             } else {
                 fileNameElement.textContent = 'No file selected';
-
                 if (previewWrap && previewImage) {
                     previewImage.removeAttribute('src');
                     previewWrap.classList.remove('is-visible');
@@ -470,11 +450,23 @@
             }
         }
 
+        function initializeLogoPreview() {
+            const previewWrap = document.getElementById('logo-preview-wrap');
+            const previewImage = document.getElementById('logo-preview-image');
+            const fileNameElement = document.getElementById('logo-file-name');
+            
+            {% if admin_institution and admin_institution.logo %}
+                if (previewWrap && previewImage && fileNameElement) {
+                    previewImage.src = "{{ admin_institution.logo.url }}";
+                    previewWrap.classList.add('is-visible');
+                    fileNameElement.textContent = 'Current logo (change to update)';
+                }
+            {% endif %}
+        }
+
         function validateCurrentStep() {
             const currentStepElement = document.querySelector(`.step-content[data-step="${currentStep}"]`);
-            if (!currentStepElement) {
-                return true;
-            }
+            if (!currentStepElement) return true;
 
             const fields = currentStepElement.querySelectorAll('input, select, textarea');
             for (const field of fields) {
@@ -483,33 +475,135 @@
                     return false;
                 }
             }
-
             return true;
         }
 
         function validateAllRequiredFields() {
             const form = document.getElementById('profileForm');
-            if (!form) {
-                return true;
-            }
+            if (!form) return true;
 
             const requiredFields = form.querySelectorAll('[required]');
+            let firstInvalidField = null;
+            let invalidStep = null;
+
             for (const field of requiredFields) {
                 if (!field.checkValidity()) {
-                    const stepContainer = field.closest('.step-content');
-                    if (stepContainer) {
-                        const targetStep = parseInt(stepContainer.dataset.step, 10);
-                        if (!Number.isNaN(targetStep) && targetStep !== currentStep) {
-                            goToStep(targetStep);
+                    if (!firstInvalidField) {
+                        firstInvalidField = field;
+                        const stepContainer = field.closest('.step-content');
+                        if (stepContainer) {
+                            invalidStep = parseInt(stepContainer.dataset.step, 10);
                         }
                     }
-
-                    field.reportValidity();
-                    return false;
                 }
             }
 
+            if (firstInvalidField) {
+                // Navigate to the step with the invalid field
+                if (!Number.isNaN(invalidStep) && invalidStep !== currentStep) {
+                    goToStep(invalidStep);
+                }
+                // Let browser show default HTML5 validation message
+                setTimeout(() => {
+                    firstInvalidField.reportValidity();
+                }, 100);
+                return false;
+            }
             return true;
+        }
+
+        function showToast(message, type = 'success') {
+            // Create toast container if it doesn't exist
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                container.className = 'fixed top-10 right-10 z-50 space-y-2';
+                document.body.appendChild(container);
+            }
+            
+            // Create toast element matching login page style
+            const toast = document.createElement('div');
+            const iconBgColor = type === 'success' ? 'bg-green-200' : 'bg-red-200';
+            const iconSvg = type === 'success' 
+                ? '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>'
+                : '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>';
+            
+            toast.className = 'w-full max-w-sm p-2 pr-5 rounded-lg border shadow-sm text-gray-800 bg-white transform transition-all duration-300 translate-x-full';
+            toast.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <span class="w-9 h-9 rounded-lg ${iconBgColor} flex items-center justify-center">
+                        ${iconSvg}
+                    </span>
+                    <p class="text-sm font-base text-gray-950">${message}</p>
+                </div>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Animate in
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-x-full');
+            });
+            
+            // Auto-remove after 5 seconds (5000ms)
+            setTimeout(() => {
+                if (toast && toast.parentNode) {
+                    toast.classList.add('translate-x-full');
+                    // Remove from DOM after slide-out animation (300ms)
+                    setTimeout(() => {
+                        if (toast && toast.parentNode) {
+                            toast.remove();
+                        }
+                    }, 300);
+                }
+            }, 5000);
+        }
+
+        async function submitForm(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (!validateAllRequiredFields()) return false;
+
+            const form = document.getElementById('profileForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const actionUrl = form.dataset.action;
+            
+            // Show loading state
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Saving...';
+            submitBtn.disabled = true;
+
+            try {
+                const formData = new FormData(form);
+                
+                const response = await fetch(actionUrl, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast(data.message || 'Institution details updated successfully!', 'success');
+                    // Reload page after 1.5 seconds to show updated data
+                    setTimeout(() => window.location.reload(), 1500);
+                } else {
+                    showToast(data.message || 'Error updating institution. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Form submission error:', error);
+                showToast('Network error. Please check your connection and try again.', 'error');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+
+            return false;
         }
 
         // Initialize
@@ -517,14 +611,11 @@
             updateNavigationButtons();
             updateStepBreadcrumb();
             toggleForeignUniversityField();
+            initializeLogoPreview();
 
             const profileForm = document.getElementById('profileForm');
             if (profileForm) {
-                profileForm.addEventListener('submit', function(event) {
-                    if (!validateAllRequiredFields()) {
-                        event.preventDefault();
-                    }
-                });
+                profileForm.addEventListener('submit', submitForm);
             }
         });
     </script>

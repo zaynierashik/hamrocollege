@@ -177,6 +177,7 @@ class InstitutionAdmin(models.Model):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default='not_decided')
+    profile_image = models.ImageField(upload_to='institution_admin/profiles/', blank=True, null=True)
     
     def __str__(self):
         return self.name

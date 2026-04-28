@@ -2,122 +2,296 @@
 
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gurkha Cyber Force</title>
+    <title>Institution Admin Profile | Gurkha Cyber Force</title>
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
-    <link href="{% static 'css/input.css' %}" rel="stylesheet">
-    <link href="{% static 'css/theme.css' %}" rel="stylesheet">
-    <link href="{% static 'css/output.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/input.css' %}">
+	<link rel="stylesheet" href="{% static 'css/theme.css' %}">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+    <style>
+        .info-item {
+            transition: all 0.2s ease;
+        }
+        .info-item:hover {
+            background-color: #f9fafb;
+        }
+    </style>
 </head>
-<body class="bg-[#FAFAFA] dark:bg-[#121212]">
-	<main>
+<body class="studio-body">
+	<main class="studio-main">
 		<div id="main-wrapper" class="flex">
 			<!-- Sidebar -->
 			{% include "components/institution_sidebar.html" %}
 
-			<div class="w-full page-wrapper overflow-hidden">
-				<!-- Header -->
-				{% include "components/institution_header.html" %}
+			<div class="w-full page-wrapper overflow-hidden xl:pl-[250px]">
+                <!-- Header -->
+                {% include "components/institution_header.html" %}
 
-				<!-- Main Content -->
-                <main class="h-full overflow-y-auto max-w-full pt-[6px]">
-					<div class="container full-container py-5 flex flex-col gap-6">
-                        <div class="flex gap-3">
-                            <div class="card min-h-[613px]">
-                                <div class="card-body">
-                                    <section class="relative pt-36">
-                                        <img src="{% static '/images/background/profile-bg.png' %}" alt="cover-image" class="w-full absolute top-0 left-0 z-0 h-48 object-cover rounded-md">
+                <!-- Main Content -->
+                <main class="studio-content-wrap h-full overflow-y-auto max-w-full pt-[6px]">
+                    <div class="container full-container py-6 flex flex-col gap-6">
+                        
+                        <!-- Page Title -->
+                        <div class="studio-panel-head">
+                            <div>
+                                <h1 class="studio-panel-title">Admin Profile</h1>
+                                <p class="studio-subtitle">Manage your personal information</p>
+                            </div>
+                        </div>
+
+                        <!-- Two Column Layout: 25% / 75% -->
+                        <div class="flex flex-col lg:flex-row gap-6">
+                            <!-- Left Column: Basic Info (25%) -->
+                            <div class="lg:w-1/4">
+                                <div class="studio-card">
+                                    <div class="studio-card-body p-6">
+                                        <!-- Avatar -->
+                                        <div class="flex justify-center mb-4">
+                                            {% if institution.profile_image %}
+                                                <img src="{{ institution.profile_image.url }}" 
+                                                     alt="Profile" 
+                                                     class="w-24 h-24 rounded-full object-cover"
+                                                     id="avatarPreview">
+                                            {% else %}
+                                                <div class="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center" id="avatarPlaceholder">
+                                                    <span class="text-3xl font-bold text-gray-600">{{ institution.name|first|upper }}</span>
+                                                </div>
+                                                <img src="" alt="Profile Preview" class="w-24 h-24 rounded-full object-cover hidden" id="avatarPreview">
+                                            {% endif %}
+                                        </div>
                                         
-                                        <div class="w-full max-w-7xl mx-auto px-6 md:px-8">
-                                            <div class="flex items-center justify-start relative z-10 mb-2.5">
-                                                <img src="{% static '/images/profile/user.png' %}" alt="user-avatar-image" class="border-0 border-solid bg-white border-white rounded-full object-cover w-24 h-24">
+                                        <!-- Name & Role -->
+                                        <div class="text-center mb-6">
+                                            <h3 class="text-lg font-semibold text-gray-800">{{ institution.name }}</h3>
+                                            <p class="text-sm text-gray-500">Institution Administrator</p>
+                                        </div>
+                                        
+                                        <!-- Contact Info -->
+                                        <div class="space-y-3 pt-4 border-t border-gray-100">
+                                            <div class="flex items-start gap-3">
+                                                <i class="ti ti-mail text-gray-500 mt-0.5"></i>
+                                                <div>
+                                                    <p class="text-xs text-gray-500">Email</p>
+                                                    <p class="text-sm text-gray-700 break-all">{{ institution.email }}</p>
+                                                </div>
                                             </div>
-    
-                                            <div class="mb-3">
-                                                <h3 class="font-manrope font-bold text-2xl leading-10 text-gray-700">{{ institution.name }}</h3>
-                                                <p class="text-sm font-medium text-gray-700 mt-7 mb-3">Email Address: <span class="text-gray-500">{{ institution.email }}</span></p>
-                                             
-                                                <div class="mt-12">
-                                                    <a href="{% url 'password-setting' %}" class="inline-flex items-center justify-center px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-3xl text-sm">
-                                                        Change Password
-                                                    </a>
+                                            <div class="flex items-start gap-3">
+                                                <i class="ti ti-building text-gray-500 mt-0.5"></i>
+                                                <div>
+                                                    <p class="text-xs text-gray-500">Institution</p>
+                                                    <p class="text-sm text-gray-700">{{ institution.institution }}</p>
                                                 </div>
                                             </div>
                                         </div>
-                                    </section>									
+                                    </div>
                                 </div>
                             </div>
-                        
-                            <div class="flex-1 card min-h-[613px]">
-                                <div class="card-body">
-                                    <form action="{% url 'update-institutionadmin-profile' institution.id %}" method="POST">
-                                        {% csrf_token %}
-                                        <div>
-                                            <div>
-                                                <label for="name" class="block mb-2 text-sm font-medium text-gray-700">Name <span class="text-red-600">*</span></label>
-                                                <div class="relative mb-6">
-                                                    <div class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
-                                                        <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                                            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
-                                                        </svg>                                                                               
-                                                    </div>
-                                                    <input type="text" value="{{ institution.name }}" name="name" id="name" class="border border-gray-400 text-sm rounded-md block w-full ps-8 p-2.5 bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" placeholder="John Doe" required>
+
+                            <!-- Right Column: Edit Form (75%) -->
+                            <div class="lg:w-3/4 w-full">
+                                <div class="studio-card h-full w-full">
+                                    <div class="studio-card-body p-6 w-full">
+                                        <form id="adminProfileForm" data-action="{% url 'update-institutionadmin-profile' institution.id %}" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                                <!-- Name Field -->
+                                                <div>
+                                                    <label for="name" class="text-sm font-medium text-gray-700">Full Name <span class="text-red-500">*</span></label>
+                                                    <input type="text" 
+                                                           value="{{ institution.name }}" 
+                                                           name="name" 
+                                                           id="name" 
+                                                           class="studio-input block w-full mt-1"
+                                                           placeholder="Enter your full name"
+                                                           required>
                                                 </div>
-                                            </div>
-        
-                                            <div class="relative mb-6">
-                                                <label for="email" class="block mb-2 text-sm font-medium text-gray-700">Email Address <span class="text-red-600">*</span></label>
-                                                <div class="relative">
-                                                    <div class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
-                                                        <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                                            <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
-                                                            <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
-                                                        </svg>
-                                                    </div>
-                                                    <input type="email" value="{{ institution.email }}" name="email" id="email" class="border border-gray-400 text-sm rounded-md block w-full ps-8 p-2.5 bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" placeholder="john@example.com" required>
+
+                                                <!-- Email Field -->
+                                                <div>
+                                                    <label for="email" class="text-sm font-medium text-gray-700">Email Address <span class="text-red-500">*</span></label>
+                                                    <input type="email" 
+                                                           value="{{ institution.email }}" 
+                                                           name="email" 
+                                                           id="email" 
+                                                           class="studio-input block w-full mt-1"
+                                                           placeholder="john@example.com"
+                                                           required>
+                                                    <p id="email-error" class="text-xs text-red-500 mt-1 hidden">This email is already registered.</p>
                                                 </div>
-                                                <div id="email-error" class="text-xs text-red-500 mt-1 hidden">This email already exists.</div>
+
+                                                <!-- Phone Field -->
+                                                <div>
+                                                    <label for="phone" class="text-sm font-medium text-gray-700">Phone Number <span class="text-red-500">*</span></label>
+                                                    <input type="tel" 
+                                                           value="{{ institution.phone }}" 
+                                                           name="phone" 
+                                                           id="phone" 
+                                                           class="studio-input block w-full mt-1"
+                                                           placeholder="98XXXXXXXX"
+                                                           pattern="[0-9]{10}"
+                                                           required>
+                                                    <p class="text-xs text-gray-500 mt-1">Phone number should be of 10 digits.</p>
+                                                </div>
+
+                                                <!-- Profile Image Upload -->
+                                                <div>
+                                                    <label for="profile_image" class="text-sm font-medium text-gray-700">Profile Image</label>
+                                                    <input type="file" 
+                                                           name="profile_image" 
+                                                           id="profile_image" 
+                                                           class="studio-input block w-full mt-1"
+                                                           accept="image/*"
+                                                           onchange="previewImage(this)">
+                                                    <p class="text-xs text-gray-500 mt-1">Max file size: 2MB (JPG, PNG)</p>
+                                                </div>
                                             </div>
 
-                                            <div class="relative mb-6">
-                                                <label for="phone" class="block mb-2 text-sm font-medium text-gray-700">Phone <span class="text-red-600">*</span></label>
-                                                <div class="relative">
-                                                    <div class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
-                                                        <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                                            <path fill-rule="evenodd" d="M1.5 4.5a3 3 0 0 1 3-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 0 1-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 0 0 6.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 0 1 1.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 0 1-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5Z" clip-rule="evenodd" />
-                                                        </svg>
-                                                    </div>
-                                                    <input type="number" value="{{ institution.phone }}" name="phone" id="phone" class="border border-gray-400 text-sm rounded-md block w-full ps-8 p-2.5 bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" placeholder="XXX XXX XXXX" required>
-                                                </div>
-                                                <div id="phone-error" class="text-xs text-red-500 mt-1 hidden">This phone number already exists.</div>
+                                            <!-- Action Buttons -->
+                                            <div class="flex items-center gap-7 mt-8 pt-6 border-t border-gray-100">
+                                                <button type="submit" 
+                                                        id="saveBtn"
+                                                        class="studio-btn-primary text-sm">
+                                                    Save Changes
+                                                </button>
+                                                <button type="button" 
+                                                        onclick="resetForm()"
+                                                        class="studio-btn-secondary text-sm">
+                                                    Reset
+                                                </button>
+                                                <a href="{% url 'password-setting' %}" class="studio-btn-secondary text-sm ml-auto">
+                                                    Change Password
+                                                </a>
                                             </div>
-                                        </div>
-        
-                                        <div class="mt-[65px] mb-4">
-                                            <button class="tracking-wide py-2.5 px-4 bg-gradient-to-tr from-indigo-600 to-violet-600 hover:bg-gradient-to-tr hover:from-indigo-700 hover:to-violet-700 text-white w-full transition ease-in duration-200 text-center text-sm font-medium shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg" type="submit">
-                                                Save Changes
-                                            </button>
-                                        </div>
-                                    </form>								
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-					</div>
-				</main>
-			</div>
-		</div>
-	</main>
-	
-    <script src="{% static 'js/script.js' %} "></script>
-	<script src="{% static 'js/sidebarmenu.js' %} "></script>
-    <script src="{% static 'js/dashboard.js' %} "></script>
-	<script src="{% static 'libs/jquery/dist/jquery.min.js' %} "></script>
-	<script src="{% static 'libs/simplebar/dist/simplebar.min.js' %} "></script>
-	<script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %} "></script>
-	<script src="{% static 'libs/@preline/dropdown/index.js' %} "></script>
-	<script src="{% static 'libs/@preline/overlay/index.js' %} "></script>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notifications -->
+    <script>
+        function previewImage(input) {
+            const preview = document.getElementById('avatarPreview');
+            const placeholder = document.getElementById('avatarPlaceholder');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    if (placeholder) {
+                        placeholder.classList.add('hidden');
+                    }
+                };
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                container.className = 'fixed top-10 right-10 z-50 space-y-2';
+                document.body.appendChild(container);
+            }
+            
+            const toast = document.createElement('div');
+            const iconBgColor = type === 'success' ? 'bg-green-200' : 'bg-red-200';
+            const iconSvg = type === 'success' 
+                ? '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>'
+                : '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>';
+            
+            toast.className = 'w-full max-w-sm p-3 pr-4 rounded-lg border shadow-sm text-gray-800 bg-white transform transition-all duration-300 translate-x-full';
+            toast.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <span class="w-9 h-9 rounded-lg ${iconBgColor} flex items-center justify-center">
+                        ${iconSvg}
+                    </span>
+                    <p class="text-sm font-medium text-gray-950">${message}</p>
+                </div>
+            `;
+            
+            container.appendChild(toast);
+            
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-x-full');
+            });
+            
+            setTimeout(() => {
+                if (toast && toast.parentNode) {
+                    toast.classList.add('translate-x-full');
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, 4000);
+        }
+
+        function resetForm() {
+            document.getElementById('adminProfileForm').reset();
+            showToast('Form reset to original values', 'success');
+        }
+
+        // AJAX Form Submission
+        document.getElementById('adminProfileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const form = this;
+            const saveBtn = document.getElementById('saveBtn');
+            const originalText = saveBtn.innerHTML;
+            
+            // Show loading state
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="ti ti-loader-2 animate-spin"></i> Saving...';
+            
+            try {
+                const formData = new FormData(form);
+                const actionUrl = form.dataset.action;
+                
+                const response = await fetch(actionUrl, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                
+                if (response.ok) {
+                    showToast('Profile updated successfully!', 'success');
+                    // Reload after 1 second to show updated data
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    const data = await response.json().catch(() => null);
+                    showToast(data?.message || 'Failed to update profile', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('Network error. Please try again.', 'error');
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = originalText;
+            }
+        });
+    </script>
+
+	<script src="{% static 'js/script.js' %}"></script>
+	<script src="{% static 'js/sidebarmenu.js' %}"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+	<script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
+	<script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
+	<script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %}"></script>
+	<script src="{% static 'libs/@preline/dropdown/index.js' %}"></script>
+	<script src="{% static 'libs/@preline/overlay/index.js' %}"></script>
 </body>
 </html>
