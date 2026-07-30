@@ -45,7 +45,7 @@
                         </a>
 
                         <div>
-                            <p class="text-[0.9rem] leading-[1.7] text-[#5b707b] mb-9">
+                            <p class="text-[0.9rem] leading-[1.7] text-[#5b707b] text-justify mb-9">
                                 Log in to explore institutions, manage your applications, and keep your academic plans
                                 in one focused place.
                             </p>
@@ -126,7 +126,7 @@
 
                                 <!-- Forgot password -->
                                 <div class="text-right -mt-2">
-                                    <a class="text-xs font-bold text-[#5c0017] hover:text-[#3d000f] transition-colors duration-300 cursor-pointer"
+                                    <a class="text-xs font-normal text-[#5c0017] hover:text-[#3d000f] transition-colors duration-300 cursor-pointer"
                                         href="{% url 'password-setting' %}">
                                         Forgot Password?
                                     </a>
@@ -134,7 +134,7 @@
 
                                 <!-- Submit -->
                                 <button type="submit"
-                                    class="w-full text-center uppercase text-[#f7fffb] font-bold text-[0.95rem] py-[0.9rem] px-4 bg-[#5c0017] hover:-translate-y-px hover:brightness-105 transition-all duration-200 cursor-pointer">
+                                    class="w-full text-center uppercase text-[#f7fffb] font-bold text-[0.95rem] py-[0.9rem] px-4 bg-[#5c0017] cursor-pointer">
                                     Login
                                 </button>
 
@@ -151,8 +151,7 @@
                                 <div class="text-center">
                                     <span class="text-sm font-semibold text-[#5a6d72]">Manage an academic institution?
                                         <a href="{% url 'institution-authentication' %}"
-                                            class="text-[#5c0017] font-bold hover:text-[#3d000f] transition-all duration-500">Click
-                                            here to sign up!</a>
+                                            class="text-[#5c0017] font-bold hover:text-[#3d000f] transition-all duration-500">Login</a>
                                     </span>
                                 </div>
                             </form>
@@ -163,18 +162,14 @@
 
             <!-- ── SIGNUP FORM ── -->
             <div class="w-full hidden" id="signup-form">
-                <div class="auth-stage w-full max-w-[660px] mx-auto">
+                <div class="auth-stage w-full max-w-lg mx-auto">
                     <div>
-                        <a href="{% url 'index' %}">
-                            <img src="{% static 'images/logos/logo.png' %}" alt="Hamrocollege" class="h-8 w-auto mb-8">
+                        <a href="{% url 'authentication' %}">
+                            <img src="{% static 'images/logos/logo.png' %}" alt="Hamrocollege" class="h-8 w-auto mb-5">
                         </a>
 
                         <div>
-                            <h2
-                                class="text-[clamp(2rem,5vw,3.1rem)] leading-[1.03] tracking-[-0.03em] mb-3 max-w-[14ch] text-[#0f1f29] font-bold">
-                                Build your academic profile in one step.
-                            </h2>
-                            <p class="text-[0.9rem] leading-[1.7] text-[#5b707b] mb-9">
+                            <p class="text-[0.9rem] leading-[1.7] text-[#5b707b] text-justify mb-9">
                                 Create your account to compare institutions, save options, and move ahead with
                                 confidence.
                             </p>
@@ -275,7 +270,7 @@
 
                                 <!-- Submit -->
                                 <button type="submit"
-                                    class="w-full text-center text-[#f7fffb] font-bold text-[0.95rem] py-[0.9rem] px-4 bg-[#5c0017] hover:-translate-y-px hover:brightness-105 transition-all duration-200 cursor-pointer">
+                                    class="w-full uppercase text-center text-[#f7fffb] font-bold text-[0.95rem] py-[0.9rem] px-4 bg-[#5c0017] cursor-pointer">
                                     Sign Up
                                 </button>
 
