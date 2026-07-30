@@ -1,243 +1,122 @@
 {% load static %}
 
-<meta charset="UTF-8">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hamrocollege</title>
+    <title>Hamrocollege - Log In</title>
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
-    <link href="{% static 'css/input.css' %}" rel="stylesheet">
-    <link href="{% static 'css/output.css' %}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link href="{% static 'css/input.css' %}" rel="stylesheet">
+    <link href="{% static 'css/output.css' %}" rel="stylesheet">
     <style>
-        :root {
-            --ink-900: #0f1f29;
-            --ink-700: #27404d;
-            --ink-500: #5b707b;
-            --line: rgba(15, 31, 41, 0.22);
-            --accent-a: #0f766e;
-            --accent-b: #14b8a6;
-            --accent-c: #eab308;
-        }
-
-        .auth-page {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            color: var(--ink-900);
-            background:
-                linear-gradient(90deg, rgba(15, 118, 110, 0.08) 0 6px, transparent 6px 100%),
-                radial-gradient(circle at 12% 14%, rgba(20, 184, 166, 0.18) 0%, rgba(20, 184, 166, 0) 42%),
-                radial-gradient(circle at 86% 78%, rgba(234, 179, 8, 0.2) 0%, rgba(234, 179, 8, 0) 40%),
-                #f8fbf8;
-            min-height: 100vh;
-        }
-
-        .auth-shell {
-            min-height: 100vh;
-            padding: 2.2rem 1.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .auth-stage {
-            width: min(660px, 100%);
-            animation: stageReveal 0.65s ease-out forwards;
-            transform: translateY(10px);
-            opacity: 0;
-        }
-
-        .auth-logo {
-            height: 2.8rem;
-            width: auto;
-            margin: 0 0 2.1rem;
-        }
-
-        .auth-kicker {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-family: 'Sora', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            font-size: 0.72rem;
-            color: var(--ink-700);
-            margin-bottom: 0.85rem;
-        }
-
-        .auth-kicker-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 999px;
-            background: var(--accent-c);
-        }
-
-        .auth-heading {
-            font-family: 'Sora', sans-serif;
-            font-size: clamp(2rem, 5vw, 3.1rem);
-            line-height: 1.03;
-            letter-spacing: -0.03em;
-            margin-bottom: 0.85rem;
-            max-width: 14ch;
-            color: var(--ink-900);
-        }
-
-        .auth-subheading {
-            font-size: 1rem;
-            line-height: 1.7;
-            max-width: 48ch;
-            color: var(--ink-500);
-            margin-bottom: 2.15rem;
-        }
-
-        .auth-form {
-            width: min(470px, 100%);
-        }
-
-        .auth-field-label {
-            display: block;
-            margin-bottom: 0.4rem;
-            font-size: 0.82rem;
-            font-weight: 700;
-            letter-spacing: 0.03em;
-            text-transform: uppercase;
-            color: var(--ink-700);
-        }
-
+        /* Underline input focus effect */
         .auth-input-wrap {
-            border-bottom: 1px solid var(--line);
+            border-bottom: 1px solid rgba(15, 31, 41, 0.22);
             transition: border-color 0.25s ease;
         }
 
         .auth-input-wrap:focus-within {
-            border-bottom-color: var(--accent-a);
-        }
-
-        .auth-input {
-            border: none;
-            border-radius: 0;
-            background: transparent;
-            color: var(--ink-900);
-            padding: 0.75rem 0.35rem 0.75rem 2rem;
-            width: 100%;
-            outline: none;
-        }
-
-        .auth-input::placeholder {
-            color: #83969e;
-        }
-
-        .auth-submit {
-            width: 100%;
-            border: none;
-            color: #f7fffb;
-            font-weight: 700;
-            font-size: 0.95rem;
-            padding: 0.9rem 1rem;
-            background: linear-gradient(96deg, var(--accent-a) 0%, var(--accent-b) 100%);
-            border-radius: 0;
-            transition: transform 0.2s ease, filter 0.2s ease;
-        }
-
-        .auth-submit:hover {
-            transform: translateY(-1px);
-            filter: brightness(1.05);
-        }
-
-        .auth-link {
-            color: var(--accent-a);
-            font-weight: 700;
-            transition: color 0.2s ease;
-        }
-
-        .auth-link:hover {
-            color: #0b4f4a;
-        }
-
-        .auth-actions {
-            margin-top: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .auth-actions-line {
-            flex: 1;
-            height: 1px;
-            background: rgba(15, 31, 41, 0.18);
-        }
-
-        @media (min-width: 768px) {
-            .auth-shell {
-                padding: 3.5rem 2.5rem;
-            }
-        }
-
-        @keyframes stageReveal {
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            border-bottom-color: #5c0017;
         }
     </style>
 </head>
-<body class="auth-page">
-    <div class="auth-shell">
-        <section class="w-full flex justify-center relative">
-            
-            <!-- Login Form -->
+
+<body class="font-[Fustat,sans-serif] text-[#0f1f29] min-h-screen bg-white">
+
+    <!-- Shell -->
+    <div class="min-h-screen flex items-center justify-center px-5 py-9 md:py-14">
+        <section class="w-full relative">
+
+            <!-- ── LOGIN FORM ── -->
             <div class="w-full" id="login-form">
-                <div class="auth-stage mx-auto">
-                    <div class="auth-form-panel">
-                        <a href="{% url 'index' %}">
-                            <img src="{% static 'images/logos/logo-light.png' %}" alt="Hamrocollege" class="auth-logo">
+                <div class="auth-stage w-full max-w-lg mx-auto">
+                    <div>
+                        <a href="{% url 'authentication' %}">
+                            <img src="{% static 'images/logos/logo.png' %}" alt="Hamrocollege" class="h-8 w-auto mb-5">
                         </a>
 
-                        <div class="auth-form-card max-w-none">
-                            <h2 class="auth-heading">A clearer path back to your dashboard.</h2>
-                            <p class="auth-subheading">Log in to explore institutions, manage your applications, and keep your academic plans in one focused place.</p>
+                        <div>
+                            <p class="text-[0.9rem] leading-[1.7] text-[#5b707b] mb-9">
+                                Log in to explore institutions, manage your applications, and keep your academic plans
+                                in one focused place.
+                            </p>
 
-                            <form action="{% url 'login' %}" method="POST" class="space-y-6 auth-form">
+                            <form action="{% url 'login' %}" method="POST" class="space-y-6">
                                 {% csrf_token %}
-                                <div>
+
+                                <div class="space-y-6">
+                                    <!-- Email -->
                                     <div>
-                                        <label for="email" class="auth-field-label">Email Address</label>
+                                        <label for="email"
+                                            class="block mb-1.5 text-[0.82rem] font-bold tracking-[0.03em] uppercase text-[#27404d]">
+                                            Email Address
+                                        </label>
                                         <div class="relative auth-input-wrap">
-                                            <div class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
-                                                <svg class="w-4 h-4 text-[#4d656a]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                                    <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
-                                                    <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
-                                                </svg>                                 
+                                            <div
+                                                class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
+                                                <svg class="w-4 h-4 text-[#4d656a]" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24" fill="currentColor">
+                                                    <path
+                                                        d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
+                                                    <path
+                                                        d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
+                                                </svg>
                                             </div>
-                                            <input type="email" name="email" id="email" class="auth-input text-sm" placeholder="john@example.com" required>
+                                            <input type="email" name="email" id="email"
+                                                class="w-full border-none bg-transparent text-[#0f1f29] text-sm outline-none py-3 ps-8 pe-2 placeholder-[#83969e]"
+                                                placeholder="john@example.com" required>
                                         </div>
                                     </div>
 
+                                    <!-- Password -->
                                     <div>
-                                        <label for="login-password" class="auth-field-label mt-6">Password</label>
+                                        <label for="login-password"
+                                            class="block mb-1.5 text-[0.82rem] font-bold tracking-[0.03em] uppercase text-[#27404d]">
+                                            Password
+                                        </label>
                                         <div class="relative auth-input-wrap">
-                                            <div class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
-                                                <svg class="w-4 h-4 text-[#4d656a]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                                    <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z" clip-rule="evenodd" />
-                                                </svg>                                  
+                                            <div
+                                                class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
+                                                <svg class="w-4 h-4 text-[#4d656a]" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24" fill="currentColor">
+                                                    <path fill-rule="evenodd"
+                                                        d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
                                             </div>
-                                            
-                                            <input type="password" name="login-password" id="login-password" class="auth-input text-sm pe-8" placeholder="••••••••" required>
-                                            
-                                            <div class="absolute inset-y-0 end-0 flex items-center pe-2.5" id="login-password-toggle-container" style="display: none;">
-                                                <button type="button" id="login-toggle-password" class="flex items-center justify-center w-6 h-6 text-[#294147] focus:outline-none">
-                                                    <svg id="login-eye-icon-closed" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                                        <path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM22.676 12.553a11.249 11.249 0 0 1-2.631 4.31l-3.099-3.099a5.25 5.25 0 0 0-6.71-6.71L7.759 4.577a11.217 11.217 0 0 1 4.242-.827c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113Z" />
-                                                        <path d="M15.75 12c0 .18-.013.357-.037.53l-4.244-4.243A3.75 3.75 0 0 1 15.75 12ZM12.53 15.713l-4.243-4.244a3.75 3.75 0 0 0 4.244 4.243Z" />
-                                                        <path d="M6.75 12c0-.619.107-1.213.304-1.764l-3.1-3.1a11.25 11.25 0 0 0-2.63 4.31c-.12.362-.12.752 0 1.114 1.489 4.467 5.704 7.69 10.675 7.69 1.5 0 2.933-.294 4.242-.827l-2.477-2.477A5.25 5.25 0 0 1 6.75 12Z" />
+                                            <input type="password" name="login-password" id="login-password"
+                                                class="w-full border-none bg-transparent text-[#0f1f29] text-sm outline-none py-3 ps-8 pe-8 placeholder-[#83969e]"
+                                                placeholder="••••••••" required>
+                                            <div class="absolute inset-y-0 end-0 flex items-center pe-2.5"
+                                                id="login-password-toggle-container" style="display:none;">
+                                                <button type="button" id="login-toggle-password"
+                                                    class="flex items-center justify-center w-6 h-6 text-[#294147] focus:outline-none">
+                                                    <svg id="login-eye-icon-closed" class="w-4 h-4"
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                        fill="currentColor">
+                                                        <path
+                                                            d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM22.676 12.553a11.249 11.249 0 0 1-2.631 4.31l-3.099-3.099a5.25 5.25 0 0 0-6.71-6.71L7.759 4.577a11.217 11.217 0 0 1 4.242-.827c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113Z" />
+                                                        <path
+                                                            d="M15.75 12c0 .18-.013.357-.037.53l-4.244-4.243A3.75 3.75 0 0 1 15.75 12ZM12.53 15.713l-4.243-4.244a3.75 3.75 0 0 0 4.244 4.243Z" />
+                                                        <path
+                                                            d="M6.75 12c0-.619.107-1.213.304-1.764l-3.1-3.1a11.25 11.25 0 0 0-2.63 4.31c-.12.362-.12.752 0 1.114 1.489 4.467 5.704 7.69 10.675 7.69 1.5 0 2.933-.294 4.242-.827l-2.477-2.477A5.25 5.25 0 0 1 6.75 12Z" />
                                                     </svg>
-                                                    
-                                                    <svg id="login-eye-icon-open" class="hidden w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                                    <svg id="login-eye-icon-open" class="hidden w-4 h-4"
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                        fill="currentColor">
                                                         <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-                                                        <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd" />
+                                                        <path fill-rule="evenodd"
+                                                            d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z"
+                                                            clip-rule="evenodd" />
                                                     </svg>
                                                 </button>
                                             </div>
@@ -245,26 +124,36 @@
                                     </div>
                                 </div>
 
+                                <!-- Forgot password -->
                                 <div class="text-right -mt-2">
-                                    <a class="text-xs font-semibold auth-link duration-300 cursor-pointer" href="{% url 'password-setting' %}">
+                                    <a class="text-xs font-bold text-[#5c0017] hover:text-[#3d000f] transition-colors duration-300 cursor-pointer"
+                                        href="{% url 'password-setting' %}">
                                         Forgot Password?
                                     </a>
                                 </div>
 
-                                <div>
-                                    <button type="submit" class="auth-submit text-center">
-                                        Login
-                                    </button>
+                                <!-- Submit -->
+                                <button type="submit"
+                                    class="w-full text-center uppercase text-[#f7fffb] font-bold text-[0.95rem] py-[0.9rem] px-4 bg-[#5c0017] hover:-translate-y-px hover:brightness-105 transition-all duration-200 cursor-pointer">
+                                    Login
+                                </button>
+
+                                <!-- Sign Up toggle -->
+                                <div class="mt-8 flex items-center gap-4">
+                                    <span class="flex-1 h-px bg-[rgba(15,31,41,0.18)]"></span>
+                                    <a id="toggleSignup"
+                                        class="cursor-pointer uppercase text-xs font-semibold tracking-[0.14em] text-[#294147] hover:tracking-[0.18em] hover:text-[#5c0017] duration-500">Sign
+                                        Up</a>
+                                    <span class="flex-1 h-px bg-[rgba(15,31,41,0.18)]"></span>
                                 </div>
 
-                                <div class="auth-actions">
-                                    <span class="auth-actions-line"></span>
-                                    <a id="toggleSignup" class="cursor-pointer uppercase text-xs font-semibold tracking-[0.14em] text-[#294147] hover:tracking-[0.18em] hover:text-[#0f766e] duration-500">Sign Up</a>
-                                    <span class="auth-actions-line"></span>
-                                </div>
-
-                                <div class="text-left">
-                                    <span class="text-xs font-semibold text-[#5a6d72] duration-500">Manage an academic institution? <a href="{% url 'institution-authentication' %}" class="auth-link transition-all duration-500">Click here to sign up!</a></span>
+                                <!-- Institution link -->
+                                <div class="text-center">
+                                    <span class="text-sm font-semibold text-[#5a6d72]">Manage an academic institution?
+                                        <a href="{% url 'institution-authentication' %}"
+                                            class="text-[#5c0017] font-bold hover:text-[#3d000f] transition-all duration-500">Click
+                                            here to sign up!</a>
+                                    </span>
                                 </div>
                             </form>
                         </div>
@@ -272,121 +161,175 @@
                 </div>
             </div>
 
-            <!-- Signup Form -->
+            <!-- ── SIGNUP FORM ── -->
             <div class="w-full hidden" id="signup-form">
-                <div class="auth-stage mx-auto">
-                    <div class="auth-form-panel">
+                <div class="auth-stage w-full max-w-[660px] mx-auto">
+                    <div>
                         <a href="{% url 'index' %}">
-                            <img src="{% static 'images/logos/logo-light.png' %}" alt="Hamrocollege" class="auth-logo">
+                            <img src="{% static 'images/logos/logo.png' %}" alt="Hamrocollege" class="h-8 w-auto mb-8">
                         </a>
 
-                        <div class="auth-form-card max-w-none">
-                            <h2 class="auth-heading">Build your academic profile in one step.</h2>
-                            <p class="auth-subheading">Create your account to compare institutions, save options, and move ahead with confidence.</p>
+                        <div>
+                            <h2
+                                class="text-[clamp(2rem,5vw,3.1rem)] leading-[1.03] tracking-[-0.03em] mb-3 max-w-[14ch] text-[#0f1f29] font-bold">
+                                Build your academic profile in one step.
+                            </h2>
+                            <p class="text-[0.9rem] leading-[1.7] text-[#5b707b] mb-9">
+                                Create your account to compare institutions, save options, and move ahead with
+                                confidence.
+                            </p>
 
-                            <form action="{% url 'signup' %}" method="POST" class="space-y-6 auth-form">
+                            <form action="{% url 'signup' %}" method="POST" class="space-y-6">
                                 {% csrf_token %}
+
+                                <!-- Name -->
                                 <div>
-                                    <label for="name" class="auth-field-label">Name</label>
+                                    <label for="name"
+                                        class="block mb-1.5 text-[0.82rem] font-bold tracking-[0.03em] uppercase text-[#27404d]">Name</label>
                                     <div class="relative auth-input-wrap">
-                                        <div class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
-                                            <svg class="w-4 h-4 text-[#4d656a]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                                <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+                                        <div
+                                            class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
+                                            <svg class="w-4 h-4 text-[#4d656a]" xmlns="http://www.w3.org/2000/svg"
+                                                fill="currentColor" viewBox="0 0 24 24">
+                                                <path fill-rule="evenodd"
+                                                    d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
+                                                    clip-rule="evenodd" />
                                             </svg>
                                         </div>
-                                        <input type="text" name="name" id="name" class="auth-input text-sm" placeholder="John Doe" required>
+                                        <input type="text" name="name" id="name"
+                                            class="w-full border-none bg-transparent text-[#0f1f29] text-sm outline-none py-3 ps-8 pe-2 placeholder-[#83969e]"
+                                            placeholder="John Doe" required>
                                     </div>
                                 </div>
 
+                                <!-- Email -->
                                 <div>
-                                    <label for="signup-email" class="auth-field-label">Email Address</label>
+                                    <label for="signup-email"
+                                        class="block mb-1.5 text-[0.82rem] font-bold tracking-[0.03em] uppercase text-[#27404d]">Email
+                                        Address</label>
                                     <div class="relative auth-input-wrap">
-                                        <div class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
-                                            <svg class="w-4 h-4 text-[#4d656a]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                                <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
-                                                <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
+                                        <div
+                                            class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
+                                            <svg class="w-4 h-4 text-[#4d656a]" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24" fill="currentColor">
+                                                <path
+                                                    d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
+                                                <path
+                                                    d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
                                             </svg>
                                         </div>
-                                        <input type="email" name="signup-email" id="signup-email" class="auth-input text-sm" placeholder="john@example.com" required>
+                                        <input type="email" name="signup-email" id="signup-email"
+                                            class="w-full border-none bg-transparent text-[#0f1f29] text-sm outline-none py-3 ps-8 pe-2 placeholder-[#83969e]"
+                                            placeholder="john@example.com" required>
                                     </div>
-                                    <div id="email-error" class="text-xs text-red-500 mt-1 hidden">This email already exists.</div>
+                                    <div id="email-error" class="text-xs text-red-500 mt-1 hidden">This email already
+                                        exists.</div>
                                 </div>
 
+                                <!-- Password -->
                                 <div>
-                                    <label for="signup-password" class="auth-field-label">Password</label>
+                                    <label for="signup-password"
+                                        class="block mb-1.5 text-[0.82rem] font-bold tracking-[0.03em] uppercase text-[#27404d]">Password</label>
                                     <div class="relative auth-input-wrap">
-                                        <div class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
-                                            <svg class="w-4 h-4 text-[#4d656a]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z" clip-rule="evenodd" />
+                                        <div
+                                            class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
+                                            <svg class="w-4 h-4 text-[#4d656a]" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24" fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z"
+                                                    clip-rule="evenodd" />
                                             </svg>
                                         </div>
-
-                                        <input type="password" name="signup-password" id="signup-password" class="auth-input text-sm pe-8" minlength="7" maxlength="20" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,20}" title="Password must be 7-20 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character" placeholder="••••••••" required>
-
-                                        <div class="absolute inset-y-0 end-0 flex items-center pe-2.5" id="password-toggle-container" style="display: none;">
-                                            <button type="button" id="toggle-password" class="flex items-center justify-center w-6 h-6 text-[#294147] focus:outline-none">
-                                                <svg id="eye-icon-closed" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                                    <path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM22.676 12.553a11.249 11.249 0 0 1-2.631 4.31l-3.099-3.099a5.25 5.25 0 0 0-6.71-6.71L7.759 4.577a11.217 11.217 0 0 1 4.242-.827c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113Z" />
-                                                    <path d="M15.75 12c0 .18-.013.357-.037.53l-4.244-4.243A3.75 3.75 0 0 1 15.75 12ZM12.53 15.713l-4.243-4.244a3.75 3.75 0 0 0 4.244 4.243Z" />
-                                                    <path d="M6.75 12c0-.619.107-1.213.304-1.764l-3.1-3.1a11.25 11.25 0 0 0-2.63 4.31c-.12.362-.12.752 0 1.114 1.489 4.467 5.704 7.69 10.675 7.69 1.5 0 2.933-.294 4.242-.827l-2.477-2.477A5.25 5.25 0 0 1 6.75 12Z" />
+                                        <input type="password" name="signup-password" id="signup-password"
+                                            class="w-full border-none bg-transparent text-[#0f1f29] text-sm outline-none py-3 ps-8 pe-8 placeholder-[#83969e]"
+                                            minlength="7" maxlength="20"
+                                            pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,20}"
+                                            title="Password must be 7-20 characters, with uppercase, lowercase, number and special character."
+                                            placeholder="••••••••" required>
+                                        <div class="absolute inset-y-0 end-0 flex items-center pe-2.5"
+                                            id="password-toggle-container" style="display:none;">
+                                            <button type="button" id="toggle-password"
+                                                class="flex items-center justify-center w-6 h-6 text-[#294147] focus:outline-none">
+                                                <svg id="eye-icon-closed" class="w-4 h-4"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                    fill="currentColor">
+                                                    <path
+                                                        d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM22.676 12.553a11.249 11.249 0 0 1-2.631 4.31l-3.099-3.099a5.25 5.25 0 0 0-6.71-6.71L7.759 4.577a11.217 11.217 0 0 1 4.242-.827c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113Z" />
+                                                    <path
+                                                        d="M15.75 12c0 .18-.013.357-.037.53l-4.244-4.243A3.75 3.75 0 0 1 15.75 12ZM12.53 15.713l-4.243-4.244a3.75 3.75 0 0 0 4.244 4.243Z" />
+                                                    <path
+                                                        d="M6.75 12c0-.619.107-1.213.304-1.764l-3.1-3.1a11.25 11.25 0 0 0-2.63 4.31c-.12.362-.12.752 0 1.114 1.489 4.467 5.704 7.69 10.675 7.69 1.5 0 2.933-.294 4.242-.827l-2.477-2.477A5.25 5.25 0 0 1 6.75 12Z" />
                                                 </svg>
-
-                                                <svg id="eye-icon-open" class="hidden w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                                <svg id="eye-icon-open" class="hidden w-4 h-4"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                    fill="currentColor">
                                                     <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-                                                    <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd" />
+                                                    <path fill-rule="evenodd"
+                                                        d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z"
+                                                        clip-rule="evenodd" />
                                                 </svg>
                                             </button>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div>
-                                    <button class="auth-submit text-center" type="submit">
-                                        Sign Up
-                                    </button>
-                                </div>
+                                <!-- Submit -->
+                                <button type="submit"
+                                    class="w-full text-center text-[#f7fffb] font-bold text-[0.95rem] py-[0.9rem] px-4 bg-[#5c0017] hover:-translate-y-px hover:brightness-105 transition-all duration-200 cursor-pointer">
+                                    Sign Up
+                                </button>
 
-                                <div class="auth-actions">
-                                    <span class="auth-actions-line"></span>
-                                    <a id="toggleLogin" class="cursor-pointer uppercase text-xs font-semibold tracking-[0.14em] text-[#294147] hover:tracking-[0.18em] hover:text-[#0f766e] duration-500">Login</a>
-                                    <span class="auth-actions-line"></span>
+                                <!-- Login toggle -->
+                                <div class="mt-8 flex items-center gap-4">
+                                    <span class="flex-1 h-px bg-[rgba(15,31,41,0.18)]"></span>
+                                    <a id="toggleLogin"
+                                        class="cursor-pointer uppercase text-xs font-semibold tracking-[0.14em] text-[#294147] hover:tracking-[0.18em] hover:text-[#5c0017] duration-500">Login</a>
+                                    <span class="flex-1 h-px bg-[rgba(15,31,41,0.18)]"></span>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
+
         </section>
     </div>
 
     {% if messages %}
-        <div id="toast-container" class="fixed top-10 right-10 z-50 space-y-2">
-            {% for message in messages %}
-                <div class="w-full max-w-sm p-2 pr-5 rounded-lg border shadow-sm {{ message.tags }} text-gray-800 bg-white">
-                    <div class="flex items-center space-x-3">
-                        <span class="w-9 h-9 rounded-lg {% if message.tags == 'error' %} bg-red-200 {% elif message.tags == 'success' %} bg-green-200 {% else %} bg-gray-200 {% endif %} flex items-center justify-center">
-                            {% if message.tags == 'error' %}
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-                            </svg>
-                            {% elif message.tags == 'success' %}
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                            </svg>
-                            {% else %}
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-                            </svg>
-                            {% endif %}
-                        </span>
-                        <p class="text-sm font-base text-gray-950">{{ message }}</p>
-                    </div>
-                </div>
-            {% endfor %}
+    <div id="toast-container" class="fixed top-10 right-10 z-50 space-y-2">
+        {% for message in messages %}
+        <div class="w-full max-w-sm p-2 pr-5 rounded-lg border shadow-sm {{ message.tags }} text-gray-800 bg-white">
+            <div class="flex items-center space-x-3">
+                <span
+                    class="w-9 h-9 rounded-lg {% if message.tags == 'error' %} bg-red-200 {% elif message.tags == 'success' %} bg-green-200 {% else %} bg-gray-200 {% endif %} flex items-center justify-center">
+                    {% if message.tags == 'error' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                    </svg>
+                    {% elif message.tags == 'success' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                    </svg>
+                    {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                    </svg>
+                    {% endif %}
+                </span>
+                <p class="text-sm font-base text-gray-950">{{ message }}</p>
+            </div>
         </div>
+        {% endfor %}
+    </div>
     {% endif %}
 
-	<script src="{% static 'js/script.js' %}"></script>
-	<script src="{% static 'js/index.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/index.js' %}"></script>
 </body>
+
 </html>

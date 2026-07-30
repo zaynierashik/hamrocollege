@@ -6,14 +6,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Course</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="{% static 'css/input.css' %}" rel="stylesheet">
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
     <link href="{% static 'css/theme.css' %}" rel="stylesheet">
     <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body class="studio-body">
+<body class="bg-slate-50 text-slate-900 font-sans">
 <main class="studio-main">
     <div id="main-wrapper" class="flex">
         {% include "components/admin_sidebar.html" %}
@@ -21,29 +24,29 @@
         <div class="w-full page-wrapper overflow-hidden xl:pl-[250px]">
             {% include "components/admin_header.html" %}
 
-            <main class="h-full overflow-y-auto max-w-full pb-6" id="course-table">
-                <div class="container full-container xl:px-5 px-4">
-                    <section class="studio-content-wrap" x-data="{ openModal: 'edit-course' }">
-                        <div class="studio-panel-head mb-4">
+            <main class="h-full overflow-y-auto max-w-full pb-6">
+                <div class="container full-container xl:px-6 px-4">
+                    <section class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm" x-data="{ openModal: 'edit-course' }">
+                        <div class="flex items-center justify-between mb-6">
                             <div>
-                                <h1 class="studio-panel-title">Edit Course</h1>
-                                <p class="studio-subtitle">Update course metadata and publish details.</p>
+                                <h1 class="text-xl font-bold text-slate-900">Edit Course</h1>
+                                <p class="text-sm text-slate-500 mt-1">Update course metadata and publish details.</p>
                             </div>
-                            <a href="{% url 'course' %}" class="studio-btn-ghost">
-                                <i class="ti ti-arrow-left mr-1"></i> Back to Courses
+                            <a href="{% url 'course' %}" class="border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5">
+                                <i class="bx bx-arrow-back text-lg"></i> Back to Courses
                             </a>
                         </div>
 
                         <!-- Edit Course Modal -->
-                        <div x-show="openModal === 'edit-course'" class="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50" style="display: none;">
-                            <div class="studio-content-wrap w-full max-w-4xl h-[85vh] overflow-y-auto shadow-2xl border border-gray-200 mx-4">
-                                <div class="studio-panel-head mb-4">
+                        <div x-show="openModal === 'edit-course'" class="fixed inset-0 flex items-center justify-center bg-slate-950/40 backdrop-blur-sm z-50 p-4" style="display: none;">
+                            <div class="bg-white rounded-xl border border-slate-200 shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6">
+                                <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
                                     <div>
-                                        <h3 class="text-lg font-semibold text-gray-800">Edit Course</h3>
-                                        <p class="text-sm text-gray-500 mt-1">Update course information and details.</p>
+                                        <h3 class="text-lg font-bold text-slate-900">Edit Course</h3>
+                                        <p class="text-sm text-slate-500 mt-0.5">Update course information and details.</p>
                                     </div>
-                                    <button @click="window.location.href='{% url 'course' %}'" type="button" class="text-gray-400 hover:text-gray-600">
-                                        <i class="ti ti-x text-xl"></i>
+                                    <button @click="window.location.href='{% url 'course' %}'" type="button" class="text-slate-400 hover:text-slate-600 rounded-lg p-1 transition-colors">
+                                        <i class="bx bx-x text-2xl"></i>
                                     </button>
                                 </div>
 

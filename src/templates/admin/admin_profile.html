@@ -6,13 +6,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="{% static 'css/input.css' %}" rel="stylesheet">
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
     <link href="{% static 'css/theme.css' %}" rel="stylesheet">
     <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 </head>
-<body class="studio-body">
+<body class="bg-slate-50 text-slate-900 font-sans">
 <main class="studio-main">
     <div id="main-wrapper" class="flex">
         {% include "components/admin_sidebar.html" %}
@@ -21,50 +24,52 @@
             {% include "components/admin_header.html" %}
 
             <main class="h-full overflow-y-auto max-w-full pb-6">
-                <div class="container full-container xl:px-5 px-4">
-                    <section class="studio-content-wrap">
-                        <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
-                            <aside class="studio-panel xl:col-span-1">
-                                <div class="flex items-center gap-3 mb-4">
-                                    <img src="{% static 'images/profile/user.png' %}" alt="avatar" class="studio-avatar w-14 h-14 rounded-xl">
+                <div class="container full-container xl:px-6 px-4">
+                    <section>
+                        <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
+                            <aside class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm xl:col-span-1">
+                                <div class="flex items-center gap-3 mb-5">
+                                    <img src="{% static 'images/profile/user.png' %}" alt="avatar" class="w-14 h-14 rounded-xl object-cover border border-slate-200">
                                     <div>
-                                        <h2 class="text-lg font-semibold text-gray-800">{{ admin.name }}</h2>
-                                        <span class="studio-pill studio-pill-success">{{ admin.get_role_display }}</span>
+                                        <h2 class="text-base font-semibold text-slate-900">{{ admin.name }}</h2>
+                                        <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">{{ admin.get_role_display }}</span>
                                     </div>
                                 </div>
-                                <div class="space-y-2 text-sm text-gray-600">
-                                    <p><span class="font-semibold text-gray-800">Email:</span> {{ admin.email }}</p>
-                                    <p><span class="font-semibold text-gray-800">Phone:</span> {{ admin.phone }}</p>
+                                <div class="space-y-2 text-sm text-slate-600">
+                                    <p><span class="font-semibold text-slate-800">Email:</span> {{ admin.email }}</p>
+                                    <p><span class="font-semibold text-slate-800">Phone:</span> {{ admin.phone }}</p>
                                 </div>
-                                <a href="{% url 'password-setting' %}" class="studio-btn-ghost mt-5 w-full">Change Password</a>
+                                <a href="{% url 'password-setting' %}" class="mt-5 w-full inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-sm font-medium px-4 py-2 transition-colors">
+                                    <i class="bx bx-lock-alt"></i> Change Password
+                                </a>
                             </aside>
 
-                            <section class="studio-panel xl:col-span-2">
-                                <div class="studio-panel-head mb-4">
+                            <section class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm xl:col-span-2">
+                                <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
                                     <div>
-                                        <h1 class="studio-panel-title">Profile Settings</h1>
-                                        <p class="studio-subtitle">Update personal details used in admin access.</p>
+                                        <h1 class="text-xl font-bold text-slate-900">Profile Settings</h1>
+                                        <p class="text-sm text-slate-500 mt-1">Update personal details used in admin access.</p>
                                     </div>
                                 </div>
 
                                 <form action="{% url 'update-admin-profile' admin.id %}" method="POST" class="space-y-4">
                                     {% csrf_token %}
                                     <div>
-                                        <label for="name" class="text-sm font-medium text-gray-700">Name <span class="text-red-600">*</span></label>
-                                        <input type="text" value="{{ admin.name }}" name="name" id="name" class="studio-input mt-1" required>
+                                        <label for="name" class="block text-sm font-medium text-slate-700 mb-1">Name <span class="text-rose-500">*</span></label>
+                                        <input type="text" value="{{ admin.name }}" name="name" id="name" class="w-full rounded-lg border border-slate-200 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-slate-950 transition-colors" required>
                                     </div>
 
                                     <div>
-                                        <label for="email" class="text-sm font-medium text-gray-700">Email <span class="text-red-600">*</span></label>
-                                        <input type="email" value="{{ admin.email }}" name="email" id="email" class="studio-input mt-1" required>
+                                        <label for="email" class="block text-sm font-medium text-slate-700 mb-1">Email <span class="text-rose-500">*</span></label>
+                                        <input type="email" value="{{ admin.email }}" name="email" id="email" class="w-full rounded-lg border border-slate-200 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-slate-950 transition-colors" required>
                                     </div>
 
                                     <div>
-                                        <label for="phone" class="text-sm font-medium text-gray-700">Phone <span class="text-red-600">*</span></label>
-                                        <input type="number" value="{{ admin.phone }}" name="phone" id="phone" class="studio-input mt-1" required>
+                                        <label for="phone" class="block text-sm font-medium text-slate-700 mb-1">Phone <span class="text-rose-500">*</span></label>
+                                        <input type="number" value="{{ admin.phone }}" name="phone" id="phone" class="w-full rounded-lg border border-slate-200 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-slate-950 transition-colors" required>
                                     </div>
 
-                                    <button class="studio-btn-primary w-full" type="submit">Save Changes</button>
+                                    <button class="w-full bg-slate-900 hover:bg-slate-800 text-white rounded-lg py-2.5 text-sm font-medium transition-colors shadow-sm" type="submit">Save Changes</button>
                                 </form>
                             </section>
                         </div>

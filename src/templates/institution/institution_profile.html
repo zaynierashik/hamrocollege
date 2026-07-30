@@ -10,11 +10,10 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
-    <link href="{% static 'css/input.css' %}" rel="stylesheet">
+                    <link href="{% static 'css/input.css' %}" rel="stylesheet">
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
     <link href="{% static 'css/theme.css' %}" rel="stylesheet">
     <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
     <style>
         .step-content {
             display: none;
@@ -187,8 +186,12 @@
             }
         }
     </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
-<body class="studio-body">
+<body class="bg-slate-50 text-slate-900 font-sans">
     <main class="studio-main">
         <div id="main-wrapper" class="flex">
             {% include "components/institution_sidebar.html" %}
@@ -215,9 +218,9 @@
 
                                     <nav class="step-breadcrumb" aria-label="Profile steps">
                                         <button type="button" class="step-breadcrumb-item is-active" data-step-link="1" onclick="goToStep(1)">Basic Information</button>
-                                        <span class="step-breadcrumb-separator"><i class="ti ti-chevron-right"></i></span>
+                                        <span class="step-breadcrumb-separator"><i class="bx bx-chevron-right"></i></span>
                                         <button type="button" class="step-breadcrumb-item" data-step-link="2" onclick="goToStep(2)">Contact Information</button>
-                                        <span class="step-breadcrumb-separator"><i class="ti ti-chevron-right"></i></span>
+                                        <span class="step-breadcrumb-separator"><i class="bx bx-chevron-right"></i></span>
                                         <button type="button" class="step-breadcrumb-item" data-step-link="3" onclick="goToStep(3)">Description</button>
                                     </nav>
                                     
@@ -232,7 +235,7 @@
                                                             <div class="logo-upload-main">
                                                                 <label for="logo" class="logo-upload-dropzone">
                                                                     <span class="logo-upload-icon">
-                                                                        <i class="ti ti-photo-up text-lg"></i>
+                                                                        <i class="bx bx-image-add text-lg"></i>
                                                                     </span>
                                                                     <span>
                                                                         <span class="logo-upload-title">Choose institution logo</span>

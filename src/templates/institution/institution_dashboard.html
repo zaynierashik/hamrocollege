@@ -10,14 +10,17 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="{% static 'css/input.css' %}" rel="stylesheet">
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
     <link href="{% static 'css/theme.css' %}" rel="stylesheet">
     <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
-<body class="studio-body">
+<body class="bg-slate-50 text-slate-900 font-sans">
     <main class="studio-main">
         <div id="main-wrapper" class="flex">
             {% include "components/institution_sidebar.html" %}
@@ -27,35 +30,50 @@
 
                 <main class="h-full overflow-y-auto max-w-full pb-6">
                     <div class="container full-container xl:px-5 px-4">
-                        <section class="studio-content-wrap space-y-5">
+                        <section class="space-y-6">
                             <header>
-                                <h1 class="studio-title">Good morning, {{ institution.admin|default:'Institution Admin' }}</h1>
-                                <p class="studio-subtitle">Here is what is happening with your institution today.</p>
+                                <h1 class="text-2xl font-bold text-slate-900">Good morning, {{ institution.admin|default:'Institution Admin' }}</h1>
+                                <p class="text-sm text-slate-500 mt-1">Here is what is happening with your institution today.</p>
                             </header>
 
-                            <section class="studio-kpi-grid">
-                                <div class="studio-kpi">
-                                    <h4>Total Students</h4>
-                                    <p id="metricStudents">{{ total_students|default:0 }}</p>
-                                    <span>Current enrollment summary</span>
+                            <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <span class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
+                                            <i class="bx bx-group text-xl"></i>
+                                        </span>
+                                        <h4 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Total Students</h4>
+                                    </div>
+                                    <p id="metricStudents" class="text-3xl font-bold text-slate-900">{{ total_students|default:0 }}</p>
+                                    <span class="text-xs text-slate-400 mt-1 block">Current enrollment summary</span>
                                 </div>
-                                <div class="studio-kpi">
-                                    <h4>Active Courses</h4>
-                                    <p id="metricCourses">{{ total_courses|default:0 }}</p>
-                                    <span>Program offerings overview</span>
+                                <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <span class="w-9 h-9 rounded-lg bg-violet-50 flex items-center justify-center text-violet-600">
+                                            <i class="bx bx-book-open text-xl"></i>
+                                        </span>
+                                        <h4 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Active Courses</h4>
+                                    </div>
+                                    <p id="metricCourses" class="text-3xl font-bold text-slate-900">{{ total_courses|default:0 }}</p>
+                                    <span class="text-xs text-slate-400 mt-1 block">Program offerings overview</span>
                                 </div>
-                                <div class="studio-kpi">
-                                    <h4>Pending Admissions</h4>
-                                    <p id="metricAdmissions">{{ pending_admissions|default:0 }}</p>
-                                    <span>Application pipeline status</span>
+                                <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <span class="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600">
+                                            <i class="bx bx-time-five text-xl"></i>
+                                        </span>
+                                        <h4 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Pending Admissions</h4>
+                                    </div>
+                                    <p id="metricAdmissions" class="text-3xl font-bold text-slate-900">{{ pending_admissions|default:0 }}</p>
+                                    <span class="text-xs text-slate-400 mt-1 block">Application pipeline status</span>
                                 </div>
                             </section>
 
                             <section class="grid grid-cols-1 gap-4">
-                                <article class="studio-panel">
-                                    <div class="studio-panel-head">
-                                        <h2 class="studio-panel-title">Admissions Trend</h2>
-                                        <span class="studio-tag">Monthly</span>
+                                <article class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <h2 class="text-base font-semibold text-slate-900">Admissions Trend</h2>
+                                        <span class="text-xs font-medium bg-slate-100 text-slate-600 rounded-full px-2.5 py-1">Monthly</span>
                                     </div>
                                     <div id="admissionsChart" class="min-h-[380px]"></div>
                                 </article>

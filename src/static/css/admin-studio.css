@@ -1,20 +1,20 @@
 :root {
-    --studio-bg: #f4f5f7;
+    --studio-bg: #f8fafc;
     --studio-surface: #ffffff;
-    --studio-sidebar: #f0f1f3;
-    --studio-border: #e3e5e8;
-    --studio-text: #1f2937;
-    --studio-muted: #6b7280;
-    --studio-primary: #2563eb;
-    --studio-primary-soft: #dbeafe;
-    --studio-success: #16a34a;
-    --studio-danger: #dc2626;
+    --studio-sidebar: #ffffff;
+    --studio-border: #e2e8f0;
+    --studio-text: #0f172a;
+    --studio-muted: #64748b;
+    --studio-primary: #0f172a;
+    --studio-primary-soft: #f1f5f9;
+    --studio-success: #10b981;
+    --studio-danger: #ef4444;
 }
 
 .studio-body {
     background: var(--studio-bg);
     color: var(--studio-text);
-    font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    font-family: "Fustat", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .studio-main {
@@ -160,7 +160,7 @@ section.studio-content-wrap {
         width: 100% !important;
     }
 
-    .studio-body.admin-sidebar-icon-only #main-wrapper > .page-wrapper {
+    .studio-body.admin-sidebar-icon-only #main-wrapper>.page-wrapper {
         padding-left: 82px !important;
     }
 

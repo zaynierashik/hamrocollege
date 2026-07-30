@@ -7,32 +7,35 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="{% static 'css/input.css' %}" rel="stylesheet">
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
 	<link href="{% static 'css/theme.css' %}" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+    <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
 </head>
-<body class="bg-[#FAFAFA] dark:bg-[#121212]">
-	<main>
+<body class="bg-slate-50 text-slate-900 font-sans">
+	<main class="studio-main">
 		<div id="main-wrapper" class="flex">
 			<!-- Sidebar -->
 			{% include "components/institution_sidebar.html" %}
 
-			<div class="w-full page-wrapper overflow-hidden">
+			<div class="w-full page-wrapper overflow-hidden xl:pl-[250px]">
 				<!-- Header -->
 				{% include "components/institution_header.html" %}
 
 				<!-- Main Content -->
-				<main class="h-full overflow-y-auto max-w-full pt-[6px]" id="institution-edit-card">
-					<div class="container full-container py-5 flex flex-col gap-6">
-						<div class="card min-h-[613px]">
-                            <div class="card-body">
-                                <h4 class="mb-6 text-gray-600 text-lg tracking-wider font-semibold uppercase">Edit: {{ offered_course.course }}</h4>
-                                <a href="{% url 'programs' %}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="cursor-pointer size-6 p-1 rounded-md absolute -top-2 right-6 bg-gray-700 text-white dark:bg-[#121212] dark:text-white">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                                    </svg>
+				<main class="h-full overflow-y-auto max-w-full pb-6" id="institution-edit-card">
+					<div class="container full-container xl:px-6 px-4">
+						<div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm relative">
+                            <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
+                                <h4 class="text-lg font-bold text-slate-900">Edit: {{ offered_course.course }}</h4>
+                                <a href="{% url 'programs' %}" class="text-slate-400 hover:text-slate-600 transition-colors">
+                                    <i class="bx bx-x text-2xl"></i>
                                 </a>
+                            </div>
 
                                 <div class="relative overflow-x-auto">
                                     <form action="{% url 'update-offered-course' offered_course.id %}" method="POST" enctype="multipart/form-data">

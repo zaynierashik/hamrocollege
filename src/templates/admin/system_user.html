@@ -6,13 +6,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>System Users</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="{% static 'css/input.css' %}" rel="stylesheet">
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
     <link href="{% static 'css/theme.css' %}" rel="stylesheet">
     <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 </head>
-<body class="studio-body">
+<body class="bg-slate-50 text-slate-900 font-sans">
 <main class="studio-main">
     <div id="main-wrapper" class="flex">
         {% include "components/admin_sidebar.html" %}
@@ -20,42 +23,42 @@
         <div class="w-full page-wrapper overflow-hidden xl:pl-[250px]">
             {% include "components/admin_header.html" %}
 
-            <main class="h-full overflow-y-auto max-w-full pb-6" id="system-user-table">
-                <div class="container full-container xl:px-5 px-4">
-                    <section class="studio-content-wrap" x-data="{ openModal: null }">
-                        <div class="studio-panel-head mb-4">
+            <main class="h-full overflow-y-auto max-w-full pb-6">
+                <div class="container full-container xl:px-6 px-4">
+                    <section class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm" x-data="{ openModal: null }">
+                        <div class="flex items-center justify-between mb-6">
                             <div>
-                                <h1 class="studio-panel-title">System Users</h1>
-                                <p class="studio-subtitle">Manage staff and admin users with role controls.</p>
+                                <h1 class="text-xl font-bold text-slate-900">System Users</h1>
+                                <p class="text-sm text-slate-500 mt-1">Manage staff and admin users with role controls.</p>
                             </div>
-                            <button @click="openModal = 'new-user'" class="studio-btn-primary" type="button">
-                                <i class="ti ti-plus mr-1"></i> New User
+                            <button @click="openModal = 'new-user'" class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center gap-1.5" type="button">
+                                <i class="bx bx-plus text-lg"></i> New User
                             </button>
                         </div>
 
-                        <div class="studio-table-wrap relative overflow-x-auto">
-                            <table class="studio-table text-left">
+                        <div class="border border-slate-200 rounded-lg overflow-hidden relative">
+                            <table class="w-full text-left text-sm">
                                 <thead>
-                                <tr>
-                                    <th>S.N.</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
+                                <tr class="bg-slate-50/80 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                    <th class="py-3 px-4">S.N.</th>
+                                    <th class="py-3 px-4">Name</th>
+                                    <th class="py-3 px-4">Email</th>
+                                    <th class="py-3 px-4">Role</th>
+                                    <th class="py-3 px-4">Status</th>
+                                    <th class="py-3 px-4">Action</th>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="divide-y divide-slate-100">
                                 {% for system_user in system_users %}
-                                    <tr>
-                                        <td>{{ forloop.counter }}</td>
-                                        <td>{{ system_user.name }}</td>
-                                        <td>{{ system_user.email }}</td>
-                                        <td>{{ system_user.get_role_display }}</td>
-                                        <td>{{ system_user.get_status_display }}</td>
-                                        <td>
-                                            <button class="text-red-600 hover:text-red-700" @click.prevent="openModal = '{{ system_user.id }}'" type="button">
-                                                <i class="ti ti-trash"></i>
+                                    <tr class="hover:bg-slate-50/50 transition-colors">
+                                        <td class="py-3 px-4 font-medium text-slate-700">{{ forloop.counter }}</td>
+                                        <td class="py-3 px-4 font-medium text-slate-900">{{ system_user.name }}</td>
+                                        <td class="py-3 px-4 text-slate-600">{{ system_user.email }}</td>
+                                        <td class="py-3 px-4"><span class="bg-slate-100 text-slate-700 border border-slate-200 text-xs font-medium px-2.5 py-0.5 rounded-full">{{ system_user.get_role_display }}</span></td>
+                                        <td class="py-3 px-4"><span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-medium px-2.5 py-0.5 rounded-full">{{ system_user.get_status_display }}</span></td>
+                                        <td class="py-3 px-4">
+                                            <button class="text-slate-400 hover:text-rose-600 transition-colors" @click.prevent="openModal = '{{ system_user.id }}'" type="button">
+                                                <i class="bx bx-trash text-lg"></i>
                                             </button>
                                         </td>
                                     </tr>
@@ -64,44 +67,44 @@
                             </table>
 
                             {% for system_user in system_users %}
-                                <div x-show="openModal === '{{ system_user.id }}'" class="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50" style="display: none;">
-                                    <div class="studio-content-wrap w-full max-w-md shadow-2xl border border-gray-200">
-                                        <h3 class="text-lg font-semibold text-gray-800">Delete user?</h3>
-                                        <p class="text-sm text-gray-500 mt-2">Are you sure you want to remove {{ system_user.name }}?</p>
-                                        <div class="mt-5 flex justify-end gap-2">
-                                            <button @click="openModal = null" type="button" class="studio-btn-ghost">Cancel</button>
+                                <div x-show="openModal === '{{ system_user.id }}'" class="fixed inset-0 flex items-center justify-center bg-slate-950/40 backdrop-blur-sm z-50 p-4" style="display: none;">
+                                    <div class="bg-white rounded-xl border border-slate-200 shadow-xl max-w-md w-full p-6 space-y-4">
+                                        <h3 class="text-lg font-bold text-slate-900">Delete user?</h3>
+                                        <p class="text-sm text-slate-500">Are you sure you want to remove <span class="font-semibold text-slate-900">{{ system_user.name }}</span>?</p>
+                                        <div class="flex justify-end gap-2 pt-2">
+                                            <button @click="openModal = null" type="button" class="border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">Cancel</button>
                                             <form method="post" action="{% url 'delete-system-user' system_user.id %}">
                                                 {% csrf_token %}
-                                                <button type="submit" class="studio-btn-primary bg-red-600 hover:bg-red-700">Delete</button>
+                                                <button type="submit" class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">Delete</button>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
                             {% endfor %}
 
-                            <!-- New System User Modal -->
-                            <div x-show="openModal === 'new-user'" class="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50" style="display: none;">
-                                <div class="studio-content-wrap w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200">
-                                    <div class="studio-panel-head mb-4">
+                            <!-- New System User Modal (shadcn Dialog) -->
+                            <div x-show="openModal === 'new-user'" class="fixed inset-0 flex items-center justify-center bg-slate-950/40 backdrop-blur-sm z-50 p-4" style="display: none;">
+                                <div class="bg-white rounded-xl border border-slate-200 shadow-xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
+                                    <div class="flex items-center justify-between pb-4 border-b border-slate-100">
                                         <div>
-                                            <h3 class="text-lg font-semibold text-gray-800">Create System User</h3>
-                                            <p class="text-sm text-gray-500 mt-1">Add admin or staff account credentials.</p>
+                                            <h3 class="text-lg font-bold text-slate-900">Create System User</h3>
+                                            <p class="text-sm text-slate-500 mt-0.5">Add admin or staff account credentials.</p>
                                         </div>
-                                        <button @click="openModal = null" type="button" class="text-gray-400 hover:text-gray-600">
-                                            <i class="ti ti-x text-xl"></i>
+                                        <button @click="openModal = null" type="button" class="text-slate-400 hover:text-slate-600 rounded-lg p-1 transition-colors">
+                                            <i class="bx bx-x text-2xl"></i>
                                         </button>
                                     </div>
 
-                                    <form action="{% url 'admin-signup' %}" method="POST" class="space-y-4">
+                                    <form action="{% url 'admin-signup' %}" method="POST" class="space-y-4 pt-4">
                                         {% csrf_token %}
                                         <div class="grid grid-cols-4 gap-4">
                                             <div class="col-span-3">
-                                                <label for="modal-name" class="text-sm font-medium text-gray-700">Name <span class="text-red-600">*</span></label>
-                                                <input type="text" name="name" id="modal-name" class="studio-input mt-1" placeholder="John Doe" required>
+                                                <label for="modal-name" class="block text-sm font-medium text-slate-700 mb-1">Name <span class="text-rose-600">*</span></label>
+                                                <input type="text" name="name" id="modal-name" class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-950 transition-colors" placeholder="John Doe" required>
                                             </div>
                                             <div class="col-span-1">
-                                                <label for="modal-role" class="text-sm font-medium text-gray-700">Role <span class="text-red-600">*</span></label>
-                                                <select id="modal-role" name="role" class="studio-select mt-1" required>
+                                                <label for="modal-role" class="block text-sm font-medium text-slate-700 mb-1">Role <span class="text-rose-600">*</span></label>
+                                                <select id="modal-role" name="role" class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-950 transition-colors bg-white" required>
                                                     <option value="" selected>Choose role</option>
                                                     {% for role in roles %}
                                                         <option value="{{ role.0 }}">{{ role.1 }}</option>
@@ -112,23 +115,23 @@
 
                                         <div class="grid grid-cols-2 gap-4">
                                             <div>
-                                                <label for="modal-phone" class="text-sm font-medium text-gray-700">Phone <span class="text-red-600">*</span></label>
-                                                <input type="number" name="phone" id="modal-phone" class="studio-input mt-1" placeholder="98XXXXXXXX" required>
+                                                <label for="modal-phone" class="block text-sm font-medium text-slate-700 mb-1">Phone <span class="text-rose-600">*</span></label>
+                                                <input type="number" name="phone" id="modal-phone" class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-950 transition-colors" placeholder="98XXXXXXXX" required>
                                             </div>
                                             <div>
-                                                <label for="modal-email" class="text-sm font-medium text-gray-700">Email <span class="text-red-600">*</span></label>
-                                                <input type="email" name="email" id="modal-email" class="studio-input mt-1" placeholder="john@example.com" required>
+                                                <label for="modal-email" class="block text-sm font-medium text-slate-700 mb-1">Email <span class="text-rose-600">*</span></label>
+                                                <input type="email" name="email" id="modal-email" class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-950 transition-colors" placeholder="john@example.com" required>
                                             </div>
                                         </div>
 
                                         <div>
-                                            <label for="modal-password" class="text-sm font-medium text-gray-700">Password <span class="text-red-600">*</span></label>
-                                            <input type="text" name="password" id="modal-password" class="studio-input mt-1" minlength="7" maxlength="20" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,20}" title="Password must be 7-20 chars with uppercase, lowercase, number, special character" placeholder="Strong password" required>
+                                            <label for="modal-password" class="block text-sm font-medium text-slate-700 mb-1">Password <span class="text-rose-600">*</span></label>
+                                            <input type="text" name="password" id="modal-password" class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-950 transition-colors" minlength="7" maxlength="20" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,20}" title="Password must be 7-20 chars with uppercase, lowercase, number, special character" placeholder="Strong password" required>
                                         </div>
 
-                                        <div class="flex justify-end gap-2 pt-4">
-                                            <button @click="openModal = null" type="button" class="studio-btn-ghost">Cancel</button>
-                                            <button type="submit" class="studio-btn-primary">Create</button>
+                                        <div class="flex justify-end gap-2 pt-4 border-t border-slate-100">
+                                            <button @click="openModal = null" type="button" class="border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">Cancel</button>
+                                            <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">Create</button>
                                         </div>
                                     </form>
                                 </div>

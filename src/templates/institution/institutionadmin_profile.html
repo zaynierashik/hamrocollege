@@ -7,11 +7,14 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/input.css' %}">
 	<link rel="stylesheet" href="{% static 'css/theme.css' %}">
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
     <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
     <style>
         .info-item {
             transition: all 0.2s ease;
@@ -21,7 +24,7 @@
         }
     </style>
 </head>
-<body class="studio-body">
+<body class="bg-slate-50 text-slate-900 font-sans">
 	<main class="studio-main">
 		<div id="main-wrapper" class="flex">
 			<!-- Sidebar -->
@@ -73,14 +76,14 @@
                                         <!-- Contact Info -->
                                         <div class="space-y-3 pt-4 border-t border-gray-100">
                                             <div class="flex items-start gap-3">
-                                                <i class="ti ti-mail text-gray-500 mt-0.5"></i>
+                                                <i class="bx bx-envelope text-gray-500 mt-0.5"></i>
                                                 <div>
                                                     <p class="text-xs text-gray-500">Email</p>
                                                     <p class="text-sm text-gray-700 break-all">{{ institution.email }}</p>
                                                 </div>
                                             </div>
                                             <div class="flex items-start gap-3">
-                                                <i class="ti ti-building text-gray-500 mt-0.5"></i>
+                                                <i class="bx bx-building text-gray-500 mt-0.5"></i>
                                                 <div>
                                                     <p class="text-xs text-gray-500">Institution</p>
                                                     <p class="text-sm text-gray-700">{{ institution.institution }}</p>
@@ -253,7 +256,7 @@
             
             // Show loading state
             saveBtn.disabled = true;
-            saveBtn.innerHTML = '<i class="ti ti-loader-2 animate-spin"></i> Saving...';
+            saveBtn.innerHTML = '<i class="bx bx-loader-alt animate-spin"></i> Saving...';
             
             try {
                 const formData = new FormData(form);

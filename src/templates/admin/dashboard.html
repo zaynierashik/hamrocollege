@@ -10,14 +10,17 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="{% static 'css/input.css' %}" rel="stylesheet">
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
     <link href="{% static 'css/theme.css' %}" rel="stylesheet">
     <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
-<body class="studio-body">
+<body class="bg-slate-50 text-slate-900 font-sans">
     <main class="studio-main">
         <div id="main-wrapper" class="flex">
             {% include "components/admin_sidebar.html" %}
@@ -26,62 +29,81 @@
                 {% include "components/admin_header.html" %}
 
                 <main class="h-full overflow-y-auto max-w-full pb-6">
-                    <div class="container full-container xl:px-5 px-4">
-                        <section class="studio-content-wrap space-y-5">
-                            <header>
-                                <h1 class="studio-title">Good morning, {{ admin.name|default:'Admin' }}</h1>
-                                <p class="studio-subtitle">Here is what is happening with your platform today.</p>
+                    <div class="container full-container xl:px-6 px-4">
+                        <section class="space-y-6">
+                            <header class="flex items-center justify-between">
+                                <div>
+                                    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Good morning, {{ admin.name|default:'Admin' }}</h1>
+                                    <p class="text-sm text-slate-500 mt-1">Here is what is happening with your platform today.</p>
+                                </div>
                             </header>
 
-                            <section class="studio-kpi-grid">
-                                <div class="studio-kpi">
-                                    <h4>Total Users</h4>
-                                    <p id="metricUsers">0</p>
-                                    <span>Live distribution summary</span>
+                            <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm font-medium text-slate-500">Total Users</span>
+                                        <i class="bx bx-group text-xl text-slate-400"></i>
+                                    </div>
+                                    <p id="metricUsers" class="text-3xl font-bold text-slate-900 tracking-tight">0</p>
+                                    <span class="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                                        <i class="bx bx-trending-up"></i> Live distribution summary
+                                    </span>
                                 </div>
-                                <div class="studio-kpi">
-                                    <h4>Approved Institutions</h4>
-                                    <p id="metricApproved">0</p>
-                                    <span>Verification pipeline output</span>
+
+                                <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm font-medium text-slate-500">Approved Institutions</span>
+                                        <i class="bx bx-building text-xl text-slate-400"></i>
+                                    </div>
+                                    <p id="metricApproved" class="text-3xl font-bold text-slate-900 tracking-tight">0</p>
+                                    <span class="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                                        <i class="bx bx-check-circle"></i> Verification pipeline output
+                                    </span>
                                 </div>
-                                <div class="studio-kpi">
-                                    <h4>Visible Feedback</h4>
-                                    <p id="metricVisibleFeedback">0</p>
-                                    <span>Moderation quality snapshot</span>
+
+                                <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm font-medium text-slate-500">Visible Feedback</span>
+                                        <i class="bx bx-comment-detail text-xl text-slate-400"></i>
+                                    </div>
+                                    <p id="metricVisibleFeedback" class="text-3xl font-bold text-slate-900 tracking-tight">0</p>
+                                    <span class="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200">
+                                        <i class="bx bx-badge-check"></i> Moderation quality snapshot
+                                    </span>
                                 </div>
                             </section>
 
-                            <section class="grid grid-cols-1 2xl:grid-cols-5 gap-4">
-                                <article class="studio-panel 2xl:col-span-2">
-                                    <div class="studio-panel-head">
-                                        <h2 class="studio-panel-title">Top Performing Provinces</h2>
-                                        <span class="studio-tag">Weekly</span>
+                            <section class="grid grid-cols-1 2xl:grid-cols-5 gap-5">
+                                <article class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm 2xl:col-span-2">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <h2 class="text-lg font-semibold text-slate-900">Top Performing Provinces</h2>
+                                        <span class="text-xs font-medium text-slate-500 border border-slate-200 bg-slate-50 px-2.5 py-1 rounded-md">Weekly</span>
                                     </div>
                                     <div id="userChart" class="min-h-[320px]"></div>
                                 </article>
 
-                                <article class="studio-panel 2xl:col-span-3">
-                                    <div class="studio-panel-head">
-                                        <h2 class="studio-panel-title">Institution Review Trend</h2>
-                                        <span class="studio-tag">Status Mix</span>
+                                <article class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm 2xl:col-span-3">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <h2 class="text-lg font-semibold text-slate-900">Institution Review Trend</h2>
+                                        <span class="text-xs font-medium text-slate-500 border border-slate-200 bg-slate-50 px-2.5 py-1 rounded-md">Status Mix</span>
                                     </div>
                                     <div id="institutionChart" class="min-h-[320px]"></div>
                                 </article>
                             </section>
 
-                            <section class="grid grid-cols-1 xl:grid-cols-3 gap-4">
-                                <article class="studio-panel xl:col-span-1">
-                                    <div class="studio-panel-head">
-                                        <h2 class="studio-panel-title">Feedback Visibility</h2>
-                                        <span class="studio-tag">Moderation</span>
+                            <section class="grid grid-cols-1 xl:grid-cols-3 gap-5">
+                                <article class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm xl:col-span-1">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <h2 class="text-lg font-semibold text-slate-900">Feedback Visibility</h2>
+                                        <span class="text-xs font-medium text-slate-500 border border-slate-200 bg-slate-50 px-2.5 py-1 rounded-md">Moderation</span>
                                     </div>
                                     <div id="feedbackChart" class="min-h-[270px]"></div>
                                 </article>
 
-                                <article class="studio-panel xl:col-span-2">
-                                    <div class="studio-panel-head">
-                                        <h2 class="studio-panel-title">Province Highlights</h2>
-                                        <span class="studio-tag">Top 4</span>
+                                <article class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm xl:col-span-2">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <h2 class="text-lg font-semibold text-slate-900">Province Highlights</h2>
+                                        <span class="text-xs font-medium text-slate-500 border border-slate-200 bg-slate-50 px-2.5 py-1 rounded-md">Top 4</span>
                                     </div>
                                     <div id="topProvinceList" class="space-y-4"></div>
                                 </article>

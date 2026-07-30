@@ -2,19 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap');
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 222.2 84% 4.9%;
+  --radius: 0.5rem;
+}
 
 html {
     scroll-behavior: smooth;
 }
 
-body{
-    font-family: "Plus Jakarta Sans", serif;
+body {
+    font-family: "Fustat", -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #f8fafc;
+    color: #0f172a;
 }
 
 .bg-index {
     background-image: url('/static/images/background/index-bg.png');
-}  
+}
 
 .swiper-slide-active {
     border-color: #7c3aed;
@@ -47,7 +72,8 @@ body{
 .pagination-wrapper {
     position: sticky;
     bottom: 0;
-    background-color: white;  /* Optional, to ensure background consistency */
+    background-color: white;
+    /* Optional, to ensure background consistency */
     z-index: 10;
     padding-top: 1rem;
     padding-bottom: 1rem;
@@ -63,20 +89,24 @@ body{
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
     border-radius: 0.375rem;
-    background-color: #f3f4f6; /* Gray background for unselected buttons */
+    background-color: #f3f4f6;
+    /* Gray background for unselected buttons */
     color: #4b5563;
     text-align: center;
     transition: background-color 0.2s;
 }
 
 .pagination-button:hover {
-    background-color: #e5e7eb; /* Slight hover effect */
+    background-color: #e5e7eb;
+    /* Slight hover effect */
 }
 
 .pagination-button.active {
-    background-color: #e5e7eb; /* Active page background */
+    background-color: #e5e7eb;
+    /* Active page background */
     font-weight: bold;
-    color: #1f2937; /* Dark text for active page */
+    color: #1f2937;
+    /* Dark text for active page */
 }
 
 .pagination-button.disabled {
@@ -84,7 +114,8 @@ body{
     pointer-events: none;
 }
 
-input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
