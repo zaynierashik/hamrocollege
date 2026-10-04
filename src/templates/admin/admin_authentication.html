@@ -146,26 +146,32 @@
     <script>
         const loginPasswordInput = document.getElementById('login-password');
         const loginToggleButton = document.getElementById('login-toggle-password');
+        const loginToggleContainer = document.getElementById('login-password-toggle-container');
         const loginEyeIconClosed = document.getElementById('login-eye-icon-closed');
         const loginEyeIconOpen = document.getElementById('login-eye-icon-open');
 
         loginPasswordInput.addEventListener('input', () => {
-            loginToggleButton.style.display = loginPasswordInput.value.length > 0 ? 'inline-flex' : 'none';
+            loginToggleContainer.style.display =
+                loginPasswordInput.value.length > 0 ? 'flex' : 'none';
         });
 
         loginToggleButton.addEventListener('click', () => {
             const isPassword = loginPasswordInput.type === 'password';
+
             loginPasswordInput.type = isPassword ? 'text' : 'password';
+
             loginEyeIconClosed.classList.toggle('hidden', isPassword);
             loginEyeIconOpen.classList.toggle('hidden', !isPassword);
         });
 
         setTimeout(function () {
             const toastContainer = document.getElementById('toast-container');
+
             if (toastContainer) {
                 toastContainer.querySelectorAll('.w-full').forEach(function (toast) {
                     toast.style.opacity = '0';
                     toast.style.transition = 'opacity 0.6s ease-out';
+
                     setTimeout(function () {
                         toast.remove();
                     }, 600);

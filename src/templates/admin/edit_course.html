@@ -2,21 +2,25 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Course</title>
+    <title>Admin Login</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="{% static 'css/input.css' %}" rel="stylesheet">
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
-    <link href="{% static 'css/theme.css' %}" rel="stylesheet">
     <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans">
+
+<body class="bg-slate-50 text-slate-900">
 <main class="studio-main">
     <div id="main-wrapper" class="flex">
         {% include "components/admin_sidebar.html" %}
@@ -38,88 +42,71 @@
                         </div>
 
                         <!-- Edit Course Modal -->
-                        <div x-show="openModal === 'edit-course'" class="fixed inset-0 flex items-center justify-center bg-slate-950/40 backdrop-blur-sm z-50 p-4" style="display: none;">
-                            <div class="bg-white rounded-xl border border-slate-200 shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6">
-                                <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+                        <div x-show="openModal === 'edit-course'" class="studio-modal-backdrop" style="display:none;">
+                            <div class="studio-modal max-w-3xl w-full" @click.outside="openModal = null">
+                                <div class="studio-modal-header">
                                     <div>
-                                        <h3 class="text-lg font-bold text-slate-900">Edit Course</h3>
-                                        <p class="text-sm text-slate-500 mt-0.5">Update course information and details.</p>
+                                        <h2 class="studio-modal-title">Edit Course</h2>
                                     </div>
-                                    <button @click="window.location.href='{% url 'course' %}'" type="button" class="text-slate-400 hover:text-slate-600 rounded-lg p-1 transition-colors">
-                                        <i class="bx bx-x text-2xl"></i>
+                                    <button @click="openModal = null" type="button" class="studio-modal-close">
+                                        <i class="bx bx-x"></i>
                                     </button>
                                 </div>
 
-                                <!-- Progress Indicator -->
-                                <div class="mb-6">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">1</div>
-                                            <div class="ml-3">
-                                                <h4 class="text-sm font-medium text-gray-900">Basic Details</h4>
-                                                <p class="text-xs text-gray-500">Course information</p>
-                                            </div>
-                                        </div>
-                                        <div class="flex-1 mx-4">
-                                            <div class="h-1 bg-gray-200 rounded-full">
-                                                <div class="h-1 bg-blue-600 rounded-full transition-all duration-300" :style="currentStep === 2 ? 'width: 100%' : 'width: 0%'"></div>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors duration-300" :class="currentStep === 2 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'">2</div>
-                                            <div class="ml-3">
-                                                <h4 class="text-sm font-medium text-gray-900">Additional Information</h4>
-                                                <p class="text-xs text-gray-500">Course details</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <form action="{% url 'update-course' course.id %}" method="POST" class="space-y-4" x-data="{ currentStep: 1 }">
+                                <form action="{% url 'update-course' course.id %}" method="POST" x-data="{ currentStep: 1 }">
                                     {% csrf_token %}
+
+                                    <div class="studio-modal-body">
                                     
                                     <!-- Step 1: Basic Details -->
-                                    <div x-show="currentStep === 1" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-4" x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 -translate-x-4">
-                                        <div class="space-y-4">
+                                    <div x-show="currentStep === 1"
+                                        x-transition:enter="transition ease-out duration-200"
+                                        x-transition:enter-start="opacity-0 translate-x-3"
+                                        x-transition:enter-end="opacity-100 translate-x-0"
+                                        x-transition:leave="transition ease-in duration-150"
+                                        x-transition:leave-start="opacity-100 translate-x-0"
+                                        x-transition:leave-end="opacity-0 -translate-x-3"
+                                        class="space-y-4">
+                                        
                                             <div class="grid grid-cols-4 gap-4">
                                                 <div class="col-span-3">
-                                                    <label for="name" class="text-sm font-medium text-gray-700">Name <span class="text-red-600">*</span></label>
-                                                    <input type="text" value="{{ course.name }}" name="name" id="name" class="studio-input mt-1" required>
+                                                    <label for="modal-name" class="studio-label studio-label-required">Course Name</label>
+                                                    <input type="text" value="{{ course.name }}" name="name" id="name" class="studio-input" required>
                                                 </div>
                                                 <div>
-                                                    <label for="abbreviation" class="text-sm font-medium text-gray-700">Abbreviation</label>
-                                                    <input type="text" value="{{ course.abbreviation }}" name="abbreviation" id="abbreviation" class="studio-input mt-1">
+                                                    <label for="modal-abbreviation" class="studio-label">Abbreviation</label>
+                                                    <input type="text" value="{{ course.abbreviation }}" name="abbreviation" id="abbreviation" class="studio-input">
                                                 </div>
                                             </div>
 
                                             <div class="grid grid-cols-4 gap-4">
-                                                <div class="col-span-2">
-                                                    <label for="field" class="text-sm font-medium text-gray-700">Field <span class="text-red-600">*</span></label>
-                                                    <select id="field" name="field" class="studio-select mt-1" required>
-                                                        <option value="" {% if not course.field %}selected{% endif %}>Choose field</option>
-                                                        {% for field in fields %}
-                                                            <option value="{{ field.0 }}" {% if course.field == field.0 %}selected{% endif %}>{{ field.1 }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </div>
-                                                <div>
-                                                    <label for="year" class="text-sm font-medium text-gray-700">Duration (Years) <span class="text-red-600">*</span></label>
-                                                    <input type="text" value="{{ course.year }}" name="year" id="year" class="studio-input mt-1" required>
-                                                </div>
-                                                <div>
-                                                    <label for="level" class="text-sm font-medium text-gray-700">Level <span class="text-red-600">*</span></label>
-                                                    <select id="level" name="level" class="studio-select mt-1" required>
+                                                <div class="col-span-1">
+                                                    <label for="level" class="studio-label text-gray-700">Level <span class="text-red-600">*</span></label>
+                                                    <select id="level" name="level" class="studio-select" required>
                                                         <option value="" {% if not course.level %}selected{% endif %}>Choose level</option>
                                                         {% for level in levels %}
                                                             <option value="{{ level.0 }}" {% if course.level == level.0 %}selected{% endif %}>{{ level.1 }}</option>
                                                         {% endfor %}
                                                     </select>
                                                 </div>
+                                                <div class="col-span-1">
+                                                    <label for="year" class="studio-label text-gray-700">Duration (Years) <span class="text-red-600">*</span></label>
+                                                    <input type="text" value="{{ course.year }}" name="year" id="year" class="studio-input" required>
+                                                </div>
+                                                <div class="col-span-2">
+                                                    <label for="field" class="studio-label text-gray-700">Field <span class="text-red-600">*</span></label>
+                                                    <select id="field" name="field" class="studio-select" required>
+                                                        <option value="" {% if not course.field %}selected{% endif %}>Choose field</option>
+                                                        {% for field in fields %}
+                                                            <option value="{{ field.0 }}" {% if course.field == field.0 %}selected{% endif %}>{{ field.1 }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
                                             </div>
 
                                             <div>
-                                                <label for="affiliation" class="text-sm font-medium text-gray-700">Affiliation <span class="text-red-600">*</span></label>
-                                                <select id="affiliation" name="affiliation" class="studio-select mt-1" onchange="toggleModalForeignUniversityField()" required>
+                                                <label for="affiliation" class="studio-label text-gray-700">Affiliation <span class="text-red-600">*</span></label>
+                                                <select id="affiliation" name="affiliation" class="studio-select" onchange="toggleModalForeignUniversityField()" required>
                                                     <option value="" {% if not course.affiliation %}selected{% endif %}>Choose affiliation</option>
                                                     {% for affiliation in affiliation_choices %}
                                                         <option value="{{ affiliation.0 }}" {% if course.affiliation == affiliation.0 %}selected{% endif %}>{{ affiliation.1 }}</option>
@@ -128,33 +115,38 @@
                                             </div>
 
                                             <div id="modal-foreign-university-field" class="hidden">
-                                                <label for="foreign_university_name" class="text-sm font-medium text-gray-700">Foreign University Name</label>
-                                                <input type="text" value="{{ course.Foreign_University_Name }}" name="foreign_university_name" id="foreign_university_name" class="studio-input mt-1">
+                                                <label for="foreign_university_name" class="studio-label text-gray-700">Foreign University Name</label>
+                                                <input type="text" value="{{ course.Foreign_University_Name }}" name="foreign_university_name" id="foreign_university_name" class="studio-input">
                                             </div>
                                         </div>
-                                    </div>
 
                                     <!-- Step 2: Additional Information -->
-                                    <div x-show="currentStep === 2" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-4" x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 -translate-x-4">
-                                        <div class="space-y-4">
+                                    <div x-show="currentStep === 2"
+                                        x-transition:enter="transition ease-out duration-200"
+                                        x-transition:enter-start="opacity-0 translate-x-3"
+                                        x-transition:enter-end="opacity-100 translate-x-0"
+                                        x-transition:leave="transition ease-in duration-150"
+                                        x-transition:leave-start="opacity-100 translate-x-0"
+                                        x-transition:leave-end="opacity-0 -translate-x-3"
+                                        class="space-y-4">
                                             <div>
                                                 <label for="about" class="text-sm font-medium text-gray-700">About <span class="text-red-600">*</span></label>
-                                                <textarea name="about" id="about" rows="4" class="studio-textarea mt-1" required>{{ course.about }}</textarea>
+                                                <textarea name="about" id="about" rows="4" class="studio-textarea" required>{{ course.about }}</textarea>
                                             </div>
 
                                             <div>
                                                 <label for="eligibility" class="text-sm font-medium text-gray-700">Eligibility</label>
-                                                <textarea name="eligibility" id="eligibility" rows="3" class="studio-textarea mt-1">{{ course.eligibility }}</textarea>
+                                                <textarea name="eligibility" id="eligibility" rows="3" class="studio-textarea">{{ course.eligibility }}</textarea>
                                             </div>
 
                                             <div>
                                                 <label for="prospect_career" class="text-sm font-medium text-gray-700">Prospect Career</label>
-                                                <textarea name="prospect_career" id="prospect_career" rows="3" class="studio-textarea mt-1">{{ course.Prospect_Career }}</textarea>
+                                                <textarea name="prospect_career" id="prospect_career" rows="3" class="studio-textarea">{{ course.Prospect_Career }}</textarea>
                                             </div>
 
                                             <div>
                                                 <label for="offered_by" class="text-sm font-medium text-gray-700">Offered By</label>
-                                                <select id="offered_by" name="offered_by" class="studio-select mt-1" multiple>
+                                                <select id="offered_by" name="offered_by" class="studio-select" multiple>
                                                     <option disabled>Select institutions</option>
                                                     {% for institution in institutions %}
                                                         <option value="{{ institution.id }}" {% if institution in course.Offered_by.all %}selected{% endif %}>{{ institution.name }}</option>
@@ -166,18 +158,16 @@
                                     </div>
 
                                     <!-- Navigation Buttons -->
-                                    <div class="flex justify-between pt-4 border-t">
-                                        <div>
-                                            <button x-show="currentStep === 2" @click="currentStep = 1" type="button" class="studio-btn-ghost">
-                                                Previous
+                                    <div class="studio-modal-footer">
+                                            <button x-show="currentStep === 2" @click="currentStep = 1" type="button" class="studio-btn studio-btn-ghost">
+                                                Back
                                             </button>
-                                        </div>
-                                        <div class="flex gap-2">
-                                            <button @click="window.location.href='{% url 'course' %}'" type="button" class="studio-btn-ghost">Cancel</button>
-                                            <button x-show="currentStep === 1" @click="currentStep = 2" type="button" class="studio-btn-primary">
+                                        <div class="flex items-center gap-2">
+                                            <button @click="openModal = null" type="button" class="studio-btn studio-btn-ghost">Cancel</button>
+                                            <button x-show="currentStep === 1" @click="currentStep = 2" type="button" class="studio-btn studio-btn-primary">
                                                 Next
                                             </button>
-                                            <button x-show="currentStep === 2" type="submit" class="studio-btn-primary">Save Changes</button>
+                                            <button x-show="currentStep === 2" type="submit" class="studio-btn studio-btn-primary">Save Changes</button>
                                         </div>
                                     </div>
                                 </form>

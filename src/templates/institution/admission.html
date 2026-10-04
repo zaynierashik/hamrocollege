@@ -2,7 +2,7 @@
 
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gurkha Cyber Force</title>
+    <title>Hamrocollege</title>
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
@@ -97,13 +97,8 @@
 							</div>
 						</div>
 
-						<div class="relative mb-6">
-							<i class="bx bx-search text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 text-lg"></i>
-							<input id="searchInput" name="search" placeholder="Search applicant name..." onkeyup="filterAdmissions()" class="w-full rounded-lg border border-slate-200 pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-950 transition-colors bg-white">
-						</div>
-
-						<div class="border border-slate-200 rounded-lg overflow-hidden">
-							<table class="w-full text-left text-sm">
+						<div class="border border-slate-200 rounded-lg overflow-hidden bg-white shadow-xs">
+							<table id="inst-admission-table" class="w-full text-left text-sm">
 								<thead>
 									<tr class="bg-slate-50/80 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
 										<th class="py-3 px-4">S.N.</th>
@@ -114,7 +109,7 @@
 									</tr>
 								</thead>
 								<tbody class="divide-y divide-slate-100">
-									{% for admission in page_obj.object_list %}
+									{% for admission in admissions %}
 									<tr class="hover:bg-slate-50/50 transition-colors">
 										<td class="py-3 px-4 text-slate-500 font-medium">{{ forloop.counter }}</td>
 										<td class="py-3 px-4 font-medium text-slate-900"><span>{{ admission.user }}</span></td>
@@ -145,7 +140,7 @@
 								</tbody>
 							</table>
 
-                                        {% for admission in page_obj.object_list %}
+                                        {% for admission in admissions %}
                                             <div x-show="openModal === '{{ admission.id }}'" class="fixed inset-0 z-20 flex items-center justify-center bg-gray-900 bg-opacity-50">
                                                 <div class="fixed inset-0 bg-gray-500/75 transition-opacity" aria-hidden="true"></div>
                                                 
@@ -200,53 +195,6 @@
                                             </div>
                                         {% endfor %}
 
-                                        {% if page_obj %}
-                                            <div class="pagination-wrapper mt-4">
-                                                <nav class="flex items-center gap-x-1 justify-center" aria-label="Pagination">
-                                                    {% if page_obj.has_previous %}
-                                                        <a href="?page={{ page_obj.previous_page_number }}" class="pagination-button" aria-label="Previous">
-                                                            <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                                <path d="m15 18-6-6 6-6"></path>
-                                                            </svg>
-                                                            <span>Previous</span>
-                                                        </a>
-                                                    {% else %}
-                                                        <button type="button" class="pagination-button disabled" aria-label="Previous" disabled>
-                                                            <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                                <path d="m15 18-6-6 6-6"></path>
-                                                            </svg>
-                                                            <span>Previous</span>
-                                                        </button>
-                                                    {% endif %}
-                                                    
-                                                    <div class="flex items-center gap-x-1">
-                                                        {% for page in page_obj.paginator.page_range %}
-                                                            {% if page == page_obj.number %}
-                                                                <button type="button" class="pagination-button active" aria-current="page">{{ page }}</button>
-                                                            {% else %}
-                                                                <a href="?page={{ page }}" class="pagination-button">{{ page }}</a>
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    </div>
-                                                    
-                                                    {% if page_obj.has_next %}
-                                                        <a href="?page={{ page_obj.next_page_number }}" class="pagination-button" aria-label="Next">
-                                                            <span>Next</span>
-                                                            <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                                <path d="m9 18 6-6-6-6"></path>
-                                                            </svg>
-                                                        </a>
-                                                    {% else %}
-                                                        <button type="button" class="pagination-button disabled" aria-label="Next" disabled>
-                                                            <span>Next</span>
-                                                            <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                                <path d="m9 18 6-6-6-6"></path>
-                                                            </svg>
-                                                        </button>
-                                                    {% endif %}
-                                                </nav>
-                                            </div>
-                                        {% endif %}
 								</div>
 						</div>
 					</section>
@@ -359,5 +307,15 @@
 	<script src="{% static 'libs/simplebar/dist/simplebar.min.js' %} "></script>
 	<script src="{% static 'libs/@preline/dropdown/index.js' %} "></script>
 	<script src="{% static 'libs/@preline/overlay/index.js' %} "></script>
+    <script src="{% static 'js/shadcn-table.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            new ShadcnTable({
+                tableSelector: '#inst-admission-table',
+                pageSize: 10,
+                searchPlaceholder: 'Search applications...'
+            });
+        });
+    </script>
 </body>
 </html>

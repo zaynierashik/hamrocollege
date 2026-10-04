@@ -2,7 +2,7 @@
 
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gurkha Cyber Force</title>
+    <title>Hamrocollege</title>
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
@@ -33,7 +33,7 @@
                                 <div class="card-body">
                                     <h4 class="text-gray-600 text-lg tracking-wider font-semibold mb-6 uppercase">Feedbacks</h4>
                                     <div class="relative overflow-x-auto">
-                                        <table class="text-left w-full whitespace-normal text-sm">
+                                        <table id="user-feedback-table" class="text-left w-full whitespace-normal text-sm">
                                             <thead class="text-gray-700">
                                                 <tr class="font-semibold text-gray-600">
                                                     <th scope="col" class="p-4">S.N.</th>
@@ -42,7 +42,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {% for feedback in page_obj.object_list %}
+                                                {% for feedback in feedbacks %}
                                                 <tr>
                                                     <td class="p-4 font-medium text-gray-500">{{ forloop.counter }}</td>
                                                     <td class="p-4 break-words">
@@ -52,57 +52,18 @@
                                                         <span class="font-medium text-gray-500">{{ feedback.created_at }}</span>
                                                     </td>
                                                 </tr>
+                                                {% empty %}
+                                                <tr>
+                                                    <td colspan="3" class="text-center py-10 text-slate-400">
+                                                        <i class="bx bx-message-square-detail text-3xl mb-2 block"></i>
+                                                        No feedbacks submitted yet
+                                                    </td>
+                                                </tr>
                                                 {% endfor %}
                                             </tbody>                                            
                                         </table>
                             
-                                        {% if page_obj %}
-                                        <div class="pagination-wrapper mt-4">
-                                            <nav class="flex items-center gap-x-1 justify-center" aria-label="Pagination">
-                                                {% if page_obj.has_previous %}
-                                                    <a href="?page={{ page_obj.previous_page_number }}" class="pagination-button" aria-label="Previous">
-                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path d="m15 18-6-6 6-6"></path>
-                                                        </svg>
-                                                        <span>Previous</span>
-                                                    </a>
-                                                {% else %}
-                                                    <button type="button" class="pagination-button disabled" aria-label="Previous" disabled>
-                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path d="m15 18-6-6 6-6"></path>
-                                                        </svg>
-                                                        <span>Previous</span>
-                                                    </button>
-                                                {% endif %}
-                                                
-                                                <div class="flex items-center gap-x-1">
-                                                    {% for page in page_obj.paginator.page_range %}
-                                                        {% if page == page_obj.number %}
-                                                            <button type="button" class="pagination-button active" aria-current="page">{{ page }}</button>
-                                                        {% else %}
-                                                            <a href="?page={{ page }}" class="pagination-button">{{ page }}</a>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                </div>
-                                                
-                                                {% if page_obj.has_next %}
-                                                    <a href="?page={{ page_obj.next_page_number }}" class="pagination-button" aria-label="Next">
-                                                        <span>Next</span>
-                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path d="m9 18 6-6-6-6"></path>
-                                                        </svg>
-                                                    </a>
-                                                {% else %}
-                                                    <button type="button" class="pagination-button disabled" aria-label="Next" disabled>
-                                                        <span>Next</span>
-                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path d="m9 18 6-6-6-6"></path>
-                                                        </svg>
-                                                    </button>
-                                                {% endif %}
-                                            </nav>
-                                        </div>
-                                        {% endif %}
+
                                     </div>
                                 </div>
                             </div>
@@ -176,5 +137,15 @@
 	<script src="{% static 'libs/@preline/overlay/index.js' %} "></script>
 	<script src="{% static 'js/sidebarmenu.js' %} "></script>
     <script src="{% static 'js/dashboard.js' %} "></script>
+    <script src="{% static 'js/shadcn-table.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            new ShadcnTable({
+                tableSelector: '#user-feedback-table',
+                pageSize: 10,
+                searchPlaceholder: 'Search feedbacks...'
+            });
+        });
+    </script>
 </body>
 </html>

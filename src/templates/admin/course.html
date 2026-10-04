@@ -2,246 +2,243 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courses</title>
+    <title>Admin Login</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="{% static 'css/input.css' %}" rel="stylesheet">
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
-    <link href="{% static 'css/theme.css' %}" rel="stylesheet">
     <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans">
+
+<body class="bg-slate-50 text-slate-900">
 <main class="studio-main">
     <div id="main-wrapper" class="flex">
         {% include "components/admin_sidebar.html" %}
 
-        <div class="w-full page-wrapper overflow-hidden xl:pl-[250px]">
+        <div class="w-full page-wrapper overflow-hidden xl:pl-[252px]">
             {% include "components/admin_header.html" %}
 
-            <main class="h-full overflow-y-auto max-w-full pb-6" id="course-table">
-                <div class="container full-container xl:px-6 px-4">
-                    <section class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm" x-data="{ openModal: null }">
-                        <div class="flex items-center justify-between mb-6">
-                            <div>
-                                <h1 class="text-xl font-bold text-slate-900">Courses</h1>
-                                <p class="text-sm text-slate-500 mt-1">Manage course catalog, affiliations and edit details.</p>
-                            </div>
-                            <button @click="openModal = 'new-course'" class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center gap-1.5" type="button">
-                                <i class="bx bx-plus text-lg"></i> New Course
-                            </button>
-                        </div>
+            <main class="h-full overflow-y-auto max-w-full" id="course-table">
+                <div class="full-container xl:px-6 px-4" x-data="{ openModal: null }">
 
-                        <div class="relative mb-6">
-                            <i class="bx bx-search text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 text-lg"></i>
-                            <input id="searchInput" name="search" placeholder="Search course name..." onkeyup="filterCourses()" class="w-full rounded-lg border border-slate-200 pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-950 transition-colors bg-white">
+                    <!-- Page header -->
+                    <div class="studio-page-header">
+                        <div>
+                            <h1 class="studio-page-title">Courses</h1>
                         </div>
+                        <button @click="openModal = 'add-course'"
+                            class="studio-btn studio-btn-primary" type="button">
+                            Add Course
+                        </button>
+                    </div>
 
-                        <div class="border border-slate-200 rounded-lg overflow-hidden relative">
-                            <table class="w-full text-left text-sm">
-                                <thead>
-                                <tr class="bg-slate-50/80 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                    <!-- Table card -->
+                    <div class="studio-card">
+                        <table id="courses-table" class="studio-table w-full">
+                            <thead>
+                                <tr>
                                     <th class="py-3 px-4">S.N.</th>
                                     <th class="py-3 px-4">Course Name</th>
                                     <th class="py-3 px-4">Affiliation</th>
-                                    <th class="py-3 px-4">Abbreviation</th>
-                                    <th class="py-3 px-4">Edit</th>
-                                    <th class="py-3 px-4">View</th>
+                                    <th class="py-3 px-4">Abbrev.</th>
+                                    <th class="py-3 px-4"></th>
                                 </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-100">
-                                {% for course in page_obj.object_list %}
-                                    <tr class="hover:bg-slate-50/50 transition-colors">
-                                        <td class="py-3 px-4 font-medium text-slate-700">{{ forloop.counter }}</td>
-                                        <td class="py-3 px-4 font-medium text-slate-900"><span>{{ course.name }}</span></td>
-                                        <td class="py-3 px-4 text-slate-600">
+                            </thead>
+                            <tbody>
+                                {% for course in courses %}
+                                <tr>
+                                    <td class="py-3 px-4 text-slate-600 text-xs font-medium">{{ forloop.counter }}</td>
+                                    <td class="py-3 px-4 font-semibold text-slate-600">{{ course.name }}</td>
+                                    <td class="py-3 px-4 text-slate-600">
                                             {% if course.affiliation == 'foreign' %}
                                                 {{ course.Foreign_University_Name }}
                                             {% else %}
                                                 {{ course.get_affiliation_display }}
                                             {% endif %}
-                                        </td>
-                                        <td class="py-3 px-4 text-slate-600">{% if course.abbreviation %}{{ course.abbreviation }}{% else %}-{% endif %}</td>
-                                        <td class="py-3 px-4">
-                                            <a href="{% url 'edit-course' course.id %}" class="text-slate-500 hover:text-slate-900 transition-colors">
-                                                <i class="bx bx-edit-alt text-lg"></i>
-                                            </a>
-                                        </td>
-                                        <td class="py-3 px-4">
-                                            <a href="{% url 'course-details' course.id %}" target="_blank" class="text-slate-500 hover:text-slate-900 transition-colors">
-                                                <i class="bx bx-link-external text-lg"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                    </td>
+                                    <td class="py-3 px-4 text-slate-600">
+                                        {% if course.abbreviation %}
+                                            {{ course.abbreviation }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <div class="flex gap-1">
+                                            <a href="{% url 'edit-course' course.id %}"
+                                            class="studio-icon-btn w-8 h-8 rounded-lg text-sm"
+                                            title="Edit course">
+                                            <i class="bx bx-edit-alt"></i>
+                                        </a>
+                                        <a href="{% url 'course-details' course.id %}" target="_blank"
+                                            class="studio-icon-btn w-8 h-8 rounded-lg text-sm"
+                                            title="View course">
+                                            <i class="bx bx-link-external"></i>
+                                        </a>
+                                        </div>
+                                        
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="py-16 text-center">
+                                        <div class="flex flex-col items-center gap-2 text-slate-400">
+                                            <i class="bx bx-book-open text-4xl"></i>
+                                            <p class="text-sm font-medium">No courses cataloged yet</p>
+                                            <button @click="openModal = 'add-course'" class="studio-btn studio-btn-primary studio-btn-sm mt-2" type="button">
+                                                <i class="bx bx-plus text-lg"></i> Add Course
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
                                 {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
+                    </div>
 
-                        {% if page_obj %}
-                            <div class="flex items-center justify-center gap-2 mt-5 flex-wrap">
-                                {% if page_obj.has_previous %}
-                                    <a href="?page={{ page_obj.previous_page_number }}" class="studio-btn-ghost">Previous</a>
-                                {% else %}
-                                    <span class="studio-btn-ghost opacity-50">Previous</span>
-                                {% endif %}
-
-                                {% for page in page_obj.paginator.page_range %}
-                                    {% if page == page_obj.number %}
-                                        <span class="studio-btn-primary">{{ page }}</span>
-                                    {% else %}
-                                        <a href="?page={{ page }}" class="studio-btn-ghost">{{ page }}</a>
-                                    {% endif %}
-                                {% endfor %}
-
-                                {% if page_obj.has_next %}
-                                    <a href="?page={{ page_obj.next_page_number }}" class="studio-btn-ghost">Next</a>
-                                {% else %}
-                                    <span class="studio-btn-ghost opacity-50">Next</span>
-                                {% endif %}
+                    <!-- New Course Modal -->
+                    <div x-show="openModal === 'add-course'" class="studio-modal-backdrop" style="display:none;">
+                        <div class="studio-modal max-w-3xl w-full" @click.outside="openModal = null">
+                            <div class="studio-modal-header">
+                                <div>
+                                    <h2 class="studio-modal-title">Add New Course</h2>
+                                </div>
+                                <button @click="openModal = null" type="button" class="studio-modal-close">
+                                    <i class="bx bx-x"></i>
+                                </button>
                             </div>
-                        {% endif %}
 
-                        <div x-show="openModal === 'new-course'" class="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50" style="display: none;">
-                            <div class="studio-content-wrap w-full max-w-4xl h-[85vh] overflow-y-auto shadow-2xl border border-gray-200 mx-4">
-                                <div class="studio-panel-head mb-4">
-                                    <div>
-                                        <h3 class="text-lg font-semibold text-gray-800">Create Course</h3>
-                                        <p class="text-sm text-gray-500 mt-1">Add a new course to the platform catalog.</p>
-                                    </div>
-                                    <button @click="openModal = null" type="button" class="text-gray-400 hover:text-gray-600">
-                                        <i class="bx bx-x text-xl"></i>
-                                    </button>
-                                </div>
+                            <form action="{% url 'add-course' %}" method="POST" x-data="{ currentStep: 1 }">
+                                {% csrf_token %}
 
-                                <!-- Progress Indicator -->
-                                <div class="mb-6">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">1</div>
-                                            <div class="ml-3">
-                                                <h4 class="text-sm font-medium text-gray-900">Basic Details</h4>
-                                                <p class="text-xs text-gray-500">Course information</p>
-                                            </div>
-                                        </div>
-                                        <div class="flex-1 mx-4">
-                                            <div class="h-1 bg-gray-200 rounded-full">
-                                                <div class="h-1 bg-blue-600 rounded-full transition-all duration-300" :style="currentStep === 2 ? 'width: 100%' : 'width: 0%'"></div>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors duration-300" :class="currentStep === 2 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'">2</div>
-                                            <div class="ml-3">
-                                                <h4 class="text-sm font-medium text-gray-900">Additional Information</h4>
-                                                <p class="text-xs text-gray-500">Course details</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <div class="studio-modal-body">
 
-                                <form action="{% url 'add-course' %}" method="POST" class="space-y-4" x-data="{ currentStep: 1 }">
-                                    {% csrf_token %}
-                                    
-                                    <!-- Step 1: Basic Details -->
-                                    <div x-show="currentStep === 1" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-4" x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 -translate-x-4">
-                                        <div class="space-y-4">
-                                            <div class="grid grid-cols-4 gap-4">
-                                                <div class="col-span-3">
-                                                    <label for="modal-name" class="text-sm font-medium text-gray-700">Name <span class="text-red-600">*</span></label>
-                                                    <input type="text" name="name" id="modal-name" class="studio-input mt-1" placeholder="Mathematics 101" required>
-                                                </div>
-                                                <div>
-                                                    <label for="modal-abbreviation" class="text-sm font-medium text-gray-700">Abbreviation</label>
-                                                    <input type="text" name="abbreviation" id="modal-abbreviation" class="studio-input mt-1" placeholder="MTH-101">
-                                                </div>
-                                            </div>
+                                    <!-- Step 1 -->
+                                    <div x-show="currentStep === 1"
+                                        x-transition:enter="transition ease-out duration-200"
+                                        x-transition:enter-start="opacity-0 translate-x-3"
+                                        x-transition:enter-end="opacity-100 translate-x-0"
+                                        x-transition:leave="transition ease-in duration-150"
+                                        x-transition:leave-start="opacity-100 translate-x-0"
+                                        x-transition:leave-end="opacity-0 -translate-x-3"
+                                        class="space-y-4">
 
-                                            <div class="grid grid-cols-4 gap-4">
-                                                <div class="col-span-2">
-                                                    <label for="modal-field" class="text-sm font-medium text-gray-700">Field <span class="text-red-600">*</span></label>
-                                                    <select id="modal-field" name="field" class="studio-select mt-1" required>
-                                                        <option value="" selected>Choose field</option>
-                                                        {% for field in fields %}
-                                                            <option value="{{ field.0 }}">{{ field.1 }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </div>
-                                                <div>
-                                                    <label for="modal-year" class="text-sm font-medium text-gray-700">Duration (Years) <span class="text-red-600">*</span></label>
-                                                    <input type="number" name="year" id="modal-year" class="studio-input mt-1" placeholder="4" required>
-                                                </div>
-                                                <div>
-                                                    <label for="modal-level" class="text-sm font-medium text-gray-700">Level <span class="text-red-600">*</span></label>
-                                                    <select id="modal-level" name="level" class="studio-select mt-1" required>
-                                                        <option value="" selected>Choose level</option>
-                                                        {% for level in levels %}
-                                                            <option value="{{ level.0 }}">{{ level.1 }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </div>
+                                        <div class="grid grid-cols-4 gap-4">
+                                            <div class="col-span-3">
+                                                <label for="modal-name" class="studio-label studio-label-required">Course Name</label>
+                                                <input type="text" name="name" id="modal-name" class="studio-input" placeholder="Bachelor of Computer Application" required>
                                             </div>
-
                                             <div>
-                                                <label for="modal-affiliation" class="text-sm font-medium text-gray-700">Affiliation <span class="text-red-600">*</span></label>
-                                                <select id="modal-affiliation" name="affiliation" class="studio-select mt-1" onchange="toggleModalForeignUniversityField()" required>
-                                                    <option value="" selected>Choose affiliation</option>
-                                                    {% for affiliation in affiliation_choices %}
-                                                        <option value="{{ affiliation.0 }}">{{ affiliation.1 }}</option>
+                                                <label for="modal-abbreviation" class="studio-label">Abbreviation</label>
+                                                <input type="text" name="abbreviation" id="modal-abbreviation" class="studio-input" placeholder="BCA">
+                                            </div>
+                                        </div>
+
+                                        <div class="grid grid-cols-4 gap-4">
+                                            <div class="col-span-1">
+                                                <label for="modal-level" class="studio-label studio-label-required">Level</label>
+                                                <select id="modal-level" name="level" class="studio-select" required>
+                                                    <option value="">Choose level</option>
+                                                    {% for level in levels %}
+                                                        <option value="{{ level.0 }}">{{ level.1 }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
 
-                                            <div class="hidden" id="modal-foreign-university-field">
-                                                <label for="modal-foreign_university_name" class="text-sm font-medium text-gray-700">Foreign University Name</label>
-                                                <input type="text" name="foreign_university_name" id="modal-foreign_university_name" class="studio-input mt-1" placeholder="University name">
+                                            <div class="col-span-1">
+                                                <label for="modal-year" class="studio-label studio-label-required">Duration (Years)</label>
+                                                <input
+                                                    type="number"
+                                                    name="year"
+                                                    id="modal-year"
+                                                    class="studio-input"
+                                                    placeholder="4"
+                                                    min="1"
+                                                    max="10"
+                                                    required
+                                                >
+                                            </div>
+
+                                            <div class="col-span-2">
+                                                <label for="modal-field" class="studio-label studio-label-required">Field</label>
+                                                <select id="modal-field" name="field" class="studio-select" required>
+                                                    <option value="">Choose field</option>
+                                                    {% for field in fields %}
+                                                        <option value="{{ field.0 }}">{{ field.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <!-- Step 2: Additional Information -->
-                                    <div x-show="currentStep === 2" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-4" x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 -translate-x-4">
-                                        <div class="space-y-4">
-                                            <div>
-                                                <label for="modal-about" class="text-sm font-medium text-gray-700">About <span class="text-red-600">*</span></label>
-                                                <textarea name="about" id="modal-about" rows="4" class="studio-textarea mt-1" required></textarea>
-                                            </div>
-
-                                            <div>
-                                                <label for="modal-eligibility" class="text-sm font-medium text-gray-700">Eligibility</label>
-                                                <textarea name="eligibility" id="modal-eligibility" rows="3" class="studio-textarea mt-1"></textarea>
-                                            </div>
-
-                                            <div>
-                                                <label for="modal-prospect_career" class="text-sm font-medium text-gray-700">Prospect Career</label>
-                                                <textarea name="prospect_career" id="modal-prospect_career" rows="3" class="studio-textarea mt-1"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Navigation Buttons -->
-                                    <div class="flex justify-between pt-4 border-t">
                                         <div>
-                                            <button x-show="currentStep === 2" @click="currentStep = 1" type="button" class="studio-btn-ghost">
-                                                Previous
-                                            </button>
+                                            <label for="modal-affiliation" class="studio-label studio-label-required">Affiliation</label>
+                                            <select id="modal-affiliation" name="affiliation" class="studio-select" onchange="toggleModalForeignUniversityField()" required>
+                                                <option value="">Choose affiliation</option>
+                                                {% for affiliation in affiliation_choices %}
+                                                    <option value="{{ affiliation.0 }}">{{ affiliation.1 }}</option>
+                                                {% endfor %}
+                                            </select>
                                         </div>
-                                        <div class="flex gap-2">
-                                            <button @click="openModal = null" type="button" class="studio-btn-ghost">Cancel</button>
-                                            <button x-show="currentStep === 1" @click="currentStep = 2" type="button" class="studio-btn-primary">
-                                                Next
-                                            </button>
-                                            <button x-show="currentStep === 2" type="submit" class="studio-btn-primary">Create</button>
+
+                                        <div class="hidden" id="modal-foreign-university-field">
+                                            <label for="modal-foreign_university_name" class="studio-label">Foreign University Name</label>
+                                            <input type="text" name="foreign_university_name" id="modal-foreign_university_name" class="studio-input" placeholder="University of Oxford">
                                         </div>
                                     </div>
-                                </form>
-                            </div>
+
+                                    <!-- Step 2 -->
+                                    <div x-show="currentStep === 2"
+                                        x-transition:enter="transition ease-out duration-200"
+                                        x-transition:enter-start="opacity-0 translate-x-3"
+                                        x-transition:enter-end="opacity-100 translate-x-0"
+                                        x-transition:leave="transition ease-in duration-150"
+                                        x-transition:leave-start="opacity-100 translate-x-0"
+                                        x-transition:leave-end="opacity-0 -translate-x-3"
+                                        class="space-y-4">
+
+                                        <div>
+                                            <label for="modal-about" class="studio-label studio-label-required">About</label>
+                                            <textarea name="about" id="modal-about" rows="4" class="studio-textarea" placeholder="Brief description of this course..." required></textarea>
+                                        </div>
+                                        <div>
+                                            <label for="modal-eligibility" class="studio-label">Eligibility Requirements</label>
+                                            <textarea name="eligibility" id="modal-eligibility" rows="3" class="studio-textarea" placeholder="Who can apply for this course..."></textarea>
+                                        </div>
+                                        <div>
+                                            <label for="modal-prospect_career" class="studio-label">Career Prospects</label>
+                                            <textarea name="prospect_career" id="modal-prospect_career" rows="3" class="studio-textarea" placeholder="Career opportunities after completing this course..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="studio-modal-footer">
+                                    <button x-show="currentStep === 2" @click="currentStep = 1" type="button" class="studio-btn studio-btn-ghost">
+                                        Back
+                                    </button>
+                                    <div class="flex items-center gap-2">
+                                        <button @click="openModal = null" type="button" class="studio-btn studio-btn-ghost">Cancel</button>
+                                        <button x-show="currentStep === 1" @click="currentStep = 2" type="button" class="studio-btn studio-btn-primary">
+                                            Next
+                                        </button>
+                                        <button x-show="currentStep === 2" type="submit" class="studio-btn studio-btn-primary">
+                                            Create
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                    </section>
+                    </div>
+
                 </div>
             </main>
         </div>
@@ -249,36 +246,13 @@
 </main>
 
 <script>
-    function filterCourses() {
-        const searchInput = document.getElementById('searchInput').value.toLowerCase();
-        const tableRows = document.querySelectorAll('table tbody tr');
-
-        tableRows.forEach(row => {
-            const nameCell = row.querySelector('td:nth-child(2) span');
-            const nameText = nameCell ? nameCell.textContent.toLowerCase() : '';
-            row.style.display = nameText.includes(searchInput) ? '' : 'none';
-        });
-    }
-
-    function toggleForeignUniversityField() {
-        const affiliationSelect = document.getElementById('affiliation');
-        const foreignUniversityField = document.getElementById('foreign-university-field');
-        if (!affiliationSelect || !foreignUniversityField) {
-            return;
-        }
-        foreignUniversityField.classList.toggle('hidden', affiliationSelect.value !== 'foreign');
-    }
-
     function toggleModalForeignUniversityField() {
         const affiliationSelect = document.getElementById('modal-affiliation');
         const foreignUniversityField = document.getElementById('modal-foreign-university-field');
-        if (!affiliationSelect || !foreignUniversityField) {
-            return;
+        if (affiliationSelect && foreignUniversityField) {
+            foreignUniversityField.classList.toggle('hidden', affiliationSelect.value !== 'foreign');
         }
-        foreignUniversityField.classList.toggle('hidden', affiliationSelect.value !== 'foreign');
     }
-
-    toggleForeignUniversityField();
 </script>
 
 <script src="//unpkg.com/alpinejs" defer></script>
@@ -289,5 +263,15 @@
 <script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %}"></script>
 <script src="{% static 'libs/@preline/dropdown/index.js' %}"></script>
 <script src="{% static 'libs/@preline/overlay/index.js' %}"></script>
+<script src="{% static 'js/shadcn-table.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        new ShadcnTable({
+            tableSelector: '#courses-table',
+            pageSize: 10,
+            searchPlaceholder: 'Search courses by name or affiliation...'
+        });
+    });
+</script>
 </body>
 </html>

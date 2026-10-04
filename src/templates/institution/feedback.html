@@ -2,7 +2,7 @@
 
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gurkha Cyber Force</title>
+    <title>Hamrocollege</title>
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
@@ -34,7 +34,7 @@
                                 <p class="text-sm text-slate-500 mt-1">Feedback received from students and users.</p>
                             </div>
                             <div class="border border-slate-200 rounded-lg overflow-hidden">
-                                <table class="text-left w-full text-sm">
+                                <table id="inst-feedback-table" class="text-left w-full text-sm">
                                     <thead>
                                         <tr class="bg-slate-50/80 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                             <th class="py-3 px-4">S.N.</th>
@@ -79,5 +79,15 @@
 	<script src="{% static 'js/sidebarmenu.js' %} "></script>
 	<script src="{% static 'libs/apexcharts/dist/apexcharts.min.js' %} "></script>
     <script src="{% static 'js/dashboard.js' %} "></script>
+    <script src="{% static 'js/shadcn-table.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            new ShadcnTable({
+                tableSelector: '#inst-feedback-table',
+                pageSize: 10,
+                searchPlaceholder: 'Search feedback...'
+            });
+        });
+    </script>
 </body>
 </html>

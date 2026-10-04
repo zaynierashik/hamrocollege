@@ -1,31 +1,62 @@
 {% load static %}
 
-<header class="container full-container w-full py-4 xl:px-5 px-4">
-    <nav class="studio-topbar flex items-center justify-between gap-4" aria-label="Global">
-        <div class="flex items-center gap-3">
-        </div>
+<header class="studio-topbar">
+    <div class="studio-topbar-left">
+        <!-- Mobile menu toggle -->
+        <button class="studio-sidebar-toggle xl:hidden" type="button"
+            data-hs-overlay="#application-sidebar-brand"
+            aria-controls="application-sidebar-brand"
+            aria-label="Toggle navigation">
+            <i class="bx bx-menu"></i>
+        </button>
 
-        <div class="flex items-center gap-3">
-            <div class="hs-dropdown relative inline-flex [--placement:bottom-right]">
-                <button class="hs-dropdown-toggle cursor-pointer align-middle rounded-md flex items-center gap-2" type="button">
-                    <img class="studio-avatar" src="{% static 'images/profile/user-1.jpg' %}" alt="Admin">
-                    <div class="hidden lg:block text-left">
-                        <p class="text-sm font-semibold text-gray-700">{{ admin.name|default:'System Admin' }}</p>
-                        <p class="text-xs text-gray-500">{{ admin.email|default:'admin@hamrocollege.com' }}</p>
-                    </div>
-                </button>
+        <!-- Breadcrumb -->
+        <nav class="studio-breadcrumb hidden sm:flex" aria-label="Breadcrumb">
+            <span>Hamrocollege</span>
+            <span class="studio-breadcrumb-sep"><i class="bx bx-chevron-right text-sm"></i></span>
+            <span class="studio-breadcrumb-current">
+                {% if request.path == '/dashboard/' %}Dashboard
+                {% elif request.path == '/user/' %}Users
+                {% elif request.path == '/institution/' %}Institutions
+                {% elif request.path == '/course/' %}Courses
+                {% elif request.path == '/feedback/' %}Feedback
+                {% elif request.path == '/system-user/' %}System Users
+                {% elif request.path == '/admin-profile/' %}Profile
+                {% else %}Admin Panel{% endif %}
+            </span>
+        </nav>
+    </div>
 
-                <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 mt-2 min-w-max w-[210px] hidden z-[12] studio-content-wrap p-2" aria-labelledby="hs-dropdown-custom-icon-trigger">
-                    <a href="{% url 'admin-profile' %}" class="studio-nav-link text-slate-700 hover:bg-slate-100 rounded-md px-3 py-2 text-sm flex items-center gap-2">
-                        <i class="bx bx-user text-lg"></i>
-                        <span>My Profile</span>
-                    </a>
-                    <a href="{% url 'admin-logout' %}" class="studio-nav-link text-rose-600 hover:bg-rose-50 rounded-md px-3 py-2 text-sm flex items-center gap-2">
-                        <i class="bx bx-log-out text-lg"></i>
-                        <span>Logout</span>
-                    </a>
+    <div class="studio-topbar-right">
+        <!-- Notification bell -->
+        <button class="studio-icon-btn" type="button" title="Notifications">
+            <i class="bx bx-bell"></i>
+        </button>
+
+        <!-- Admin dropdown -->
+        <div class="hs-dropdown relative inline-flex [--placement:bottom-right]">
+            <button class="hs-dropdown-toggle flex items-center gap-2.5 rounded-lg px-2 py-1.5 hover:bg-slate-100 transition-colors" type="button">
+                <div class="studio-avatar-initials">
+                    {{ admin.name|slice:":1"|upper|default:"A" }}
                 </div>
+                <div class="hidden lg:block text-left">
+                    <p class="text-sm font-semibold text-slate-800 leading-tight">{{ admin.name|default:'System Admin' }}</p>
+                    <p class="text-[11px] text-slate-500 leading-tight">{{ admin.email|default:'admin@hamrocollege.com' }}</p>
+                </div>
+                <i class="bx bx-chevron-down text-slate-400 text-sm hidden lg:block"></i>
+            </button>
+
+            <div class="hs-dropdown-menu studio-dropdown transition-[opacity,margin] hs-dropdown-open:opacity-100 opacity-0 hidden mt-1.5 z-[12]" aria-labelledby="hs-dropdown-custom-icon-trigger">
+                <a href="{% url 'admin-profile' %}" class="studio-dropdown-item">
+                    <i class="bx bx-user text-base"></i>
+                    My Profile
+                </a>
+                <hr class="my-1 border-slate-100">
+                <a href="{% url 'admin-logout' %}" class="studio-dropdown-item danger">
+                    <i class="bx bx-log-out text-base"></i>
+                    Sign Out
+                </a>
             </div>
         </div>
-    </nav>
+    </div>
 </header>

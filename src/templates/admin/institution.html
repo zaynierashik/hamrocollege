@@ -5,166 +5,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Institutions</title>
+    <title>Institutions — Hamrocollege Admin</title>
+    <meta name="description" content="Review and manage institution verification status.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link href="{% static 'css/input.css' %}" rel="stylesheet">
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
-    <link href="{% static 'css/theme.css' %}" rel="stylesheet">
     <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans">
+<body class="bg-slate-50 text-slate-900" style="font-family:'Inter',sans-serif;">
 <main class="studio-main">
     <div id="main-wrapper" class="flex">
         {% include "components/admin_sidebar.html" %}
 
-        <div class="w-full page-wrapper overflow-hidden xl:pl-[250px]">
+        <div class="w-full page-wrapper overflow-hidden xl:pl-[252px]">
             {% include "components/admin_header.html" %}
 
-            <main class="h-full overflow-y-auto max-w-full pb-6">
-                <div class="container full-container xl:px-6 px-4">
-                    <section class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
-                        <div class="flex items-center justify-between mb-6">
-                            <div>
-                                <h1 class="text-xl font-bold text-slate-900">Institutions</h1>
-                                <p class="text-sm text-slate-500 mt-1">Review institution administrators and update status.</p>
-                            </div>
-                        </div>
+            <main class="h-full overflow-y-auto max-w-full">
+                <div class="full-container xl:px-6 px-4">
 
-                        <div class="relative mb-6">
-                            <i class="bx bx-search text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 text-lg"></i>
-                            <input id="searchInput" name="search" placeholder="Search institution name..." onkeyup="filterInstitution()" class="w-full rounded-lg border border-slate-200 pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-950 transition-colors bg-white">
+                    <!-- Page header -->
+                    <div class="studio-page-header">
+                        <div>
+                            <h1 class="studio-page-title">Institutions</h1>
+                            <p class="studio-page-subtitle">Review institution administrators and update verification status.</p>
                         </div>
+                        <span class="studio-badge studio-badge-slate">
+                            <i class="bx bx-buildings text-sm"></i>
+                            {{ institutions|length }} total
+                        </span>
+                    </div>
 
-                        <div class="border border-slate-200 rounded-lg overflow-hidden relative">
-                            <table class="w-full text-left text-sm">
-                                <thead>
-                                <tr class="bg-slate-50/80 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                                    <th class="py-3 px-4">S.N.</th>
+                    <!-- Table card -->
+                    <div class="studio-card">
+                        <table id="institutions-table" class="studio-table w-full">
+                            <thead>
+                                <tr>
+                                    <th class="py-3 px-4">#</th>
                                     <th class="py-3 px-4">Institution Admin</th>
                                     <th class="py-3 px-4">Institution Name</th>
                                     <th class="py-3 px-4">Email</th>
                                     <th class="py-3 px-4">Status</th>
                                 </tr>
-                                </thead>
-                                <tbody>
-                                {% for institution in page_obj.object_list %}
-                                    <tr>
-                                        <td>{{ forloop.counter }}</td>
-                                        <td><span>{{ institution.name }}</span></td>
-                                        <td><span>{{ institution.institution }}</span></td>
-                                        <td>{{ institution.email }}</td>
-
+                            </thead>
+                            <tbody>
+                                {% for institution in institutions %}
+                                <tr>
+                                    <td class="py-3 px-4 text-slate-400 text-xs font-medium">{{ forloop.counter }}</td>
+                                    <td class="py-3 px-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="studio-avatar-initials-sm">{{ institution.name|slice:":1"|upper }}</div>
+                                            <span class="font-semibold text-slate-800">{{ institution.name }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <span class="font-medium text-slate-700">{{ institution.institution }}</span>
+                                    </td>
+                                    <td class="py-3 px-4 text-slate-500 text-sm">{{ institution.email }}</td>
+                                    <td class="py-3 px-4">
                                         {% if admin and admin.role == "admin" %}
-                                            <td>
-                                                <select name="status" class="status-dropdown studio-select max-w-[170px] px-0 py-0 appearance-none bg-transparent border-none shadow-none focus:outline-none focus:ring-0 cursor-pointer text-gray-700 font-medium" data-institution-id="{{ institution.id }}" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"%23374151\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"%3E%3Cpolyline points=\"20,6 9,17 4,12\"%3E%3C/polyline%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 0px center; background-size: 16px; padding-right: 1.5rem;">
-                                                    <option value="approved" {% if institution.status == 'approved' %}selected{% endif %}>Approved</option>
-                                                    <option value="rejected" {% if institution.status == 'rejected' %}selected{% endif %}>Rejected</option>
-                                                    <option value="not_decided" {% if institution.status == 'not_decided' %}selected{% endif %} {% if institution.status != 'not_decided' %}disabled{% endif %}>Not Decided</option>
-                                                </select>
-                                            </td>
+                                            <select name="status"
+                                                class="status-dropdown status-dropdown-styled text-xs font-semibold cursor-pointer border focus:outline-none
+                                                    {% if institution.status == 'approved' %}bg-emerald-50 text-emerald-700 border-emerald-200
+                                                    {% elif institution.status == 'rejected' %}bg-rose-50 text-rose-700 border-rose-200
+                                                    {% else %}bg-amber-50 text-amber-700 border-amber-200{% endif %}"
+                                                data-institution-id="{{ institution.id }}">
+                                                <option value="approved" {% if institution.status == 'approved' %}selected{% endif %}>✓ Approved</option>
+                                                <option value="rejected" {% if institution.status == 'rejected' %}selected{% endif %}>✕ Rejected</option>
+                                                <option value="not_decided" {% if institution.status == 'not_decided' %}selected{% endif %} {% if institution.status != 'not_decided' %}disabled{% endif %}>⌛ Pending</option>
+                                            </select>
                                         {% else %}
-                                            <td>{{ institution.get_status_display }}</td>
+                                            {% if institution.status == 'approved' %}
+                                                <span class="studio-badge studio-badge-success"><i class="bx bx-check-circle text-xs"></i> Approved</span>
+                                            {% elif institution.status == 'rejected' %}
+                                                <span class="studio-badge studio-badge-danger"><i class="bx bx-x-circle text-xs"></i> Rejected</span>
+                                            {% else %}
+                                                <span class="studio-badge studio-badge-warning"><i class="bx bx-time text-xs"></i> Pending</span>
+                                            {% endif %}
                                         {% endif %}
-                                    </tr>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="py-16 text-center">
+                                        <div class="flex flex-col items-center gap-2 text-slate-400">
+                                            <i class="bx bx-buildings text-4xl"></i>
+                                            <p class="text-sm font-medium">No institutions registered yet</p>
+                                        </div>
+                                    </td>
+                                </tr>
                                 {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
+                    </div>
 
-                        {% if page_obj %}
-                            <div class="flex items-center justify-center gap-2 mt-5 flex-wrap">
-                                {% if page_obj.has_previous %}
-                                    <a href="?page={{ page_obj.previous_page_number }}" class="studio-btn-ghost">Previous</a>
-                                {% else %}
-                                    <span class="studio-btn-ghost opacity-50">Previous</span>
-                                {% endif %}
-
-                                {% for page in page_obj.paginator.page_range %}
-                                    {% if page == page_obj.number %}
-                                        <span class="studio-btn-primary">{{ page }}</span>
-                                    {% else %}
-                                        <a href="?page={{ page }}" class="studio-btn-ghost">{{ page }}</a>
-                                    {% endif %}
-                                {% endfor %}
-
-                                {% if page_obj.has_next %}
-                                    <a href="?page={{ page_obj.next_page_number }}" class="studio-btn-ghost">Next</a>
-                                {% else %}
-                                    <span class="studio-btn-ghost opacity-50">Next</span>
-                                {% endif %}
-                            </div>
-                        {% endif %}
-                    </section>
                 </div>
             </main>
         </div>
     </div>
 </main>
 
-<div id="toast-container" class="fixed top-5 right-5 z-50 space-y-2 text-xs hidden"></div>
+<!-- Toast notifications -->
+<div id="toast-container" class="fixed top-5 right-5 z-50 space-y-2 hidden"></div>
 
 <script>
-    function filterInstitution() {
-        const searchInput = document.getElementById('searchInput').value.toLowerCase();
-        const tableRows = document.querySelectorAll('table tbody tr');
-
-        tableRows.forEach(row => {
-            const nameCell = row.querySelector('td:nth-child(3) span');
-            const nameText = nameCell ? nameCell.textContent.toLowerCase() : '';
-            row.style.display = nameText.includes(searchInput) ? '' : 'none';
-        });
-    }
-
     function showToast(message, type = 'success') {
-        const bgColor = {success: 'bg-green-600', error: 'bg-red-600', info: 'bg-blue-600', warning: 'bg-yellow-500'};
-
+        const typeMap = {
+            success: 'studio-toast-success',
+            error: 'studio-toast-error',
+            info: 'studio-toast-info'
+        };
+        const icons = { success: 'bx-check-circle', error: 'bx-x-circle', info: 'bx-info-circle' };
         const toast = document.createElement('div');
-        toast.className = `toast ${bgColor[type]} text-white p-4 rounded shadow-lg flex items-center space-x-2 transition-opacity duration-300 ease-in-out`;
-        toast.innerHTML = `
-            <span>${message}</span>
-            <button class="text-white focus:outline-none" onclick="this.parentElement.remove()">✕</button>
-        `;
-
+        toast.className = `studio-toast ${typeMap[type] || typeMap.success}`;
+        toast.innerHTML = `<i class="bx ${icons[type] || icons.success} text-lg"></i><span>${message}</span>`;
         const container = document.getElementById('toast-container');
         container.classList.remove('hidden');
         container.appendChild(toast);
-
         setTimeout(() => {
-            toast.remove();
-            if (container.childElementCount === 0) {
-                container.classList.add('hidden');
-            }
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.4s ease';
+            setTimeout(() => { toast.remove(); if (!container.children.length) container.classList.add('hidden'); }, 400);
         }, 3000);
     }
 
     $(document).ready(function () {
-        $('.status-dropdown').change(function () {
-            var institutionId = $(this).data('institution-id');
-            var newStatus = $(this).val();
-            var $dropdown = $(this);
+        $(document).on('change', '.status-dropdown', function () {
+            const institutionId = $(this).data('institution-id');
+            const newStatus = $(this).val();
+            const $dropdown = $(this);
 
             $.ajax({
                 url: '/update-status/' + institutionId + '/',
                 type: 'POST',
-                data: {
-                    'status': newStatus,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
+                data: { 'status': newStatus, 'csrfmiddlewaretoken': '{{ csrf_token }}' },
                 success: function (response) {
                     if (response.success) {
                         showToast(response.message, 'success');
                         $dropdown.find('option[value="not_decided"]').attr('disabled', true);
+                        // Update dropdown styling
+                        $dropdown.removeClass('bg-emerald-50 text-emerald-700 border-emerald-200 bg-rose-50 text-rose-700 border-rose-200 bg-amber-50 text-amber-700 border-amber-200');
+                        if (newStatus === 'approved') {
+                            $dropdown.addClass('bg-emerald-50 text-emerald-700 border-emerald-200');
+                        } else if (newStatus === 'rejected') {
+                            $dropdown.addClass('bg-rose-50 text-rose-700 border-rose-200');
+                        }
                     } else {
                         showToast(response.message, 'error');
                     }
                 },
-                error: function () {
-                    showToast('Error updating status.', 'error');
-                }
+                error: function () { showToast('Error updating status.', 'error'); }
             });
         });
     });
@@ -176,5 +168,15 @@
 <script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %}"></script>
 <script src="{% static 'libs/@preline/dropdown/index.js' %}"></script>
 <script src="{% static 'libs/@preline/overlay/index.js' %}"></script>
+<script src="{% static 'js/shadcn-table.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        new ShadcnTable({
+            tableSelector: '#institutions-table',
+            pageSize: 10,
+            searchPlaceholder: 'Search institutions by name, admin or email...'
+        });
+    });
+</script>
 </body>
 </html>

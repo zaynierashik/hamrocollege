@@ -344,11 +344,7 @@ def applications(request):
     institutions = Institution.objects.filter(admission=True).order_by('name')
     application_list = Application.objects.filter(user=user_id).select_related('institution', 'program', 'program__course').order_by('-id')
 
-    paginator = Paginator(application_list, 7)  
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    context = {'institutions': institutions, 'page_obj': page_obj, 'user': user}
+    context = {'institutions': institutions, 'applications': application_list, 'user': user}
     return render(request, 'applications.html', context)
 
 def send_application(request):
@@ -412,12 +408,8 @@ def feedbacks(request):
     user = User.objects.get(id=user_id)
 
     feedback_list = Feedback.objects.filter(user=user).order_by('-id')
-    paginator = Paginator(feedback_list, 5)
 
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    context = {'page_obj': page_obj, 'user': user}
+    context = {'feedbacks': feedback_list, 'user': user}
     return render(request, 'feedbacks.html', context)
 
 def send_feedback(request):
@@ -965,11 +957,7 @@ def admission(request):
 
     admissions_list = Application.objects.filter(institution=institution).select_related('user', 'program', 'program__course').order_by('-id')
 
-    paginator = Paginator(admissions_list, 7)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    context = {'page_obj': page_obj, 'institution': institution}
+    context = {'admissions': admissions_list, 'institution': institution}
     return render(request, 'admission.html', context)
 
 @csrf_exempt
@@ -1185,11 +1173,7 @@ def institution(request):
 
     institutions_list = InstitutionAdmin.objects.all().order_by('name')
 
-    paginator = Paginator(institutions_list, 10)  
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    context = {'admin': admin, 'page_obj': page_obj}
+    context = {'admin': admin, 'institutions': institutions_list}
     return render(request, 'institution.html', context)
 
 def course(request):
@@ -1225,11 +1209,7 @@ def course(request):
     courses_list = Course.objects.all().order_by('name')
     institutions = Institution.objects.all()
 
-    paginator = Paginator(courses_list, 10)  
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    context = {'admin': admin, 'fields': FIELDS, 'levels': LEVELS, 'affiliation_choices': AFFILIATION_CHOICES, 'page_obj': page_obj, 'institutions': institutions}
+    context = {'admin': admin, 'fields': FIELDS, 'levels': LEVELS, 'affiliation_choices': AFFILIATION_CHOICES, 'courses': courses_list, 'institutions': institutions}
     return render(request, 'course.html', context)
 
 def add_course(request):

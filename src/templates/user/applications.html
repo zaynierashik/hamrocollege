@@ -2,7 +2,7 @@
 
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gurkha Cyber Force</title>
+    <title>Hamrocollege</title>
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
@@ -38,7 +38,7 @@
                                 </div>
                                     
                                 <div class="relative overflow-x-auto">
-                                    <table class="text-left w-full whitespace-nowrap text-sm">
+                                    <table id="user-applications-table" class="text-left w-full whitespace-nowrap text-sm">
                                         <thead class="text-gray-700">
                                             <tr class="font-semibold text-gray-600">
                                                 <th scope="col" class="p-4">S.N.</th>
@@ -48,7 +48,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for application in page_obj.object_list %}
+                                            {% for application in applications %}
                                             <tr>
                                                 <td class="p-4 font-medium text-gray-500">{{ forloop.counter }}</td>
                                                 <td class="p-4">
@@ -60,72 +60,33 @@
                                                 <td class="p-4">
                                                     <span class="font-medium text-gray-500">
                                                         {% if application.status == 'pending' %}
-                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                            </svg>
+                                                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                                                                <i class="bx bx-time-five"></i> Pending
+                                                            </span>
                                                         {% elif application.status == 'accepted' %}
-                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12" />
-                                                            </svg>
+                                                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                                                <i class="bx bx-check"></i> Accepted
+                                                            </span>
                                                         {% else %}
-                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                            </svg>
+                                                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200">
+                                                                <i class="bx bx-x"></i> Rejected
+                                                            </span>
                                                         {% endif %}
                                                     </span>
+                                                </td>
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="4" class="text-center py-10 text-slate-400">
+                                                    <i class="bx bx-inbox text-3xl mb-2 block"></i>
+                                                    No applications submitted yet
                                                 </td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>
                                     </table>
 
-                                    {% if page_obj %}
-                                        <div class="pagination-wrapper mt-4">
-                                            <nav class="flex items-center gap-x-1 justify-center" aria-label="Pagination">
-                                                {% if page_obj.has_previous %}
-                                                    <a href="?page={{ page_obj.previous_page_number }}" class="pagination-button" aria-label="Previous">
-                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path d="m15 18-6-6 6-6"></path>
-                                                        </svg>
-                                                        <span>Previous</span>
-                                                    </a>
-                                                {% else %}
-                                                    <button type="button" class="pagination-button disabled" aria-label="Previous" disabled>
-                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path d="m15 18-6-6 6-6"></path>
-                                                        </svg>
-                                                        <span>Previous</span>
-                                                    </button>
-                                                {% endif %}
-                                                    
-                                                <div class="flex items-center gap-x-1">
-                                                    {% for page in page_obj.paginator.page_range %}
-                                                        {% if page == page_obj.number %}
-                                                            <button type="button" class="pagination-button active" aria-current="page">{{ page }}</button>
-                                                        {% else %}
-                                                            <a href="?page={{ page }}" class="pagination-button">{{ page }}</a>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                </div>
-                                                    
-                                                {% if page_obj.has_next %}
-                                                    <a href="?page={{ page_obj.next_page_number }}" class="pagination-button" aria-label="Next">
-                                                        <span>Next</span>
-                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path d="m9 18 6-6-6-6"></path>
-                                                        </svg>
-                                                    </a>
-                                                {% else %}
-                                                    <button type="button" class="pagination-button disabled" aria-label="Next" disabled>
-                                                        <span>Next</span>
-                                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path d="m9 18 6-6-6-6"></path>
-                                                        </svg>
-                                                    </button>
-                                                {% endif %}
-                                            </nav>
-                                        </div>
-                                    {% endif %}
+
                                 </div>									
                             </div>
                         </div>
@@ -326,5 +287,15 @@
 	<script src="{% static 'libs/simplebar/dist/simplebar.min.js' %} "></script>
 	<script src="{% static 'libs/@preline/dropdown/index.js' %} "></script>
 	<script src="{% static 'libs/@preline/overlay/index.js' %} "></script>
+    <script src="{% static 'js/shadcn-table.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            new ShadcnTable({
+                tableSelector: '#user-applications-table',
+                pageSize: 10,
+                searchPlaceholder: 'Search applications...'
+            });
+        });
+    </script>
 </body>
 </html>
