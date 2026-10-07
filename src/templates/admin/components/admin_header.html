@@ -12,7 +12,7 @@
 
         <!-- Breadcrumb -->
         <nav class="studio-breadcrumb hidden sm:flex" aria-label="Breadcrumb">
-            <span>Hamrocollege</span>
+            <span>Admin</span>
             <span class="studio-breadcrumb-sep"><i class="bx bx-chevron-right text-sm"></i></span>
             <span class="studio-breadcrumb-current">
                 {% if request.path == '/dashboard/' %}Dashboard
@@ -29,19 +29,16 @@
 
     <div class="studio-topbar-right">
         <!-- Notification bell -->
-        <button class="studio-icon-btn" type="button" title="Notifications">
+        <button class="studio-icon-btn" style="background-color: #f8fafc;" type="button" title="Notifications">
             <i class="bx bx-bell"></i>
         </button>
 
         <!-- Admin dropdown -->
         <div class="hs-dropdown relative inline-flex [--placement:bottom-right]">
-            <button class="hs-dropdown-toggle flex items-center gap-2.5 rounded-lg px-2 py-1.5 hover:bg-slate-100 transition-colors" type="button">
-                <div class="studio-avatar-initials">
-                    {{ admin.name|slice:":1"|upper|default:"A" }}
-                </div>
+            <button class="hs-dropdown-toggle flex items-center gap-2.5 rounded-1 px-2 py-1.5 hover:bg-slate-100 transition-colors" type="button">
                 <div class="hidden lg:block text-left">
-                    <p class="text-sm font-semibold text-slate-800 leading-tight">{{ admin.name|default:'System Admin' }}</p>
-                    <p class="text-[11px] text-slate-500 leading-tight">{{ admin.email|default:'admin@hamrocollege.com' }}</p>
+                    <p class="text-xs text-slate-500 leading-tight">{{ admin.email|default:'admin@hamrocollege.com' }}</p>
+                    <p class="text-sm font-medium text-slate-700 leading-tight">{{ admin.name|default:'System Admin' }}</p>
                 </div>
                 <i class="bx bx-chevron-down text-slate-400 text-sm hidden lg:block"></i>
             </button>

@@ -23,25 +23,7 @@
                     </a>
                 </li>
 
-                {% if admin and admin.role == "admin" %}
-                <li>
-                    <a href="{% url 'system-user' %}"
-                        class="studio-nav-link {% if request.path == '/system-user/' %}is-active{% endif %}">
-                        <i class="bx bx-shield-quarter"></i>
-                        <span>System Users</span>
-                    </a>
-                </li>
-                {% endif %}
-
-                <li>
-                    <a href="{% url 'user' %}"
-                        class="studio-nav-link {% if request.path == '/user/' %}is-active{% endif %}">
-                        <i class="bx bx-group"></i>
-                        <span>Users</span>
-                    </a>
-                </li>
-
-                <li>
+                 <li>
                     <a href="{% url 'institution' %}"
                         class="studio-nav-link {% if request.path == '/institution/' %}is-active{% endif %}">
                         <i class="bx bx-building"></i>
@@ -57,12 +39,30 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{% url 'user' %}"
+                        class="studio-nav-link {% if request.path == '/user/' %}is-active{% endif %}">
+                        <i class="bx bx-group"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+
                 {% if admin and admin.role == "admin" %}
                 <li>
                     <a href="{% url 'feedback' %}"
                         class="studio-nav-link {% if request.path == '/feedback/' %}is-active{% endif %}">
                         <i class="bx bx-comment-detail"></i>
                         <span>Feedback</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% if admin and admin.role == "admin" %}
+                <li>
+                    <a href="{% url 'system-user' %}"
+                        class="studio-nav-link {% if request.path == '/system-user/' %}is-active{% endif %}">
+                        <i class="bx bx-shield-quarter"></i>
+                        <span>System Users</span>
                     </a>
                 </li>
                 {% endif %}

@@ -4,6 +4,11 @@
 4. Error and success message in admission form, institution course form, user profile;
    Error/Success message showing in some places due to Json
 
+Admin Portal:
+1. The AJAX for changing status of admin account for institution is not working.
+2. The offered by part is not working in edit course part.
+3. Manage dashboard - charts, graphs
+
 To be done:
 1. Content-Based Recommendation (Matching Users with Institutions & Courses)
  - Recommend institutions and courses based on user preferences (e.g., province, affiliation, past interactions).

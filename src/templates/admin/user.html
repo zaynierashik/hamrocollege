@@ -2,19 +2,25 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users — Hamrocollege Admin</title>
-    <meta name="description" content="View all registered platform users.">
+    <title>Users</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link href="{% static 'css/input.css' %}" rel="stylesheet">
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
     <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
 </head>
-<body class="bg-slate-50 text-slate-900" style="font-family:'Inter',sans-serif;">
+
+<body class="bg-slate-50 text-slate-900">
 <main class="studio-main">
     <div id="main-wrapper" class="flex">
         {% include "components/admin_sidebar.html" %}
@@ -29,10 +35,8 @@
                     <div class="studio-page-header">
                         <div>
                             <h1 class="studio-page-title">Users</h1>
-                            <p class="studio-page-subtitle">All registered platform users — view names, emails and contacts.</p>
                         </div>
                         <span class="studio-badge studio-badge-slate">
-                            <i class="bx bx-group text-sm"></i>
                             {{ users|length }} total
                         </span>
                     </div>
@@ -42,8 +46,8 @@
                         <table id="users-table" class="studio-table w-full">
                             <thead>
                                 <tr>
-                                    <th class="py-3 px-4">#</th>
-                                    <th class="py-3 px-4">User</th>
+                                    <th class="py-3 px-4">S.N.</th>
+                                    <th class="py-3 px-4">Name</th>
                                     <th class="py-3 px-4">Email</th>
                                     <th class="py-3 px-4">Phone</th>
                                 </tr>
@@ -51,15 +55,14 @@
                             <tbody>
                                 {% for user in users %}
                                 <tr>
-                                    <td class="py-3 px-4 text-slate-400 text-xs font-medium">{{ forloop.counter }}</td>
+                                    <td class="py-3 px-4 text-slate-600 text-xs font-medium">{{ forloop.counter }}</td>
                                     <td class="py-3 px-4">
                                         <div class="flex items-center gap-3">
-                                            <div class="studio-avatar-initials-sm">{{ user.name|slice:":1"|upper }}</div>
-                                            <span class="font-semibold text-slate-800">{{ user.name }}</span>
+                                            <span class="text-sm font-medium text-slate-700">{{ user.name }}</span>
                                         </div>
                                     </td>
-                                    <td class="py-3 px-4 text-slate-500 text-sm">{{ user.email }}</td>
-                                    <td class="py-3 px-4 text-slate-500 text-sm">{{ user.phone|default:"—" }}</td>
+                                    <td class="py-3 px-4 text-slate-600 text-sm">{{ user.email }}</td>
+                                    <td class="py-3 px-4 text-slate-600 text-sm">{{ user.phone|default:"-" }}</td>
                                 </tr>
                                 {% empty %}
                                 <tr>

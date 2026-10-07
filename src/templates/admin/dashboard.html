@@ -2,23 +2,25 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard — Hamrocollege Admin</title>
-    <meta name="description" content="Admin dashboard for Hamrocollege — view platform metrics, institution review trends, and user distribution.">
+    <title>Admin Dashboard</title>
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link href="{% static 'css/input.css' %}" rel="stylesheet">
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
     <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
-<body class="bg-slate-50 text-slate-900" style="font-family:'Inter',sans-serif;">
+
+<body class="bg-slate-50 text-slate-900">
 <main class="studio-main">
     <div id="main-wrapper" class="flex">
         {% include "components/admin_sidebar.html" %}
@@ -33,9 +35,8 @@
                     <div class="studio-page-header">
                         <div>
                             <h1 class="studio-page-title">
-                                <span id="greeting">Good morning</span>, {{ admin.name|default:'Admin' }} 👋
+                                <span id="greeting">Good morning</span>, {{ admin.name|default:'Admin' }}
                             </h1>
-                            <p class="studio-page-subtitle">Here's what's happening with your platform today.</p>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="studio-badge studio-badge-slate" id="current-date">—</span>
@@ -88,7 +89,7 @@
                             <div id="userChart" class="min-h-[300px]"></div>
                         </div>
 
-                        <div class="studio-chart-card xl:col-span-3">
+                        <div class="studio-chart-card xl:col-span-2">
                             <div class="studio-chart-header">
                                 <div>
                                     <h2 class="studio-card-title">Institution Review Trend</h2>

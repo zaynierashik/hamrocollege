@@ -2,20 +2,25 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Institutions — Hamrocollege Admin</title>
-    <meta name="description" content="Review and manage institution verification status.">
+    <title>Institutions</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link href="{% static 'css/input.css' %}" rel="stylesheet">
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
     <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body class="bg-slate-50 text-slate-900" style="font-family:'Inter',sans-serif;">
+
+<body class="bg-slate-50 text-slate-900">
 <main class="studio-main">
     <div id="main-wrapper" class="flex">
         {% include "components/admin_sidebar.html" %}
@@ -30,10 +35,8 @@
                     <div class="studio-page-header">
                         <div>
                             <h1 class="studio-page-title">Institutions</h1>
-                            <p class="studio-page-subtitle">Review institution administrators and update verification status.</p>
                         </div>
                         <span class="studio-badge studio-badge-slate">
-                            <i class="bx bx-buildings text-sm"></i>
                             {{ institutions|length }} total
                         </span>
                     </div>
@@ -43,27 +46,23 @@
                         <table id="institutions-table" class="studio-table w-full">
                             <thead>
                                 <tr>
-                                    <th class="py-3 px-4">#</th>
+                                    <th class="py-3 px-4">S.N.</th>
                                     <th class="py-3 px-4">Institution Admin</th>
-                                    <th class="py-3 px-4">Institution Name</th>
+                                    <th class="py-3 px-4">Institution</th>
                                     <th class="py-3 px-4">Email</th>
-                                    <th class="py-3 px-4">Status</th>
+                                    <th class="py-3 px-4"></th>
+                                    <th class="py-3 px-4"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for institution in institutions %}
                                 <tr>
-                                    <td class="py-3 px-4 text-slate-400 text-xs font-medium">{{ forloop.counter }}</td>
-                                    <td class="py-3 px-4">
-                                        <div class="flex items-center gap-3">
-                                            <div class="studio-avatar-initials-sm">{{ institution.name|slice:":1"|upper }}</div>
-                                            <span class="font-semibold text-slate-800">{{ institution.name }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 text-slate-600 text-xs font-medium">{{ forloop.counter }}</td>
+                                    <td class="py-3 px-4 text-sm text-slate-600">{{ institution.name }}</td>
+                                    <td class="py-3 px-4 text-sm">
                                         <span class="font-medium text-slate-700">{{ institution.institution }}</span>
                                     </td>
-                                    <td class="py-3 px-4 text-slate-500 text-sm">{{ institution.email }}</td>
+                                    <td class="py-3 px-4 text-sm text-slate-600">{{ institution.email }}</td>
                                     <td class="py-3 px-4">
                                         {% if admin and admin.role == "admin" %}
                                             <select name="status"
@@ -72,25 +71,34 @@
                                                     {% elif institution.status == 'rejected' %}bg-rose-50 text-rose-700 border-rose-200
                                                     {% else %}bg-amber-50 text-amber-700 border-amber-200{% endif %}"
                                                 data-institution-id="{{ institution.id }}">
-                                                <option value="approved" {% if institution.status == 'approved' %}selected{% endif %}>✓ Approved</option>
-                                                <option value="rejected" {% if institution.status == 'rejected' %}selected{% endif %}>✕ Rejected</option>
-                                                <option value="not_decided" {% if institution.status == 'not_decided' %}selected{% endif %} {% if institution.status != 'not_decided' %}disabled{% endif %}>⌛ Pending</option>
+                                                <option value="not_decided" {% if institution.status == 'not_decided' %}selected{% endif %} {% if institution.status != 'not_decided' %}disabled{% endif %}>Pending</option>
+                                                <option value="approved" {% if institution.status == 'approved' %}selected{% endif %}>Approved</option>
+                                                <option value="rejected" {% if institution.status == 'rejected' %}selected{% endif %}>Rejected</option>
                                             </select>
                                         {% else %}
                                             {% if institution.status == 'approved' %}
-                                                <span class="studio-badge studio-badge-success"><i class="bx bx-check-circle text-xs"></i> Approved</span>
+                                                <span class="studio-badge studio-badge-success"><i class="bx bx-check-circle text-xs"></i>Approved</span>
                                             {% elif institution.status == 'rejected' %}
-                                                <span class="studio-badge studio-badge-danger"><i class="bx bx-x-circle text-xs"></i> Rejected</span>
+                                                <span class="studio-badge studio-badge-danger"><i class="bx bx-x-circle text-xs"></i>Rejected</span>
                                             {% else %}
-                                                <span class="studio-badge studio-badge-warning"><i class="bx bx-time text-xs"></i> Pending</span>
+                                                <span class="studio-badge studio-badge-warning"><i class="bx bx-time text-xs"></i>Pending</span>
                                             {% endif %}
                                         {% endif %}
                                     </td>
+                                    <td>
+                                    <a href="{% url 'institution-details' institution.managed_institution.id %}"
+                                        target="_blank"
+                                        class="studio-icon-btn w-8 h-8 rounded-lg text-sm"
+                                        title="View institution">
+                                            <i class="bx bx-link-external"></i>
+                                        </a>
+
+                                        </td>
                                 </tr>
                                 {% empty %}
                                 <tr>
                                     <td colspan="5" class="py-16 text-center">
-                                        <div class="flex flex-col items-center gap-2 text-slate-400">
+                                        <div class="flex flex-col items-center gap-2 text-slate-600">
                                             <i class="bx bx-buildings text-4xl"></i>
                                             <p class="text-sm font-medium">No institutions registered yet</p>
                                         </div>
