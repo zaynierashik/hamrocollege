@@ -1,22 +1,38 @@
 {% load static %}
 
-<meta charset="UTF-8">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hamrocollege</title>
+    <title>Request OTP</title>
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="{% static 'css/input.css' %}" rel="stylesheet">
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
-<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        /* Underline input focus effect */
+        .auth-input-wrap {
+            border-bottom: 1px solid rgba(15, 31, 41, 0.22);
+            transition: border-color 0.25s ease;
+        }
+
+        .auth-input-wrap:focus-within {
+            border-bottom-color: #5c0017;
+        }
+    </style>
 </head>
-<body class="bg-white text-slate-900 font-sans ">
+
+<body>
     <div class="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
-        <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-2xl dark:bg-gray-800">
+        <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-xs shadow-lg">
             <div class="flex flex-col overflow-y-auto md:flex-row">
                 <div class="h-32 md:h-auto md:w-1/2">
                     <img src="{% static 'images/profile/change-password.png' %}" alt="Change Password">
@@ -26,10 +42,16 @@
                     <div class="w-full">
                         <form id="requestOtpForm" action="{% url 'request-otp' %}" method="POST">
                             {% csrf_token %}
-                            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email Address <span class="text-red-600">*</span></label>
-                            <input type="email" name="email" id="email" class="border border-gray-400 text-sm rounded-lg block w-full mb-4 p-2.5 bg-transparent text-gray-700 focus:border-gray-500 focus:ring-0 outline-none transition-all duration-700" placeholder="johndoe@example.com" required>
+                            <div class="relative auth-input-wrap mb-6">
+                                <label for="email" class="block mb-1.5 text-[0.82rem] font-semibold tracking-[0.03em] uppercase text-[#27404d]">
+                                    Email Address
+                                </label>
+                                <input type="email" name="email" id="email" class="w-full border-none bg-transparent text-[#0f1f29] text-sm outline-none p-3 placeholder-[#83969e]" placeholder="john@example.com" required>
+                            </div>
                             
-                            <button type="submit" value="Request OTP" class="tracking-wide mt-6 py-2.5 px-4 bg-gradient-to-tr from-indigo-600 to-violet-600 hover:bg-gradient-to-tr hover:from-indigo-700 hover:to-violet-700 text-white w-full transition ease-in duration-200 text-center text-sm font-medium shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg">Request OTP</button>
+                            <button type="submit" class="w-full text-center uppercase text-[#f7fffb] font-semibold text-[0.95rem] py-3 px-4 bg-[#ba964c] cursor-pointer">
+                                Request OTP
+                            </button>
                         </form>
                     </div>
                 </div>

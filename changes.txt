@@ -4,6 +4,9 @@
 4. Error and success message in admission form, institution course form, user profile;
    Error/Success message showing in some places due to Json
 
+General:
+1. OTP Request is not working
+
 Admin Portal:
 1. The AJAX for changing status of admin account for institution is not working.
 2. The offered by part is not working in edit course part.
