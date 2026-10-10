@@ -349,7 +349,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: linear-gradient(90deg, var(--accent-primary), #8b5cf6);
+    background: var(--accent-primary);
     opacity: 0;
     transition: opacity 0.2s ease;
 }
@@ -359,7 +359,7 @@ body {
 .studio-stat-icon {
     width: 42px;
     height: 42px;
-    border-radius: 10px;
+    border-radius: 1px;
     display: flex;
     align-items: center;
     justify-content: center;

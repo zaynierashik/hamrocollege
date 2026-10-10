@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const chatbotMessages = document.getElementById("chatbot-messages");
     const chatbotPlaceholder = document.getElementById("chatbot-placeholder");
     const chatbotInput = document.getElementById("chatbot-input");
-    const chatbotSend = document.getElementById("chatbot-send");
+    const chatbotSend = document.getElementById("bx-send");
 
     // Check if toggle and close buttons exist before adding event listeners
     if (chatbotToggle) {
@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const messageElement = document.createElement("div");
         messageElement.classList.add(
-            "p-2", "rounded-lg", "max-w-2xl", "break-words", "shadow-sm", "text-[13px]"
+            "p-2", "rounded-xs", "max-w-2xl", "break-words", "shadow-sm", "text-[13px]"
         );
 
         if (sender === "Me") {
@@ -278,7 +278,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //         const messageElement = document.createElement("div");
 //         messageElement.classList.add(
-//             "p-2", "rounded-lg", "max-w-xs", "break-words", "shadow-sm", "text-[13px]"
+//             "p-2", "rounded-xs", "max-w-xs", "break-words", "shadow-sm", "text-[13px]"
 //         );
 
 //         // Apply different styles for user and bot messages
@@ -416,7 +416,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //         const messageElement = document.createElement("div");
 //         messageElement.classList.add(
-//             "p-2", "rounded-lg", "max-w-xs", "break-words", "shadow-sm", "text-[13px]"
+//             "p-2", "rounded-xs", "max-w-xs", "break-words", "shadow-sm", "text-[13px]"
 //         );
 
 //         if (sender === "Me") {

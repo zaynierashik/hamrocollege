@@ -1,151 +1,229 @@
 {% load static %}
 
-<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hamrocollege</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
-    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
-    <link href="{% static 'css/input.css' %}" rel="stylesheet">
-    <link href="{% static 'css/output.css' %}" rel="stylesheet">
-	<link href="{% static 'css/theme.css' %}" rel="stylesheet">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
-<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-</head>
-<body class="bg-white text-slate-900 font-sans ">
-	<main>
-		<div id="main-wrapper" class="flex">
-			<!-- Sidebar -->
-			{% include "components/user_sidebar.html" %}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Feedback</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}" />
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}" />
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}" />
+        <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet" />
+        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+        <link href="{% static 'css/input.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/output.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet" />
+        <style>
+            .feedback-dialog-backdrop {
+                background: rgb(15 23 42 / 0.45);
+            }
 
-			<div class="w-full page-wrapper overflow-hidden">
-				<!-- Header -->
-				{% include "components/user_header.html" %}
+            .feedback-dialog {
+                animation: feedback-dialog-in 0.2s ease-out;
+                max-height: calc(100vh - 2rem);
+                width: 100%;
+                max-width: 28rem;
+            }
 
-				<!-- Main Content -->
-				<main class="h-full overflow-y-auto max-w-full pt-[6px]">
-					<div class="container full-container py-5 flex flex-col gap-6">
-                        <div class="flex gap-3">
-                            <div class="card w-[69%] overflow-hidden">
-                                <div class="card-body">
-                                    <h4 class="text-gray-600 text-lg tracking-wider font-semibold mb-6 uppercase">Feedbacks</h4>
-                                    <div class="relative overflow-x-auto">
-                                        <table id="user-feedback-table" class="text-left w-full whitespace-normal text-sm">
-                                            <thead class="text-gray-700">
-                                                <tr class="font-semibold text-gray-600">
-                                                    <th scope="col" class="p-4">S.N.</th>
-                                                    <th scope="col" class="p-4">Review</th>
-                                                    <th scope="col" class="p-4">Date</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {% for feedback in feedbacks %}
-                                                <tr>
-                                                    <td class="p-4 font-medium text-gray-500">{{ forloop.counter }}</td>
-                                                    <td class="p-4 break-words">
-                                                        <span class="font-medium text-gray-500">{{ feedback.review }}</span>
-                                                    </td>
-                                                    <td class="p-4">
-                                                        <span class="font-medium text-gray-500">{{ feedback.created_at }}</span>
-                                                    </td>
-                                                </tr>
-                                                {% empty %}
-                                                <tr>
-                                                    <td colspan="3" class="text-center py-10 text-slate-400">
-                                                        <i class="bx bx-message-square-detail text-3xl mb-2 block"></i>
-                                                        No feedbacks submitted yet
-                                                    </td>
-                                                </tr>
-                                                {% endfor %}
-                                            </tbody>                                            
-                                        </table>
-                            
+            @media (min-width: 640px) {
+                .feedback-dialog {
+                    max-height: calc(100vh - 3rem);
+                }
+            }
 
-                                    </div>
+            @keyframes feedback-dialog-in {
+                from {
+                    opacity: 0;
+                    transform: translateY(12px) scale(0.98);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <main>
+            <div id="main-wrapper" class="flex">
+                <!-- Sidebar -->
+                {% include "components/user_sidebar.html" %}
+
+                <div class="w-full page-wrapper overflow-hidden">
+                    <!-- Header -->
+                    {% include "components/user_header.html" %}
+
+                    <main class="h-full overflow-y-auto max-w-full">
+                        <div class="full-container xl:px-6 px-4">
+                            <!-- Page header -->
+                            <div class="studio-page-header">
+                                <div>
+                                    <h1 class="studio-page-title">Feedback</h1>
                                 </div>
+                                <span class="studio-badge studio-badge-slate"> {{ feedbacks|length }} entries </span>
                             </div>
-                        
-                            <!-- Form Card -->
-                            <div class="card w-[31%] max-h-[613px]">
-                                <div class="card-body">
-                                    <h4 class="text-gray-600 text-sm tracking-wider font-semibold mb-6">Feel free to provide us your feedback.</h4>
-                                    <form action="{% url 'send-feedback' %}" method="POST">
-                                        {% csrf_token %}
-                                        <div>
-                                            <div>
-                                                <label for="name" class="block mb-2 text-sm font-medium text-gray-700">Name <span class="text-red-600">*</span></label>
-                                                <div class="relative mb-6">
-                                                    <div class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
-                                                        <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                                            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
-                                                        </svg>                                                                               
-                                                    </div>
-                                                    <input type="text" value="{{ user.name }}" name="name" id="name" class="border border-gray-400 text-sm rounded-md block w-full p-2.5 py-[10px] bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" style="padding-left: 33px;" placeholder="John Doe" required>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <label for="email" class="block mb-2 text-sm font-medium text-gray-700">Email Address <span class="text-red-600">*</span></label>
-                                                <div class="relative mb-6">
-                                                    <div class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
-                                                        <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                                            <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
-                                                            <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
-                                                        </svg>                                 
-                                                    </div>
-                                                    <input type="email" value="{{ user.email }}" name="email" id="email" class="border border-gray-400 text-sm rounded-md block w-full p-2.5 py-[10px] bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" style="padding-left: 33px;" placeholder="john@example.com" required>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <label for="phone" class="block mb-2 text-sm font-medium text-gray-700">Phone</label>
-                                                <div class="relative mb-6">
-                                                    <div class="absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none">
-                                                        <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                                            <path fill-rule="evenodd" d="M1.5 4.5a3 3 0 0 1 3-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 0 1-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 0 0 6.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 0 1 1.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 0 1-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5Z" clip-rule="evenodd" />
-                                                        </svg>                                                                               
-                                                    </div>
-                                                    <input type="number" name="phone" id="phone" class="border border-gray-400 text-sm rounded-md block w-full p-2.5 py-[10px] bg-transparent text-gray-700 focus:border-gray-700 focus:ring-0 outline-none transition-all duration-700" style="padding-left: 33px;" placeholder="XXX XXX XXXX">
-                                                </div>
-                                            </div>
-                                            <div class="mb-6">
-                                                <label for="review" class="block mb-2 text-sm/6 font-medium text-gray-900">Review <span class="text-red-600">*</span></label>
-                                                <textarea name="review" id="review" rows="5" class="block w-full rounded-md bg-white px-3 py-1.5 text-sm text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 sm:text-sm/6"></textarea>
-                                            </div>
-                                        </div>
 
-                                        <div class="mb-4">
-                                            <button type="submit" class="tracking-wide py-2.5 px-4 bg-gray-500 text-white w-full transition ease-in duration-200 text-center text-sm font-medium shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg">
-                                                Send Feedback
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
+                            <!-- Table card -->
+                            <div class="studio-card">
+                                <table id="feedback-table" class="studio-table w-full">
+                                    <thead>
+                                        <tr>
+                                            <th class="py-3 px-4">S.N.</th>
+                                            <th class="py-3 px-4">Date</th>
+                                            <th class="py-3 px-4">Review</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for feedback in feedbacks %}
+                                        <tr>
+                                            <td class="py-3 px-4 text-slate-600 text-xs">{{ forloop.counter }}</td>
+                                            <td class="py-3 px-4 text-slate-600 text-sm">{{ feedback.created_at }}</td>
+                                            <td class="py-3 px-4 text-slate-600 text-sm">{{ feedback.review }}</td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="4" class="py-16 text-center">
+                                                <div class="flex flex-col items-center gap-2 text-slate-400">
+                                                    <i class="bx bx-message-square-x text-4xl"></i>
+                                                    <p class="text-sm font-medium">No feedback submitted yet</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-					</div>
-				</main>
-			</div>
-		</div>
-	</main>
-	
-	<script src="{% static 'libs/jquery/dist/jquery.min.js' %} "></script>
-	<script src="{% static 'libs/simplebar/dist/simplebar.min.js' %} "></script>
-	<script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %} "></script>
-	<script src="{% static 'libs/@preline/dropdown/index.js' %} "></script>
-	<script src="{% static 'libs/@preline/overlay/index.js' %} "></script>
-	<script src="{% static 'js/sidebarmenu.js' %} "></script>
-    <script src="{% static 'js/dashboard.js' %} "></script>
-    <script src="{% static 'js/shadcn-table.js' %}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            new ShadcnTable({
-                tableSelector: '#user-feedback-table',
-                pageSize: 10,
-                searchPlaceholder: 'Search feedbacks...'
+                    </main>
+
+                    <button
+                        id="feedback-dialog-open"
+                        type="button"
+                        class="fixed bottom-6 right-6 z-40 flex h-10 w-10 items-center justify-center rounded-xs bg-slate-800 text-white shadow-lg transition hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2"
+                        aria-label="Open feedback form"
+                        aria-controls="feedback-dialog"
+                        aria-expanded="false"
+                    >
+                        <i class="bx bx-comment-detail text-xl" aria-hidden="true"></i>
+                    </button>
+
+                    <div
+                        id="feedback-dialog"
+                        class="fixed inset-0 z-50 hidden items-end justify-end p-4 sm:p-6"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="feedback-dialog-title"
+                    >
+                        <div class="feedback-dialog-backdrop absolute inset-0" data-feedback-dialog-close></div>
+                        <div
+                            class="feedback-dialog relative max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto rounded-xs bg-white shadow-2xl sm:max-h-[calc(100vh-3rem)]"
+                        >
+                            <div class="flex items-center justify-between border-b border-slate-200 px-5 py-3">
+                                <h2 id="feedback-dialog-title" class="text-sm font-semibold text-slate-700">Share your feedback</h2>
+
+                                <button data-feedback-dialog-close type="button" class="studio-modal-close">
+                                    <i class="bx bx-x"></i>
+                                </button>
+                            </div>
+                            <div class="p-5">
+                                <form action="{% url 'send-feedback' %}" method="POST">
+                                    {% csrf_token %}
+                                    <div class="space-y-4">
+                                        <div>
+                                            <label for="name" class="studio-label studio-label-required">Name</label>
+                                            <input
+                                                type="text"
+                                                name="name"
+                                                id="name"
+                                                class="studio-input"
+                                                placeholder="John Doe"
+                                                value="{{ user.name }}"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label for="email" class="studio-label studio-label-required">Email</label>
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                id="email"
+                                                class="studio-input"
+                                                placeholder="john@example.com"
+                                                value="{{ user.email }}"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label for="review" class="studio-label">Review</label>
+                                            <textarea name="review" id="review" rows="5" class="studio-input"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-5">
+                                        <button type="submit" class="studio-btn studio-btn-primary w-full">Send Feedback</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <script src="{% static 'js/dashboard.js' %}"></script>
+        <script src="{% static 'js/sidebarmenu.js' %}"></script>
+        <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
+        <script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %}"></script>
+        <script src="{% static 'libs/@preline/dropdown/index.js' %}"></script>
+        <script src="{% static 'libs/@preline/overlay/index.js' %}"></script>
+        <script src="{% static 'js/shadcn-table.js' %}"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const dialog = document.getElementById("feedback-dialog");
+                const openButton = document.getElementById("feedback-dialog-open");
+                const closeButtons = document.querySelectorAll("[data-feedback-dialog-close]");
+
+                const setDialogOpen = (isOpen) => {
+                    dialog.classList.toggle("hidden", !isOpen);
+                    dialog.classList.toggle("flex", isOpen);
+                    openButton.setAttribute("aria-expanded", String(isOpen));
+                    document.body.classList.toggle("overflow-hidden", isOpen);
+
+                    if (isOpen) {
+                        const firstField = dialog.querySelector("input, textarea");
+                        if (firstField) {
+                            firstField.focus();
+                        }
+                    } else {
+                        openButton.focus();
+                    }
+                };
+
+                openButton.addEventListener("click", () => setDialogOpen(true));
+                closeButtons.forEach((button) => {
+                    button.addEventListener("click", () => setDialogOpen(false));
+                });
+                document.addEventListener("keydown", (event) => {
+                    if (event.key === "Escape" && !dialog.classList.contains("hidden")) {
+                        setDialogOpen(false);
+                    }
+                });
+
+                if (window.ShadcnTable) {
+                    new ShadcnTable({
+                        tableSelector: "#feedback-table",
+                        pageSize: 10,
+                        searchPlaceholder: "Search feedback by user, email or review...",
+                    });
+                }
             });
-        });
-    </script>
-</body>
+        </script>
+    </body>
 </html>

@@ -44,7 +44,7 @@
                     </div>
 
                     <!-- Stat cards -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                         <div class="studio-stat-card">
                             <div class="flex items-center justify-between mb-3">
                                 <div class="studio-stat-icon indigo"><i class="bx bx-group"></i></div>
@@ -63,16 +63,6 @@
                             <p class="text-2xl font-bold text-slate-900 tracking-tight" id="metricApproved">—</p>
                             <p class="text-sm text-slate-500 mt-1 font-medium">Approved Institutions</p>
                             <p class="text-xs text-slate-400 mt-1">Active in the platform catalog</p>
-                        </div>
-
-                        <div class="studio-stat-card">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="studio-stat-icon violet"><i class="bx bx-comment-check"></i></div>
-                                <span class="studio-badge studio-badge-indigo">Moderated</span>
-                            </div>
-                            <p class="text-2xl font-bold text-slate-900 tracking-tight" id="metricVisibleFeedback">—</p>
-                            <p class="text-sm text-slate-500 mt-1 font-medium">Visible Feedback</p>
-                            <p class="text-xs text-slate-400 mt-1">Reviews shown to the public</p>
                         </div>
                     </div>
 
@@ -102,18 +92,6 @@
                     </div>
 
                     <!-- Bottom row -->
-                    <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
-                        <div class="studio-chart-card">
-                            <div class="studio-chart-header">
-                                <div>
-                                    <h2 class="studio-card-title">Feedback Visibility</h2>
-                                    <p class="studio-card-subtitle">Shown vs hidden</p>
-                                </div>
-                                <span class="studio-chart-tag">Moderation</span>
-                            </div>
-                            <div id="feedbackChart" class="min-h-[260px]"></div>
-                        </div>
-
                         <div class="studio-chart-card xl:col-span-2">
                             <div class="studio-chart-header">
                                 <div>
@@ -124,8 +102,6 @@
                             </div>
                             <div id="topProvinceList" class="space-y-4 pt-2"></div>
                         </div>
-                    </div>
-
                 </div>
             </main>
         </div>
@@ -178,7 +154,7 @@
                     <div>
                         <div class="flex items-center justify-between text-sm mb-1.5">
                             <div class="flex items-center gap-2">
-                                <span class="w-5 h-5 rounded-md flex items-center justify-center text-xs font-bold text-white" style="background:${colors[idx]}">${idx+1}</span>
+                                <span class="w-5 h-5 rounded-xs flex items-center justify-center text-xs font-bold text-white" style="background:${colors[idx]}">${idx+1}</span>
                                 <span class="font-medium text-slate-700">${label}</span>
                             </div>
                             <span class="text-slate-500 text-xs font-medium">${numberFormat(val)} users · ${pct}%</span>

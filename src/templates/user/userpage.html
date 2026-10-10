@@ -1,8 +1,12 @@
 {% load static %}
 
-<meta charset="UTF-8">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hamrocollege</title>
+    <title>User Dashboard</title>
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
@@ -13,9 +17,9 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="{% static 'css/input.css' %}" rel="stylesheet">
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
-    <link href="{% static 'css/theme.css' %}" rel="stylesheet">
+    <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans">
+<body>
 	<main>
 		<div id="main-wrapper" class="flex">
 			<!-- Sidebar -->
@@ -30,8 +34,8 @@
 					<div class="container full-container py-5 flex flex-col gap-6">
                         <div class="mx-auto py-16">
                             <div class="mb-14 text-center">
-                                <h2 class="text-4xl text-center font-bold text-gray-900 dark:text-gray-500 leading-[3.25rem] mb-6 max-w-max lg:max-w-3xl lg:mx-auto">Welcome, <span class="text-transparent bg-clip-text bg-gradient-to-tr from-indigo-600 to-violet-600">{{ user.name }}.</span></h2>
-                                <p class="text-base font-normal text-gray-500 lg:max-w-2xl lg:mx-auto mb-8">We’re excited to help you explore your academic journey. Here, you’ll find all the tools you need to make informed decisions about your future.</p>  
+                                <h2 class="text-3xl text-center font-bold text-gray-900 dark:text-gray-500 leading-[3.25rem] mb-1 max-w-max lg:max-w-3xl lg:mx-auto">Welcome, <span class="text-transparent bg-clip-text bg-gradient-to-tr from-indigo-600 to-violet-600">{{ user.name }}.</span></h2>
+                                <p class="text-sm font-normal text-gray-500 lg:max-w-2xl lg:mx-auto mb-8">We’re excited to help you explore your academic journey. Here, you’ll find all the tools you need to make informed decisions about your future.</p>  
                             </div>
                             
                             <div class="grid grid-cols-4 gap-5 max-w-lg mx-auto md:max-w-2xl lg:max-w-full">
