@@ -1,77 +1,94 @@
 {% load static %}
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Request OTP</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}" />
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}" />
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}" />
+        <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet" />
+        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+        <link href="{% static 'css/input.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/output.css' %}" rel="stylesheet" />
+        <style>
+            /* Underline input focus effect */
+            .auth-input-wrap {
+                border-bottom: 1px solid rgba(15, 31, 41, 0.22);
+                transition: border-color 0.25s ease;
+            }
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Request OTP</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
-    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link href="{% static 'css/input.css' %}" rel="stylesheet">
-    <link href="{% static 'css/output.css' %}" rel="stylesheet">
-    <style>
-        /* Underline input focus effect */
-        .auth-input-wrap {
-            border-bottom: 1px solid rgba(15, 31, 41, 0.22);
-            transition: border-color 0.25s ease;
-        }
+            .auth-input-wrap:focus-within {
+                border-bottom-color: #5c0017;
+            }
+        </style>
+    </head>
 
-        .auth-input-wrap:focus-within {
-            border-bottom-color: #5c0017;
-        }
-    </style>
-</head>
+    <body>
+        <div class="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
+            <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-xs shadow-lg">
+                <div class="flex flex-col overflow-y-auto md:flex-row">
+                    <div class="h-32 md:h-auto md:w-1/2">
+                        <img src="{% static 'images/profile/change-password.png' %}" alt="Change Password" />
+                    </div>
 
-<body>
-    <div class="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
-        <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-xs shadow-lg">
-            <div class="flex flex-col overflow-y-auto md:flex-row">
-                <div class="h-32 md:h-auto md:w-1/2">
-                    <img src="{% static 'images/profile/change-password.png' %}" alt="Change Password">
-                </div>
-        
-                <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
-                    <div class="w-full">
-                        <form id="requestOtpForm" action="{% url 'request-otp' %}" method="POST">
-                            {% csrf_token %}
-                            <div class="relative auth-input-wrap mb-6">
-                                <label for="email" class="block mb-1.5 text-[0.82rem] font-semibold tracking-[0.03em] uppercase text-[#27404d]">
-                                    Email Address
-                                </label>
-                                <input type="email" name="email" id="email" class="w-full border-none bg-transparent text-[#0f1f29] text-sm outline-none p-3 placeholder-[#83969e]" placeholder="john@example.com" required>
-                            </div>
-                            
-                            <button type="submit" class="w-full text-center uppercase text-[#f7fffb] font-semibold text-[0.95rem] py-3 px-4 bg-[#ba964c] cursor-pointer">
-                                Request OTP
-                            </button>
-                        </form>
+                    <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
+                        <div class="w-full">
+                            <form id="requestOtpForm" action="{% url 'request-otp' %}" method="POST">
+                                {% csrf_token %}
+                                <div class="relative auth-input-wrap mb-6">
+                                    <label for="email" class="block mb-1.5 text-[0.82rem] font-semibold tracking-[0.03em] uppercase text-[#27404d]">
+                                        Email Address
+                                    </label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        id="email"
+                                        class="w-full border-none bg-transparent text-[#0f1f29] text-sm outline-none p-3 placeholder-[#83969e]"
+                                        placeholder="john@example.com"
+                                        required
+                                    />
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    class="w-full text-center uppercase text-[#f7fffb] font-semibold text-[0.95rem] py-3 px-4 bg-[#ba964c] cursor-pointer"
+                                >
+                                    Request OTP
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="toast-container" class="fixed top-5 right-5 z-50">
-        {% if error %}
-        <div id="toast" class="flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:bg-gray-800 dark:text-gray-400" role="alert">
-            <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 00-2 0v3a1 1 0 002 0V7zm0 6a1 1 0 10-2 0 1 1 0 002 0z" clip-rule="evenodd"></path>
-                </svg>
+        <div id="toast-container" class="fixed top-5 right-5 z-50">
+            {% if error %}
+            <div
+                id="toast"
+                class="flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:bg-gray-800 dark:text-gray-400"
+                role="alert"
+            >
+                <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 00-2 0v3a1 1 0 002 0V7zm0 6a1 1 0 10-2 0 1 1 0 002 0z"
+                            clip-rule="evenodd"
+                        ></path>
+                    </svg>
+                </div>
+                <div class="ml-3 text-xs font-normal">{{ error }}</div>
             </div>
-            <div class="ml-3 text-xs font-normal">{{ error }}</div>
+            {% endif %}
         </div>
-        {% endif %}
-    </div>
 
-    <script src="{% static 'js/script.js' %}"></script>
-</body>
+        <script src="{% static 'js/script.js' %}"></script>
+    </body>
 </html>

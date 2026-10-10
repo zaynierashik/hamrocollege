@@ -1,277 +1,309 @@
-    {% load static %}
+{% load static %}
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Courses</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}" />
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}" />
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}" />
+        <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet" />
+        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+        <link href="{% static 'css/input.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/output.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet" />
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courses</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
-    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link href="{% static 'css/input.css' %}" rel="stylesheet">
-    <link href="{% static 'css/output.css' %}" rel="stylesheet">
-    <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
-</head>
+    <body class="bg-slate-50 text-slate-900">
+        <main class="studio-main">
+            <div id="main-wrapper" class="flex">
+                {% include "components/admin_sidebar.html" %}
 
-<body class="bg-slate-50 text-slate-900">
-<main class="studio-main">
-    <div id="main-wrapper" class="flex">
-        {% include "components/admin_sidebar.html" %}
+                <div class="w-full page-wrapper overflow-hidden xl:pl-[252px]">
+                    {% include "components/admin_header.html" %}
 
-        <div class="w-full page-wrapper overflow-hidden xl:pl-[252px]">
-            {% include "components/admin_header.html" %}
-
-            <main class="h-full overflow-y-auto max-w-full" id="course-table">
-                <div class="full-container xl:px-6 px-4" x-data="{ openModal: null }">
-
-                    <!-- Page header -->
-                    <div class="studio-page-header">
-                        <div>
-                            <h1 class="studio-page-title">Courses</h1>
-                        </div>
-                        <button @click="openModal = 'add-course'"
-                            class="studio-btn studio-btn-primary" type="button">
-                            Add Course
-                        </button>
-                    </div>
-
-                    <!-- Table card -->
-                    <div class="studio-card">
-                        <table id="courses-table" class="studio-table w-full">
-                            <thead>
-                                <tr>
-                                    <th class="py-3 px-4">S.N.</th>
-                                    <th class="py-3 px-4">Course Name</th>
-                                    <th class="py-3 px-4">Affiliation</th>
-                                    <th class="py-3 px-4">Abbrev.</th>
-                                    <th class="py-3 px-4"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for course in courses %}
-                                <tr>
-                                    <td class="py-3 px-4 text-slate-600 text-xs font-medium">{{ forloop.counter }}</td>
-                                    <td class="py-3 px-4 font-medium text-slate-600">{{ course.name }}</td>
-                                    <td class="py-3 px-4 text-slate-600">
-                                            {% if course.affiliation == 'foreign' %}
-                                                {{ course.Foreign_University_Name }}
-                                            {% else %}
-                                                {{ course.get_affiliation_display }}
-                                            {% endif %}
-                                    </td>
-                                    <td class="py-3 px-4 text-slate-600">
-                                        {% if course.abbreviation %}
-                                            {{ course.abbreviation }}
-                                        {% else %}
-                                            -
-                                        {% endif %}
-                                    </td>
-                                    <td class="py-3 px-4">
-                                        <div class="flex gap-1">
-                                            <a href="{% url 'edit-course' course.id %}"
-                                            class="studio-icon-btn w-8 h-8 rounded-lg text-sm"
-                                            title="Edit course">
-                                            <i class="bx bx-edit-alt"></i>
-                                        </a>
-                                        <a href="{% url 'course-details' course.id %}" target="_blank"
-                                            class="studio-icon-btn w-8 h-8 rounded-lg text-sm"
-                                            title="View course">
-                                            <i class="bx bx-link-external"></i>
-                                        </a>
-                                        </div>
-                                        
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="6" class="py-16 text-center">
-                                        <div class="flex flex-col items-center gap-2 text-slate-400">
-                                            <i class="bx bx-book-open text-4xl"></i>
-                                            <p class="text-sm font-medium">No courses cataloged yet</p>
-                                            <button @click="openModal = 'add-course'" class="studio-btn studio-btn-primary studio-btn-sm mt-2" type="button">
-                                                <i class="bx bx-plus text-lg"></i> Add Course
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- New Course Modal -->
-                    <div x-show="openModal === 'add-course'" class="studio-modal-backdrop" style="display:none;">
-                        <div class="studio-modal max-w-3xl w-full" @click.outside="openModal = null">
-                            <div class="studio-modal-header">
+                    <main class="h-full overflow-y-auto max-w-full" id="course-table">
+                        <div class="full-container xl:px-6 px-4" x-data="{ openModal: null }">
+                            <!-- Page header -->
+                            <div class="studio-page-header">
                                 <div>
-                                    <h2 class="studio-modal-title">Add New Course</h2>
+                                    <h1 class="studio-page-title">Courses</h1>
                                 </div>
-                                <button @click="openModal = null" type="button" class="studio-modal-close">
-                                    <i class="bx bx-x"></i>
-                                </button>
+                                <button @click="openModal = 'add-course'" class="studio-btn studio-btn-primary" type="button">Add Course</button>
                             </div>
 
-                            <form action="{% url 'add-course' %}" method="POST" x-data="{ currentStep: 1 }">
-                                {% csrf_token %}
+                            <!-- Table card -->
+                            <div class="studio-card">
+                                <table id="courses-table" class="studio-table w-full">
+                                    <thead>
+                                        <tr>
+                                            <th class="py-3 px-4">S.N.</th>
+                                            <th class="py-3 px-4">Course Name</th>
+                                            <th class="py-3 px-4">Affiliation</th>
+                                            <th class="py-3 px-4">Abbrev.</th>
+                                            <th class="py-3 px-4"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for course in courses %}
+                                        <tr>
+                                            <td class="py-3 px-4 text-slate-600 text-xs font-medium">{{ forloop.counter }}</td>
+                                            <td class="py-3 px-4 font-medium text-slate-600">{{ course.name }}</td>
+                                            <td class="py-3 px-4 text-slate-600">
+                                                {% if course.affiliation == 'foreign' %} {{ course.Foreign_University_Name }} {% else %} {{
+                                                course.get_affiliation_display }} {% endif %}
+                                            </td>
+                                            <td class="py-3 px-4 text-slate-600">
+                                                {% if course.abbreviation %} {{ course.abbreviation }} {% else %} - {% endif %}
+                                            </td>
+                                            <td class="py-3 px-4">
+                                                <div class="flex gap-1">
+                                                    <a
+                                                        href="{% url 'edit-course' course.id %}"
+                                                        class="studio-icon-btn w-8 h-8 rounded-lg text-sm"
+                                                        title="Edit course"
+                                                    >
+                                                        <i class="bx bx-edit-alt"></i>
+                                                    </a>
+                                                    <a
+                                                        href="{% url 'course-details' course.id %}"
+                                                        target="_blank"
+                                                        class="studio-icon-btn w-8 h-8 rounded-lg text-sm"
+                                                        title="View course"
+                                                    >
+                                                        <i class="bx bx-link-external"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="6" class="py-16 text-center">
+                                                <div class="flex flex-col items-center gap-2 text-slate-400">
+                                                    <i class="bx bx-book-open text-4xl"></i>
+                                                    <p class="text-sm font-medium">No courses cataloged yet</p>
+                                                    <button
+                                                        @click="openModal = 'add-course'"
+                                                        class="studio-btn studio-btn-primary studio-btn-sm mt-2"
+                                                        type="button"
+                                                    >
+                                                        <i class="bx bx-plus text-lg"></i> Add Course
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
 
-                                <div class="studio-modal-body">
-
-                                    <!-- Step 1 -->
-                                    <div x-show="currentStep === 1"
-                                        x-transition:enter="transition ease-out duration-200"
-                                        x-transition:enter-start="opacity-0 translate-x-3"
-                                        x-transition:enter-end="opacity-100 translate-x-0"
-                                        x-transition:leave="transition ease-in duration-150"
-                                        x-transition:leave-start="opacity-100 translate-x-0"
-                                        x-transition:leave-end="opacity-0 -translate-x-3"
-                                        class="space-y-4">
-
-                                        <div class="grid grid-cols-4 gap-4">
-                                            <div class="col-span-3">
-                                                <label for="modal-name" class="studio-label studio-label-required">Course Name</label>
-                                                <input type="text" name="name" id="modal-name" class="studio-input" placeholder="Bachelor of Computer Application" required>
-                                            </div>
-                                            <div>
-                                                <label for="modal-abbreviation" class="studio-label">Abbreviation</label>
-                                                <input type="text" name="abbreviation" id="modal-abbreviation" class="studio-input" placeholder="BCA">
-                                            </div>
-                                        </div>
-
-                                        <div class="grid grid-cols-4 gap-4">
-                                            <div class="col-span-1">
-                                                <label for="modal-level" class="studio-label studio-label-required">Level</label>
-                                                <select id="modal-level" name="level" class="studio-select" required>
-                                                    <option value="">Choose level</option>
-                                                    {% for level in levels %}
-                                                        <option value="{{ level.0 }}">{{ level.1 }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-
-                                            <div class="col-span-1">
-                                                <label for="modal-year" class="studio-label studio-label-required">Duration (Years)</label>
-                                                <input
-                                                    type="number"
-                                                    name="year"
-                                                    id="modal-year"
-                                                    class="studio-input"
-                                                    placeholder="4"
-                                                    min="1"
-                                                    max="10"
-                                                    required
-                                                >
-                                            </div>
-
-                                            <div class="col-span-2">
-                                                <label for="modal-field" class="studio-label studio-label-required">Field</label>
-                                                <select id="modal-field" name="field" class="studio-select" required>
-                                                    <option value="">Choose field</option>
-                                                    {% for field in fields %}
-                                                        <option value="{{ field.0 }}">{{ field.1 }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-
+                            <!-- New Course Modal -->
+                            <div x-show="openModal === 'add-course'" class="studio-modal-backdrop" style="display: none">
+                                <div class="studio-modal max-w-3xl w-full" @click.outside="openModal = null">
+                                    <div class="studio-modal-header">
                                         <div>
-                                            <label for="modal-affiliation" class="studio-label studio-label-required">Affiliation</label>
-                                            <select id="modal-affiliation" name="affiliation" class="studio-select" onchange="toggleModalForeignUniversityField()" required>
-                                                <option value="">Choose affiliation</option>
-                                                {% for affiliation in affiliation_choices %}
-                                                    <option value="{{ affiliation.0 }}">{{ affiliation.1 }}</option>
-                                                {% endfor %}
-                                            </select>
+                                            <h2 class="studio-modal-title">Add New Course</h2>
                                         </div>
-
-                                        <div class="hidden" id="modal-foreign-university-field">
-                                            <label for="modal-foreign_university_name" class="studio-label">Foreign University Name</label>
-                                            <input type="text" name="foreign_university_name" id="modal-foreign_university_name" class="studio-input" placeholder="University of Oxford">
-                                        </div>
-                                    </div>
-
-                                    <!-- Step 2 -->
-                                    <div x-show="currentStep === 2"
-                                        x-transition:enter="transition ease-out duration-200"
-                                        x-transition:enter-start="opacity-0 translate-x-3"
-                                        x-transition:enter-end="opacity-100 translate-x-0"
-                                        x-transition:leave="transition ease-in duration-150"
-                                        x-transition:leave-start="opacity-100 translate-x-0"
-                                        x-transition:leave-end="opacity-0 -translate-x-3"
-                                        class="space-y-4">
-
-                                        <div>
-                                            <label for="modal-about" class="studio-label studio-label-required">About</label>
-                                            <textarea name="about" id="modal-about" rows="4" class="studio-textarea" placeholder="Brief description of this course..." required></textarea>
-                                        </div>
-                                        <div>
-                                            <label for="modal-eligibility" class="studio-label">Eligibility Requirements</label>
-                                            <textarea name="eligibility" id="modal-eligibility" rows="3" class="studio-textarea" placeholder="Who can apply for this course..."></textarea>
-                                        </div>
-                                        <div>
-                                            <label for="modal-prospect_career" class="studio-label">Career Prospects</label>
-                                            <textarea name="prospect_career" id="modal-prospect_career" rows="3" class="studio-textarea" placeholder="Career opportunities after completing this course..."></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="studio-modal-footer">
-                                    <button x-show="currentStep === 2" @click="currentStep = 1" type="button" class="studio-btn studio-btn-ghost">
-                                        Back
-                                    </button>
-                                    <div class="flex items-center gap-2">
-                                        <button @click="openModal = null" type="button" class="studio-btn studio-btn-ghost">Cancel</button>
-                                        <button x-show="currentStep === 1" @click="currentStep = 2" type="button" class="studio-btn studio-btn-primary">
-                                            Next
-                                        </button>
-                                        <button x-show="currentStep === 2" type="submit" class="studio-btn studio-btn-primary">
-                                            Create
+                                        <button @click="openModal = null" type="button" class="studio-modal-close">
+                                            <i class="bx bx-x"></i>
                                         </button>
                                     </div>
+
+                                    <form action="{% url 'add-course' %}" method="POST" x-data="{ currentStep: 1 }">
+                                        {% csrf_token %}
+
+                                        <div class="studio-modal-body">
+                                            <!-- Step 1 -->
+                                            <div
+                                                x-show="currentStep === 1"
+                                                x-transition:enter="transition ease-out duration-200"
+                                                x-transition:enter-start="opacity-0 translate-x-3"
+                                                x-transition:enter-end="opacity-100 translate-x-0"
+                                                x-transition:leave="transition ease-in duration-150"
+                                                x-transition:leave-start="opacity-100 translate-x-0"
+                                                x-transition:leave-end="opacity-0 -translate-x-3"
+                                                class="space-y-4"
+                                            >
+                                                <div class="grid grid-cols-4 gap-4">
+                                                    <div class="col-span-3">
+                                                        <label for="modal-name" class="studio-label studio-label-required">Course Name</label>
+                                                        <input
+                                                            type="text"
+                                                            name="name"
+                                                            id="modal-name"
+                                                            class="studio-input"
+                                                            placeholder="Bachelor of Computer Application"
+                                                            required
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label for="modal-abbreviation" class="studio-label">Abbreviation</label>
+                                                        <input type="text" name="abbreviation" id="modal-abbreviation" class="studio-input" placeholder="BCA" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="grid grid-cols-4 gap-4">
+                                                    <div class="col-span-1">
+                                                        <label for="modal-level" class="studio-label studio-label-required">Level</label>
+                                                        <select id="modal-level" name="level" class="studio-select" required>
+                                                            <option value="">Choose level</option>
+                                                            {% for level in levels %}
+                                                            <option value="{{ level.0 }}">{{ level.1 }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-span-1">
+                                                        <label for="modal-year" class="studio-label studio-label-required">Duration (Years)</label>
+                                                        <input
+                                                            type="number"
+                                                            name="year"
+                                                            id="modal-year"
+                                                            class="studio-input"
+                                                            placeholder="4"
+                                                            min="1"
+                                                            max="10"
+                                                            required
+                                                        />
+                                                    </div>
+
+                                                    <div class="col-span-2">
+                                                        <label for="modal-field" class="studio-label studio-label-required">Field</label>
+                                                        <select id="modal-field" name="field" class="studio-select" required>
+                                                            <option value="">Choose field</option>
+                                                            {% for field in fields %}
+                                                            <option value="{{ field.0 }}">{{ field.1 }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <label for="modal-affiliation" class="studio-label studio-label-required">Affiliation</label>
+                                                    <select
+                                                        id="modal-affiliation"
+                                                        name="affiliation"
+                                                        class="studio-select"
+                                                        onchange="toggleModalForeignUniversityField()"
+                                                        required
+                                                    >
+                                                        <option value="">Choose affiliation</option>
+                                                        {% for affiliation in affiliation_choices %}
+                                                        <option value="{{ affiliation.0 }}">{{ affiliation.1 }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+
+                                                <div class="hidden" id="modal-foreign-university-field">
+                                                    <label for="modal-foreign_university_name" class="studio-label">Foreign University Name</label>
+                                                    <input
+                                                        type="text"
+                                                        name="foreign_university_name"
+                                                        id="modal-foreign_university_name"
+                                                        class="studio-input"
+                                                        placeholder="University of Oxford"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <!-- Step 2 -->
+                                            <div
+                                                x-show="currentStep === 2"
+                                                x-transition:enter="transition ease-out duration-200"
+                                                x-transition:enter-start="opacity-0 translate-x-3"
+                                                x-transition:enter-end="opacity-100 translate-x-0"
+                                                x-transition:leave="transition ease-in duration-150"
+                                                x-transition:leave-start="opacity-100 translate-x-0"
+                                                x-transition:leave-end="opacity-0 -translate-x-3"
+                                                class="space-y-4"
+                                            >
+                                                <div>
+                                                    <label for="modal-about" class="studio-label studio-label-required">About</label>
+                                                    <textarea
+                                                        name="about"
+                                                        id="modal-about"
+                                                        rows="4"
+                                                        class="studio-textarea"
+                                                        placeholder="Brief description of this course..."
+                                                        required
+                                                    ></textarea>
+                                                </div>
+                                                <div>
+                                                    <label for="modal-eligibility" class="studio-label">Eligibility Requirements</label>
+                                                    <textarea
+                                                        name="eligibility"
+                                                        id="modal-eligibility"
+                                                        rows="3"
+                                                        class="studio-textarea"
+                                                        placeholder="Who can apply for this course..."
+                                                    ></textarea>
+                                                </div>
+                                                <div>
+                                                    <label for="modal-prospect_career" class="studio-label">Career Prospects</label>
+                                                    <textarea
+                                                        name="prospect_career"
+                                                        id="modal-prospect_career"
+                                                        rows="3"
+                                                        class="studio-textarea"
+                                                        placeholder="Career opportunities after completing this course..."
+                                                    ></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="studio-modal-footer">
+                                            <button x-show="currentStep === 2" @click="currentStep = 1" type="button" class="studio-btn studio-btn-ghost">
+                                                Back
+                                            </button>
+                                            <div class="flex items-center gap-2">
+                                                <button @click="openModal = null" type="button" class="studio-btn studio-btn-ghost">Cancel</button>
+                                                <button x-show="currentStep === 1" @click="currentStep = 2" type="button" class="studio-btn studio-btn-primary">
+                                                    Next
+                                                </button>
+                                                <button x-show="currentStep === 2" type="submit" class="studio-btn studio-btn-primary">Create</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                            </form>
+                            </div>
                         </div>
-                    </div>
-
+                    </main>
                 </div>
-            </main>
-        </div>
-    </div>
-</main>
+            </div>
+        </main>
 
-<script>
-    function toggleModalForeignUniversityField() {
-        const affiliationSelect = document.getElementById('modal-affiliation');
-        const foreignUniversityField = document.getElementById('modal-foreign-university-field');
-        if (affiliationSelect && foreignUniversityField) {
-            foreignUniversityField.classList.toggle('hidden', affiliationSelect.value !== 'foreign');
-        }
-    }
-</script>
+        <script>
+            function toggleModalForeignUniversityField() {
+                const affiliationSelect = document.getElementById("modal-affiliation");
+                const foreignUniversityField = document.getElementById("modal-foreign-university-field");
+                if (affiliationSelect && foreignUniversityField) {
+                    foreignUniversityField.classList.toggle("hidden", affiliationSelect.value !== "foreign");
+                }
+            }
+        </script>
 
-<script src="//unpkg.com/alpinejs" defer></script>
-<script src="{% static 'js/dashboard.js' %}"></script>
-<script src="{% static 'js/sidebarmenu.js' %}"></script>
-<script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
-<script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
-<script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %}"></script>
-<script src="{% static 'libs/@preline/dropdown/index.js' %}"></script>
-<script src="{% static 'libs/@preline/overlay/index.js' %}"></script>
-<script src="{% static 'js/shadcn-table.js' %}"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        new ShadcnTable({
-            tableSelector: '#courses-table',
-            pageSize: 10,
-            searchPlaceholder: 'Search courses by name or affiliation...'
-        });
-    });
-</script>
-</body>
+        <script src="//unpkg.com/alpinejs" defer></script>
+        <script src="{% static 'js/dashboard.js' %}"></script>
+        <script src="{% static 'js/sidebarmenu.js' %}"></script>
+        <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
+        <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
+        <script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %}"></script>
+        <script src="{% static 'libs/@preline/dropdown/index.js' %}"></script>
+        <script src="{% static 'libs/@preline/overlay/index.js' %}"></script>
+        <script src="{% static 'js/shadcn-table.js' %}"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                new ShadcnTable({
+                    tableSelector: "#courses-table",
+                    pageSize: 10,
+                    searchPlaceholder: "Search courses by name or affiliation...",
+                });
+            });
+        </script>
+    </body>
 </html>

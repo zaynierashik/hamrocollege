@@ -1,154 +1,155 @@
 {% load static %}
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Institution Dashboard</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
-    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link href="{% static 'css/input.css' %}" rel="stylesheet">
-    <link href="{% static 'css/output.css' %}" rel="stylesheet">
-    <link href="{% static 'css/theme.css' %}" rel="stylesheet">
-    <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-</head>
-<body class="bg-slate-50 text-slate-900 font-sans">
-    <main class="studio-main">
-        <div id="main-wrapper" class="flex">
-            {% include "components/institution_sidebar.html" %}
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Institution Dashboard</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}" />
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}" />
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}" />
+        <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet" />
+        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+        <link href="{% static 'css/input.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/output.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/theme.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    </head>
+    <body class="bg-slate-50 text-slate-900 font-sans">
+        <main class="studio-main">
+            <div id="main-wrapper" class="flex">
+                {% include "components/institution_sidebar.html" %}
 
-            <div class="w-full page-wrapper overflow-hidden xl:pl-[250px]">
-                {% include "components/institution_header.html" %}
+                <div class="w-full page-wrapper overflow-hidden xl:pl-[250px]">
+                    {% include "components/institution_header.html" %}
 
-                <main class="h-full overflow-y-auto max-w-full pb-6">
-                    <div class="container full-container xl:px-5 px-4">
-                        <section class="space-y-6">
-                            <header>
-                                <h1 class="text-2xl font-bold text-slate-900">Good morning, {{ institution.admin|default:'Institution Admin' }}</h1>
-                                <p class="text-sm text-slate-500 mt-1">Here is what is happening with your institution today.</p>
-                            </header>
+                    <main class="h-full overflow-y-auto max-w-full pb-6">
+                        <div class="container full-container xl:px-5 px-4">
+                            <section class="space-y-6">
+                                <header>
+                                    <h1 class="text-2xl font-bold text-slate-900">Good morning, {{ institution.admin|default:'Institution Admin' }}</h1>
+                                    <p class="text-sm text-slate-500 mt-1">Here is what is happening with your institution today.</p>
+                                </header>
 
-                            <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-                                    <div class="flex items-center gap-3 mb-3">
-                                        <span class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
-                                            <i class="bx bx-group text-xl"></i>
-                                        </span>
-                                        <h4 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Total Students</h4>
+                                <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <span class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
+                                                <i class="bx bx-group text-xl"></i>
+                                            </span>
+                                            <h4 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Total Students</h4>
+                                        </div>
+                                        <p id="metricStudents" class="text-3xl font-bold text-slate-900">{{ total_students|default:0 }}</p>
+                                        <span class="text-xs text-slate-400 mt-1 block">Current enrollment summary</span>
                                     </div>
-                                    <p id="metricStudents" class="text-3xl font-bold text-slate-900">{{ total_students|default:0 }}</p>
-                                    <span class="text-xs text-slate-400 mt-1 block">Current enrollment summary</span>
-                                </div>
-                                <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-                                    <div class="flex items-center gap-3 mb-3">
-                                        <span class="w-9 h-9 rounded-lg bg-violet-50 flex items-center justify-center text-violet-600">
-                                            <i class="bx bx-book-open text-xl"></i>
-                                        </span>
-                                        <h4 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Active Courses</h4>
+                                    <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <span class="w-9 h-9 rounded-lg bg-violet-50 flex items-center justify-center text-violet-600">
+                                                <i class="bx bx-book-open text-xl"></i>
+                                            </span>
+                                            <h4 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Active Courses</h4>
+                                        </div>
+                                        <p id="metricCourses" class="text-3xl font-bold text-slate-900">{{ total_courses|default:0 }}</p>
+                                        <span class="text-xs text-slate-400 mt-1 block">Program offerings overview</span>
                                     </div>
-                                    <p id="metricCourses" class="text-3xl font-bold text-slate-900">{{ total_courses|default:0 }}</p>
-                                    <span class="text-xs text-slate-400 mt-1 block">Program offerings overview</span>
-                                </div>
-                                <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-                                    <div class="flex items-center gap-3 mb-3">
-                                        <span class="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600">
-                                            <i class="bx bx-time-five text-xl"></i>
-                                        </span>
-                                        <h4 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Pending Admissions</h4>
+                                    <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <span class="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600">
+                                                <i class="bx bx-time-five text-xl"></i>
+                                            </span>
+                                            <h4 class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Pending Admissions</h4>
+                                        </div>
+                                        <p id="metricAdmissions" class="text-3xl font-bold text-slate-900">{{ pending_admissions|default:0 }}</p>
+                                        <span class="text-xs text-slate-400 mt-1 block">Application pipeline status</span>
                                     </div>
-                                    <p id="metricAdmissions" class="text-3xl font-bold text-slate-900">{{ pending_admissions|default:0 }}</p>
-                                    <span class="text-xs text-slate-400 mt-1 block">Application pipeline status</span>
-                                </div>
+                                </section>
+
+                                <section class="grid grid-cols-1 gap-4">
+                                    <article class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                                        <div class="flex items-center justify-between mb-4">
+                                            <h2 class="text-base font-semibold text-slate-900">Admissions Trend</h2>
+                                            <span class="text-xs font-medium bg-slate-100 text-slate-600 rounded-full px-2.5 py-1">Monthly</span>
+                                        </div>
+                                        <div id="admissionsChart" class="min-h-[380px]"></div>
+                                    </article>
+                                </section>
                             </section>
-
-                            <section class="grid grid-cols-1 gap-4">
-                                <article class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-                                    <div class="flex items-center justify-between mb-4">
-                                        <h2 class="text-base font-semibold text-slate-900">Admissions Trend</h2>
-                                        <span class="text-xs font-medium bg-slate-100 text-slate-600 rounded-full px-2.5 py-1">Monthly</span>
-                                    </div>
-                                    <div id="admissionsChart" class="min-h-[380px]"></div>
-                                </article>
-                            </section>
-                        </section>
-                    </div>
-                </main>
+                        </div>
+                    </main>
+                </div>
             </div>
-        </div>
-    </main>
+        </main>
 
-    <script src="{% static 'js/dashboard.js' %}"></script>
-    <script src="{% static 'js/sidebarmenu.js' %}"></script>
-    <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
-    <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
-    <script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %}"></script>
-    <script src="{% static 'libs/@preline/dropdown/index.js' %}"></script>
-    <script src="{% static 'libs/@preline/overlay/index.js' %}"></script>
-    
-    {{ admissions_data|json_script:"admissionsData" }}
-    {{ month_labels|json_script:"monthLabels" }}
-    
-    <script>
-        // Initialize Admissions Chart
-        const admissionsData = JSON.parse(document.getElementById('admissionsData').textContent);
-        const monthLabels = JSON.parse(document.getElementById('monthLabels').textContent);
-        
-        const admissionsOptions = {
-            series: [{
-                name: 'Admissions',
-                data: admissionsData
-            }],
-            chart: {
-                type: 'area',
-                height: 380,
-                toolbar: { show: false }
-            },
-            colors: ['#667eea'],
-            stroke: { curve: 'smooth', width: 2 },
-            fill: {
-                type: 'gradient',
-                gradient: {
-                    shadeIntensity: 1,
-                    opacityFrom: 0.7,
-                    opacityTo: 0.1
-                }
-            },
-            xaxis: {
-                categories: monthLabels
-            },
-            tooltip: {
-                theme: 'light'
-            }
-        };
+        <script src="{% static 'js/dashboard.js' %}"></script>
+        <script src="{% static 'js/sidebarmenu.js' %}"></script>
+        <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
+        <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
+        <script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %}"></script>
+        <script src="{% static 'libs/@preline/dropdown/index.js' %}"></script>
+        <script src="{% static 'libs/@preline/overlay/index.js' %}"></script>
 
-        const admissionsChart = new ApexCharts(document.querySelector("#admissionsChart"), admissionsOptions);
-        admissionsChart.render();
+        {{ admissions_data|json_script:"admissionsData" }} {{ month_labels|json_script:"monthLabels" }}
 
-        // Animate KPI values on load
-        document.addEventListener('DOMContentLoaded', function() {
-            const kpiValues = document.querySelectorAll('.studio-kpi p');
-            kpiValues.forEach(element => {
-                const finalValue = parseInt(element.textContent);
-                let currentValue = 0;
-                const increment = finalValue / 50;
-                const timer = setInterval(() => {
-                    currentValue += increment;
-                    if (currentValue >= finalValue) {
-                        currentValue = finalValue;
-                        clearInterval(timer);
-                    }
-                    element.textContent = Math.floor(currentValue);
-                }, 20);
+        <script>
+            // Initialize Admissions Chart
+            const admissionsData = JSON.parse(document.getElementById("admissionsData").textContent);
+            const monthLabels = JSON.parse(document.getElementById("monthLabels").textContent);
+
+            const admissionsOptions = {
+                series: [
+                    {
+                        name: "Admissions",
+                        data: admissionsData,
+                    },
+                ],
+                chart: {
+                    type: "area",
+                    height: 380,
+                    toolbar: { show: false },
+                },
+                colors: ["#667eea"],
+                stroke: { curve: "smooth", width: 2 },
+                fill: {
+                    type: "gradient",
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.7,
+                        opacityTo: 0.1,
+                    },
+                },
+                xaxis: {
+                    categories: monthLabels,
+                },
+                tooltip: {
+                    theme: "light",
+                },
+            };
+
+            const admissionsChart = new ApexCharts(document.querySelector("#admissionsChart"), admissionsOptions);
+            admissionsChart.render();
+
+            // Animate KPI values on load
+            document.addEventListener("DOMContentLoaded", function () {
+                const kpiValues = document.querySelectorAll(".studio-kpi p");
+                kpiValues.forEach((element) => {
+                    const finalValue = parseInt(element.textContent);
+                    let currentValue = 0;
+                    const increment = finalValue / 50;
+                    const timer = setInterval(() => {
+                        currentValue += increment;
+                        if (currentValue >= finalValue) {
+                            currentValue = finalValue;
+                            clearInterval(timer);
+                        }
+                        element.textContent = Math.floor(currentValue);
+                    }, 20);
+                });
             });
-        });
-    </script>
-</body>
+        </script>
+    </body>
 </html>

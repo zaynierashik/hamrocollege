@@ -1,626 +1,782 @@
 {% load static %}
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Institution Profile</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
-    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
-                    <link href="{% static 'css/input.css' %}" rel="stylesheet">
-    <link href="{% static 'css/output.css' %}" rel="stylesheet">
-    <link href="{% static 'css/theme.css' %}" rel="stylesheet">
-    <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
-    <style>
-        .step-content {
-            display: none;
-        }
-        
-        .step-content.active {
-            display: block;
-        }
-        
-        .step-navigation {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #e5e7eb;
-        }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Institution Profile</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}" />
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}" />
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}" />
+        <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}" />
+        <link href="{% static 'css/input.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/output.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/theme.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet" />
+        <style>
+            .step-content {
+                display: none;
+            }
 
-        .profile-form-wrap {
-            margin-top: 0.5rem;
-            padding-top: 0.5rem;
-        }
+            .step-content.active {
+                display: block;
+            }
 
-        .step-breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1.25rem;
-            padding: 0.25rem 0 1rem;
-            border-bottom: 1px solid #e5e7eb;
-            flex-wrap: wrap;
-        }
-
-        .step-breadcrumb-item {
-            font-size: 14px;
-            font-weight: 500;
-            color: #6b7280;
-            border: none;
-            background: transparent;
-            padding: 0;
-            cursor: pointer;
-            transition: color 0.2s ease;
-        }
-
-        .step-breadcrumb-item:hover {
-            color: #374151;
-        }
-
-        .step-breadcrumb-item.is-active {
-            color: #111827;
-            font-weight: 700;
-        }
-
-        .step-breadcrumb-separator {
-            color: #9ca3af;
-            font-size: 14px;
-        }
-
-        .logo-upload-field {
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            padding: 12px;
-            background: #f8fafc;
-        }
-
-        .logo-upload-layout {
-            display: flex;
-            gap: 10px;
-            align-items: stretch;
-        }
-
-        .logo-upload-main {
-            flex: 1;
-            width: auto;
-            min-width: 0;
-        }
-
-        .logo-preview-wrap {
-            width: 25%;
-            flex: 0 0 25%;
-            max-width: 120px;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            background: #ffffff;
-            padding: 8px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            margin-left: auto;
-        }
-
-        .logo-preview-wrap.is-visible {
-            display: flex;
-        }
-
-        .logo-preview-image {
-            width: 88px;
-            height: 88px;
-            object-fit: contain;
-            border-radius: 8px;
-            background: #f8fafc;
-        }
-
-        .logo-upload-dropzone {
-            border: 1px dashed #cbd5e1;
-            border-radius: 10px;
-            background: #ffffff;
-            padding: 14px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: border-color 0.2s ease, background 0.2s ease;
-        }
-
-        .logo-upload-dropzone:hover {
-            border-color: #94a3b8;
-            background: #f8fafc;
-        }
-
-        .logo-upload-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: #475569;
-            background: #f1f5f9;
-            flex-shrink: 0;
-        }
-
-        .logo-upload-title {
-            color: #1f2937;
-            font-size: 13px;
-            font-weight: 600;
-            line-height: 1.2;
-        }
-
-        .logo-upload-help {
-            color: #6b7280;
-            font-size: 12px;
-            margin-top: 3px;
-            line-height: 1.3;
-        }
-
-        .logo-file-name {
-            display: block;
-            margin-top: 8px;
-            font-size: 12px;
-            color: #475569;
-        }
-        
-        .step-navigation .studio-btn-primary {
-            margin-left: auto;
-        }
-        
-        @media (max-width: 768px) {
             .step-navigation {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 1.5rem;
+                padding-top: 1.5rem;
+                border-top: 1px solid #e5e7eb;
+            }
+
+            .profile-form-wrap {
+                margin-top: 0.5rem;
+                padding-top: 0.5rem;
+            }
+
+            .step-breadcrumb {
+                display: flex;
+                align-items: center;
                 gap: 0.5rem;
+                margin-bottom: 1.25rem;
+                padding: 0.25rem 0 1rem;
+                border-bottom: 1px solid #e5e7eb;
+                flex-wrap: wrap;
+            }
+
+            .step-breadcrumb-item {
+                font-size: 14px;
+                font-weight: 500;
+                color: #6b7280;
+                border: none;
+                background: transparent;
+                padding: 0;
+                cursor: pointer;
+                transition: color 0.2s ease;
+            }
+
+            .step-breadcrumb-item:hover {
+                color: #374151;
+            }
+
+            .step-breadcrumb-item.is-active {
+                color: #111827;
+                font-weight: 700;
+            }
+
+            .step-breadcrumb-separator {
+                color: #9ca3af;
+                font-size: 14px;
+            }
+
+            .logo-upload-field {
+                border: 1px solid #e5e7eb;
+                border-radius: 10px;
+                padding: 12px;
+                background: #f8fafc;
             }
 
             .logo-upload-layout {
-                flex-direction: column;
+                display: flex;
+                gap: 10px;
+                align-items: stretch;
             }
 
-            .logo-upload-main,
+            .logo-upload-main {
+                flex: 1;
+                width: auto;
+                min-width: 0;
+            }
+
             .logo-preview-wrap {
-                width: 100%;
+                width: 25%;
+                flex: 0 0 25%;
+                max-width: 120px;
+                border: 1px solid #e2e8f0;
+                border-radius: 10px;
+                background: #ffffff;
+                padding: 8px;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                margin-left: auto;
             }
-        }
-    </style>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
-<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-</head>
-<body class="bg-slate-50 text-slate-900 font-sans">
-    <main class="studio-main">
-        <div id="main-wrapper" class="flex">
-            {% include "components/institution_sidebar.html" %}
 
-            <div class="w-full page-wrapper overflow-hidden xl:pl-[250px]">
-                {% include "components/institution_header.html" %}
+            .logo-preview-wrap.is-visible {
+                display: flex;
+            }
 
-                <main class="h-full overflow-y-auto max-w-full pb-6">
-                    <div class="container full-container xl:px-5 px-4">
-                        <section class="studio-content-wrap">
-                            <div class="studio-panel-head mb-7">
-                                <div>
-                                    <h1 class="studio-panel-title">Institution Profile</h1>
-                                    <p class="studio-subtitle">Complete your institution profile step by step</p>
+            .logo-preview-image {
+                width: 88px;
+                height: 88px;
+                object-fit: contain;
+                border-radius: 8px;
+                background: #f8fafc;
+            }
+
+            .logo-upload-dropzone {
+                border: 1px dashed #cbd5e1;
+                border-radius: 10px;
+                background: #ffffff;
+                padding: 14px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                cursor: pointer;
+                transition:
+                    border-color 0.2s ease,
+                    background 0.2s ease;
+            }
+
+            .logo-upload-dropzone:hover {
+                border-color: #94a3b8;
+                background: #f8fafc;
+            }
+
+            .logo-upload-icon {
+                width: 36px;
+                height: 36px;
+                border-radius: 8px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                color: #475569;
+                background: #f1f5f9;
+                flex-shrink: 0;
+            }
+
+            .logo-upload-title {
+                color: #1f2937;
+                font-size: 13px;
+                font-weight: 600;
+                line-height: 1.2;
+            }
+
+            .logo-upload-help {
+                color: #6b7280;
+                font-size: 12px;
+                margin-top: 3px;
+                line-height: 1.3;
+            }
+
+            .logo-file-name {
+                display: block;
+                margin-top: 8px;
+                font-size: 12px;
+                color: #475569;
+            }
+
+            .step-navigation .studio-btn-primary {
+                margin-left: auto;
+            }
+
+            @media (max-width: 768px) {
+                .step-navigation {
+                    gap: 0.5rem;
+                }
+
+                .logo-upload-layout {
+                    flex-direction: column;
+                }
+
+                .logo-upload-main,
+                .logo-preview-wrap {
+                    width: 100%;
+                }
+            }
+        </style>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet" />
+        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    </head>
+    <body class="bg-slate-50 text-slate-900 font-sans">
+        <main class="studio-main">
+            <div id="main-wrapper" class="flex">
+                {% include "components/institution_sidebar.html" %}
+
+                <div class="w-full page-wrapper overflow-hidden xl:pl-[250px]">
+                    {% include "components/institution_header.html" %}
+
+                    <main class="h-full overflow-y-auto max-w-full pb-6">
+                        <div class="container full-container xl:px-5 px-4">
+                            <section class="studio-content-wrap">
+                                <div class="studio-panel-head mb-7">
+                                    <div>
+                                        <h1 class="studio-panel-title">Institution Profile</h1>
+                                        <p class="studio-subtitle">Complete your institution profile step by step</p>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <!-- Institution Profile Content -->
-                            <div class="profile-form-wrap">
-                                
-                                <!-- Profile Form -->
-                                <form id="profileForm" data-action="{% if admin_institution %}{% url 'update-institution' admin_institution.id %}{% else %}{% url 'add-institution' %}{% endif %}">
-                                    {% csrf_token %}
+                                <!-- Institution Profile Content -->
+                                <div class="profile-form-wrap">
+                                    <!-- Profile Form -->
+                                    <form
+                                        id="profileForm"
+                                        data-action="{% if admin_institution %}{% url 'update-institution' admin_institution.id %}{% else %}{% url 'add-institution' %}{% endif %}"
+                                    >
+                                        {% csrf_token %}
 
-                                    <nav class="step-breadcrumb" aria-label="Profile steps">
-                                        <button type="button" class="step-breadcrumb-item is-active" data-step-link="1" onclick="goToStep(1)">Basic Information</button>
-                                        <span class="step-breadcrumb-separator"><i class="bx bx-chevron-right"></i></span>
-                                        <button type="button" class="step-breadcrumb-item" data-step-link="2" onclick="goToStep(2)">Contact Information</button>
-                                        <span class="step-breadcrumb-separator"><i class="bx bx-chevron-right"></i></span>
-                                        <button type="button" class="step-breadcrumb-item" data-step-link="3" onclick="goToStep(3)">Description</button>
-                                    </nav>
-                                    
-                                    <!-- Step 1: Basic Information -->
-                                    <div class="step-content active" data-step="1">
-                                        <div>
-                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                                <div>
-                                                    <label for="logo" class="text-sm font-medium text-gray-700">Logo <span class="text-red-500">*</span></label>
-                                                    <div class="logo-upload-field mt-1">
-                                                        <div class="logo-upload-layout">
-                                                            <div class="logo-upload-main">
-                                                                <label for="logo" class="logo-upload-dropzone">
-                                                                    <span class="logo-upload-icon">
-                                                                        <i class="bx bx-image-add text-lg"></i>
-                                                                    </span>
-                                                                    <span>
-                                                                        <span class="logo-upload-title">Choose institution logo</span>
-                                                                        <span class="logo-upload-help">PNG, JPG, JPEG or WEBP. Recommended square image.</span>
-                                                                    </span>
-                                                                </label>
+                                        <nav class="step-breadcrumb" aria-label="Profile steps">
+                                            <button type="button" class="step-breadcrumb-item is-active" data-step-link="1" onclick="goToStep(1)">
+                                                Basic Information
+                                            </button>
+                                            <span class="step-breadcrumb-separator"><i class="bx bx-chevron-right"></i></span>
+                                            <button type="button" class="step-breadcrumb-item" data-step-link="2" onclick="goToStep(2)">
+                                                Contact Information
+                                            </button>
+                                            <span class="step-breadcrumb-separator"><i class="bx bx-chevron-right"></i></span>
+                                            <button type="button" class="step-breadcrumb-item" data-step-link="3" onclick="goToStep(3)">Description</button>
+                                        </nav>
+
+                                        <!-- Step 1: Basic Information -->
+                                        <div class="step-content active" data-step="1">
+                                            <div>
+                                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                    <div>
+                                                        <label for="logo" class="text-sm font-medium text-gray-700"
+                                                            >Logo <span class="text-red-500">*</span></label
+                                                        >
+                                                        <div class="logo-upload-field mt-1">
+                                                            <div class="logo-upload-layout">
+                                                                <div class="logo-upload-main">
+                                                                    <label for="logo" class="logo-upload-dropzone">
+                                                                        <span class="logo-upload-icon">
+                                                                            <i class="bx bx-image-add text-lg"></i>
+                                                                        </span>
+                                                                        <span>
+                                                                            <span class="logo-upload-title">Choose institution logo</span>
+                                                                            <span class="logo-upload-help"
+                                                                                >PNG, JPG, JPEG or WEBP. Recommended square image.</span
+                                                                            >
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                                <div id="logo-preview-wrap" class="logo-preview-wrap" aria-live="polite">
+                                                                    <img id="logo-preview-image" class="logo-preview-image" alt="Logo preview" />
+                                                                </div>
                                                             </div>
-                                                            <div id="logo-preview-wrap" class="logo-preview-wrap" aria-live="polite">
-                                                                <img id="logo-preview-image" class="logo-preview-image" alt="Logo preview">
-                                                            </div>
+                                                            <input
+                                                                type="file"
+                                                                name="file-upload"
+                                                                id="logo"
+                                                                accept="image/*"
+                                                                class="sr-only"
+                                                                onchange="updateLogoFileName(this)"
+                                                                {%
+                                                                if
+                                                                not
+                                                                admin_institution
+                                                                or
+                                                                not
+                                                                admin_institution.logo
+                                                                %}required{%
+                                                                endif
+                                                                %}
+                                                            />
+                                                            <span id="logo-file-name" class="logo-file-name">No file selected</span>
                                                         </div>
-                                                        <input type="file" name="file-upload" id="logo" accept="image/*" class="sr-only" onchange="updateLogoFileName(this)" {% if not admin_institution or not admin_institution.logo %}required{% endif %}>
-                                                        <span id="logo-file-name" class="logo-file-name">No file selected</span>
+                                                    </div>
+
+                                                    <div>
+                                                        <label for="name" class="text-sm font-medium text-gray-700"
+                                                            >Institution Name <span class="text-red-500">*</span></label
+                                                        >
+                                                        <input
+                                                            type="text"
+                                                            name="name"
+                                                            id="name"
+                                                            value="{% if form_data %}{{ form_data.name }}{% elif admin_institution %}{{ admin_institution.name }}{% endif %}"
+                                                            class="studio-input mt-1"
+                                                            required
+                                                        />
+                                                    </div>
+
+                                                    <div>
+                                                        <label for="affiliation" class="text-sm font-medium text-gray-700"
+                                                            >Affiliation <span class="text-red-500">*</span></label
+                                                        >
+                                                        <select
+                                                            name="affiliation"
+                                                            id="affiliation"
+                                                            class="studio-select mt-1"
+                                                            onchange="toggleForeignUniversityField()"
+                                                            required
+                                                        >
+                                                            <option value="">Choose affiliation</option>
+                                                            {% for affiliation in affiliation_choices %}
+                                                            <option
+                                                                value="{{ affiliation.0 }}"
+                                                                {%
+                                                                if
+                                                                form_data
+                                                                and
+                                                                form_data.affiliation=""
+                                                                ="affiliation.0"
+                                                                %}selected{%
+                                                                elif
+                                                                admin_institution
+                                                                and
+                                                                admin_institution.affiliation=""
+                                                                ="affiliation.0"
+                                                                %}selected{%
+                                                                endif
+                                                                %}
+                                                            >
+                                                                {{ affiliation.1 }}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+
+                                                    <div id="foreign-university-field" class="hidden md:col-span-3">
+                                                        <label for="foreign_university_name" class="text-sm font-medium text-gray-700"
+                                                            >Foreign University Name</label
+                                                        >
+                                                        <input
+                                                            type="text"
+                                                            name="foreign_university_name"
+                                                            id="foreign_university_name"
+                                                            value="{% if form_data %}{{ form_data.foreign_university_name }}{% elif admin_institution %}{{ admin_institution.Foreign_University_Name }}{% endif %}"
+                                                            class="studio-input mt-1"
+                                                        />
+                                                    </div>
+
+                                                    <div class="md:col-span-3">
+                                                        <label for="province" class="text-sm font-medium text-gray-700"
+                                                            >Province <span class="text-red-500">*</span></label
+                                                        >
+                                                        <select name="province" id="province" class="studio-select mt-1" required>
+                                                            <option value="">Choose province</option>
+                                                            {% for province in provinces %}
+                                                            <option
+                                                                value="{{ province.0 }}"
+                                                                {%
+                                                                if
+                                                                form_data
+                                                                and
+                                                                form_data.province=""
+                                                                ="province.0"
+                                                                %}selected{%
+                                                                elif
+                                                                admin_institution
+                                                                and
+                                                                admin_institution.province=""
+                                                                ="province.0"
+                                                                %}selected{%
+                                                                endif
+                                                                %}
+                                                            >
+                                                                {{ province.1 }}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
                                                     </div>
                                                 </div>
-                                                
-                                                <div>
-                                                    <label for="name" class="text-sm font-medium text-gray-700">Institution Name <span class="text-red-500">*</span></label>
-                                                    <input type="text" name="name" id="name" value="{% if form_data %}{{ form_data.name }}{% elif admin_institution %}{{ admin_institution.name }}{% endif %}" class="studio-input mt-1" required>
-                                                </div>
-                                                
-                                                <div>
-                                                    <label for="affiliation" class="text-sm font-medium text-gray-700">Affiliation <span class="text-red-500">*</span></label>
-                                                    <select name="affiliation" id="affiliation" class="studio-select mt-1" onchange="toggleForeignUniversityField()" required>
-                                                        <option value="">Choose affiliation</option>
-                                                        {% for affiliation in affiliation_choices %}
-                                                            <option value="{{ affiliation.0 }}" {% if form_data and form_data.affiliation == affiliation.0 %}selected{% elif admin_institution and admin_institution.affiliation == affiliation.0 %}selected{% endif %}>{{ affiliation.1 }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </div>
+                                            </div>
+                                        </div>
 
-                                                <div id="foreign-university-field" class="hidden md:col-span-3">
-                                                    <label for="foreign_university_name" class="text-sm font-medium text-gray-700">Foreign University Name</label>
-                                                    <input type="text" name="foreign_university_name" id="foreign_university_name" value="{% if form_data %}{{ form_data.foreign_university_name }}{% elif admin_institution %}{{ admin_institution.Foreign_University_Name }}{% endif %}" class="studio-input mt-1">
-                                                </div>
+                                        <!-- Step 2: Contact Information -->
+                                        <div class="step-content" data-step="2">
+                                            <div>
+                                                <div class="grid grid-cols-2 gap-4">
+                                                    <div>
+                                                        <label for="email" class="text-sm font-medium text-gray-700"
+                                                            >Email <span class="text-red-500">*</span></label
+                                                        >
+                                                        <input
+                                                            type="email"
+                                                            name="email"
+                                                            id="email"
+                                                            value="{% if form_data %}{{ form_data.email }}{% elif admin_institution %}{{ admin_institution.email }}{% else %}{{ institution.email }}{% endif %}"
+                                                            class="studio-input mt-1"
+                                                            required
+                                                        />
+                                                    </div>
 
-                                                <div class="md:col-span-3">
-                                                    <label for="province" class="text-sm font-medium text-gray-700">Province <span class="text-red-500">*</span></label>
-                                                    <select name="province" id="province" class="studio-select mt-1" required>
-                                                        <option value="">Choose province</option>
-                                                        {% for province in provinces %}
-                                                            <option value="{{ province.0 }}" {% if form_data and form_data.province == province.0 %}selected{% elif admin_institution and admin_institution.province == province.0 %}selected{% endif %}>{{ province.1 }}</option>
-                                                        {% endfor %}
-                                                    </select>
+                                                    <div>
+                                                        <label for="phone" class="text-sm font-medium text-gray-700"
+                                                            >Phone <span class="text-red-500">*</span></label
+                                                        >
+                                                        <input
+                                                            type="tel"
+                                                            name="phone"
+                                                            id="phone"
+                                                            value="{% if form_data %}{{ form_data.phone }}{% elif admin_institution %}{{ admin_institution.phone }}{% endif %}"
+                                                            class="studio-input mt-1"
+                                                            required
+                                                        />
+                                                    </div>
+
+                                                    <div class="col-span-2">
+                                                        <label for="website" class="text-sm font-medium text-gray-700">Website</label>
+                                                        <input
+                                                            type="url"
+                                                            name="website"
+                                                            id="website"
+                                                            value="{% if form_data %}{{ form_data.website }}{% elif admin_institution %}{{ admin_institution.website }}{% endif %}"
+                                                            class="studio-input mt-1"
+                                                        />
+                                                    </div>
+
+                                                    <div class="col-span-2">
+                                                        <label for="address" class="text-sm font-medium text-gray-700"
+                                                            >Address <span class="text-red-500">*</span></label
+                                                        >
+                                                        <textarea name="address" id="address" rows="3" class="studio-textarea mt-1" required>
+{% if form_data %}{{ form_data.address }}{% elif admin_institution %}{{ admin_institution.address }}{% endif %}</textarea
+                                                        >
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <!-- Step 2: Contact Information -->
-                                    <div class="step-content" data-step="2">
-                                        <div>
-                                            <div class="grid grid-cols-2 gap-4">
-                                                <div>
-                                                    <label for="email" class="text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
-                                                    <input type="email" name="email" id="email" value="{% if form_data %}{{ form_data.email }}{% elif admin_institution %}{{ admin_institution.email }}{% else %}{{ institution.email }}{% endif %}" class="studio-input mt-1" required>
-                                                </div>
+                                        <!-- Step 3: Description -->
+                                        <div class="step-content" data-step="3">
+                                            <div>
+                                                <div class="space-y-4">
+                                                    <div>
+                                                        <label for="overview" class="text-sm font-medium text-gray-700"
+                                                            >About Institution <span class="text-red-500">*</span></label
+                                                        >
+                                                        <textarea
+                                                            name="overview"
+                                                            id="overview"
+                                                            rows="4"
+                                                            class="studio-textarea mt-1"
+                                                            placeholder="Tell us about your institution..."
+                                                            required
+                                                        >
+{% if form_data %}{{ form_data.overview }}{% elif admin_institution %}{{ admin_institution.overview }}{% endif %}</textarea
+                                                        >
+                                                    </div>
 
-                                                <div>
-                                                    <label for="phone" class="text-sm font-medium text-gray-700">Phone <span class="text-red-500">*</span></label>
-                                                    <input type="tel" name="phone" id="phone" value="{% if form_data %}{{ form_data.phone }}{% elif admin_institution %}{{ admin_institution.phone }}{% endif %}" class="studio-input mt-1" required>
-                                                </div>
+                                                    <div>
+                                                        <label for="message" class="text-sm font-medium text-gray-700">Principal Message</label>
+                                                        <textarea
+                                                            name="message"
+                                                            id="message"
+                                                            rows="4"
+                                                            class="studio-textarea mt-1"
+                                                            placeholder="Message from the principal..."
+                                                        >
+{% if form_data %}{{ form_data.message }}{% elif admin_institution %}{{ admin_institution.message }}{% endif %}</textarea
+                                                        >
+                                                    </div>
 
-                                                <div class="col-span-2">
-                                                    <label for="website" class="text-sm font-medium text-gray-700">Website</label>
-                                                    <input type="url" name="website" id="website" value="{% if form_data %}{{ form_data.website }}{% elif admin_institution %}{{ admin_institution.website }}{% endif %}" class="studio-input mt-1">
-                                                </div>
-
-                                                <div class="col-span-2">
-                                                    <label for="address" class="text-sm font-medium text-gray-700">Address <span class="text-red-500">*</span></label>
-                                                    <textarea name="address" id="address" rows="3" class="studio-textarea mt-1" required>{% if form_data %}{{ form_data.address }}{% elif admin_institution %}{{ admin_institution.address }}{% endif %}</textarea>
+                                                    <div>
+                                                        <label for="map" class="text-sm font-medium text-gray-700"
+                                                            >Map Location <span class="text-red-500">*</span></label
+                                                        >
+                                                        <textarea
+                                                            name="map"
+                                                            id="map"
+                                                            rows="3"
+                                                            class="studio-textarea mt-1"
+                                                            placeholder="Enter map coordinates or location details"
+                                                            required
+                                                        >
+{% if form_data %}{{ form_data.map }}{% elif admin_institution %}{{ admin_institution.map }}{% endif %}</textarea
+                                                        >
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <!-- Step 3: Description -->
-                                    <div class="step-content" data-step="3">
-                                        <div>
-                                            <div class="space-y-4">
-                                                <div>
-                                                    <label for="overview" class="text-sm font-medium text-gray-700">About Institution <span class="text-red-500">*</span></label>
-                                                    <textarea name="overview" id="overview" rows="4" class="studio-textarea mt-1" placeholder="Tell us about your institution..." required>{% if form_data %}{{ form_data.overview }}{% elif admin_institution %}{{ admin_institution.overview }}{% endif %}</textarea>
-                                                </div>
-
-                                                <div>
-                                                    <label for="message" class="text-sm font-medium text-gray-700">Principal Message</label>
-                                                    <textarea name="message" id="message" rows="4" class="studio-textarea mt-1" placeholder="Message from the principal...">{% if form_data %}{{ form_data.message }}{% elif admin_institution %}{{ admin_institution.message }}{% endif %}</textarea>
-                                                </div>
-
-                                                <div>
-                                                    <label for="map" class="text-sm font-medium text-gray-700">Map Location <span class="text-red-500">*</span></label>
-                                                    <textarea name="map" id="map" rows="3" class="studio-textarea mt-1" placeholder="Enter map coordinates or location details" required>{% if form_data %}{{ form_data.map }}{% elif admin_institution %}{{ admin_institution.map }}{% endif %}</textarea>
-                                                </div>
-                                            </div>
+                                        <!-- Step Navigation -->
+                                        <div class="step-navigation">
+                                            <button type="button" id="prevBtn" class="studio-btn-ghost" onclick="changeStep(-1)" style="display: none">
+                                                Previous
+                                            </button>
+                                            <button type="button" id="nextBtn" class="studio-btn-primary" onclick="changeStep(1)">Next</button>
+                                            <button
+                                                type="submit"
+                                                id="submitBtn"
+                                                class="studio-btn-primary"
+                                                style="display: none"
+                                                onclick="return validateAllRequiredFields();"
+                                            >
+                                                Save
+                                            </button>
                                         </div>
-                                    </div>
-
-                                    <!-- Step Navigation -->
-                                    <div class="step-navigation">
-                                        <button type="button" id="prevBtn" class="studio-btn-ghost" onclick="changeStep(-1)" style="display: none;">
-                                            Previous
-                                        </button>
-                                        <button type="button" id="nextBtn" class="studio-btn-primary" onclick="changeStep(1)">
-                                            Next
-                                        </button>
-                                        <button type="submit" id="submitBtn" class="studio-btn-primary" style="display: none;" onclick="return validateAllRequiredFields();">
-                                            Save
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </section>
-                    </div>
-                </main>
+                                    </form>
+                                </div>
+                            </section>
+                        </div>
+                    </main>
+                </div>
             </div>
-        </div>
-    </main>
+        </main>
 
-    <script>
-        let currentStep = 1;
-        const totalSteps = 3;
+        <script>
+            let currentStep = 1;
+            const totalSteps = 3;
 
-        function changeStep(direction) {
-            if (direction > 0 && !validateCurrentStep()) {
-                return;
+            function changeStep(direction) {
+                if (direction > 0 && !validateCurrentStep()) {
+                    return;
+                }
+
+                const currentStepElement = document.querySelector(`.step-content[data-step="${currentStep}"]`);
+                currentStepElement.classList.remove('active');
+
+                currentStep += direction;
+                if (currentStep < 1) currentStep = 1;
+                if (currentStep > totalSteps) currentStep = totalSteps;
+
+                const newStepElement = document.querySelector(`.step-content[data-step="${currentStep}"]`);
+                newStepElement.classList.add('active');
+
+                updateNavigationButtons();
+                updateStepBreadcrumb();
             }
 
-            const currentStepElement = document.querySelector(`.step-content[data-step="${currentStep}"]`);
-            currentStepElement.classList.remove('active');
-            
-            currentStep += direction;
-            if (currentStep < 1) currentStep = 1;
-            if (currentStep > totalSteps) currentStep = totalSteps;
-            
-            const newStepElement = document.querySelector(`.step-content[data-step="${currentStep}"]`);
-            newStepElement.classList.add('active');
-            
-            updateNavigationButtons();
-            updateStepBreadcrumb();
-        }
+            function goToStep(step) {
+                if (step < 1 || step > totalSteps || step === currentStep) return;
 
-        function goToStep(step) {
-            if (step < 1 || step > totalSteps || step === currentStep) return;
+                const currentStepElement = document.querySelector(`.step-content[data-step="${currentStep}"]`);
+                const targetStepElement = document.querySelector(`.step-content[data-step="${step}"]`);
 
-            const currentStepElement = document.querySelector(`.step-content[data-step="${currentStep}"]`);
-            const targetStepElement = document.querySelector(`.step-content[data-step="${step}"]`);
+                currentStepElement.classList.remove('active');
+                currentStep = step;
+                targetStepElement.classList.add('active');
 
-            currentStepElement.classList.remove('active');
-            currentStep = step;
-            targetStepElement.classList.add('active');
-
-            updateNavigationButtons();
-            updateStepBreadcrumb();
-        }
-
-        function updateStepBreadcrumb() {
-            const stepLinks = document.querySelectorAll('.step-breadcrumb-item');
-            stepLinks.forEach(link => {
-                const linkStep = parseInt(link.dataset.stepLink, 10);
-                link.classList.toggle('is-active', linkStep === currentStep);
-            });
-        }
-
-        function updateNavigationButtons() {
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const submitBtn = document.getElementById('submitBtn');
-            
-            prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
-            
-            if (currentStep === totalSteps) {
-                nextBtn.style.display = 'none';
-                submitBtn.style.display = 'block';
-            } else {
-                nextBtn.style.display = 'block';
-                submitBtn.style.display = 'none';
+                updateNavigationButtons();
+                updateStepBreadcrumb();
             }
-        }
 
-        function toggleForeignUniversityField() {
-            const affiliation = document.getElementById('affiliation').value;
-            const foreignField = document.getElementById('foreign-university-field');
-            
-            if (affiliation === 'foreign') {
-                foreignField.classList.remove('hidden');
-            } else {
-                foreignField.classList.add('hidden');
+            function updateStepBreadcrumb() {
+                const stepLinks = document.querySelectorAll('.step-breadcrumb-item');
+                stepLinks.forEach(link => {
+                    const linkStep = parseInt(link.dataset.stepLink, 10);
+                    link.classList.toggle('is-active', linkStep === currentStep);
+                });
             }
-        }
 
-        function updateLogoFileName(input) {
-            const fileNameElement = document.getElementById('logo-file-name');
-            const previewWrap = document.getElementById('logo-preview-wrap');
-            const previewImage = document.getElementById('logo-preview-image');
+            function updateNavigationButtons() {
+                const prevBtn = document.getElementById('prevBtn');
+                const nextBtn = document.getElementById('nextBtn');
+                const submitBtn = document.getElementById('submitBtn');
 
-            if (!fileNameElement) return;
+                prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
 
-            if (input.files && input.files.length > 0) {
-                fileNameElement.textContent = `Selected: ${input.files[0].name}`;
-                if (previewWrap && previewImage) {
-                    const fileReader = new FileReader();
-                    fileReader.onload = function(event) {
-                        previewImage.src = event.target.result;
+                if (currentStep === totalSteps) {
+                    nextBtn.style.display = 'none';
+                    submitBtn.style.display = 'block';
+                } else {
+                    nextBtn.style.display = 'block';
+                    submitBtn.style.display = 'none';
+                }
+            }
+
+            function toggleForeignUniversityField() {
+                const affiliation = document.getElementById('affiliation').value;
+                const foreignField = document.getElementById('foreign-university-field');
+
+                if (affiliation === 'foreign') {
+                    foreignField.classList.remove('hidden');
+                } else {
+                    foreignField.classList.add('hidden');
+                }
+            }
+
+            function updateLogoFileName(input) {
+                const fileNameElement = document.getElementById('logo-file-name');
+                const previewWrap = document.getElementById('logo-preview-wrap');
+                const previewImage = document.getElementById('logo-preview-image');
+
+                if (!fileNameElement) return;
+
+                if (input.files && input.files.length > 0) {
+                    fileNameElement.textContent = `Selected: ${input.files[0].name}`;
+                    if (previewWrap && previewImage) {
+                        const fileReader = new FileReader();
+                        fileReader.onload = function(event) {
+                            previewImage.src = event.target.result;
+                            previewWrap.classList.add('is-visible');
+                        };
+                        fileReader.readAsDataURL(input.files[0]);
+                    }
+                } else {
+                    fileNameElement.textContent = 'No file selected';
+                    if (previewWrap && previewImage) {
+                        previewImage.removeAttribute('src');
+                        previewWrap.classList.remove('is-visible');
+                    }
+                }
+            }
+
+            function initializeLogoPreview() {
+                const previewWrap = document.getElementById('logo-preview-wrap');
+                const previewImage = document.getElementById('logo-preview-image');
+                const fileNameElement = document.getElementById('logo-file-name');
+
+                {% if admin_institution and admin_institution.logo %}
+                    if (previewWrap && previewImage && fileNameElement) {
+                        previewImage.src = "{{ admin_institution.logo.url }}";
                         previewWrap.classList.add('is-visible');
-                    };
-                    fileReader.readAsDataURL(input.files[0]);
-                }
-            } else {
-                fileNameElement.textContent = 'No file selected';
-                if (previewWrap && previewImage) {
-                    previewImage.removeAttribute('src');
-                    previewWrap.classList.remove('is-visible');
-                }
+                        fileNameElement.textContent = 'Current logo (change to update)';
+                    }
+                {% endif %}
             }
-        }
 
-        function initializeLogoPreview() {
-            const previewWrap = document.getElementById('logo-preview-wrap');
-            const previewImage = document.getElementById('logo-preview-image');
-            const fileNameElement = document.getElementById('logo-file-name');
-            
-            {% if admin_institution and admin_institution.logo %}
-                if (previewWrap && previewImage && fileNameElement) {
-                    previewImage.src = "{{ admin_institution.logo.url }}";
-                    previewWrap.classList.add('is-visible');
-                    fileNameElement.textContent = 'Current logo (change to update)';
+            function validateCurrentStep() {
+                const currentStepElement = document.querySelector(`.step-content[data-step="${currentStep}"]`);
+                if (!currentStepElement) return true;
+
+                const fields = currentStepElement.querySelectorAll('input, select, textarea');
+                for (const field of fields) {
+                    if (!field.checkValidity()) {
+                        field.reportValidity();
+                        return false;
+                    }
                 }
-            {% endif %}
-        }
+                return true;
+            }
 
-        function validateCurrentStep() {
-            const currentStepElement = document.querySelector(`.step-content[data-step="${currentStep}"]`);
-            if (!currentStepElement) return true;
+            function validateAllRequiredFields() {
+                const form = document.getElementById('profileForm');
+                if (!form) return true;
 
-            const fields = currentStepElement.querySelectorAll('input, select, textarea');
-            for (const field of fields) {
-                if (!field.checkValidity()) {
-                    field.reportValidity();
+                const requiredFields = form.querySelectorAll('[required]');
+                let firstInvalidField = null;
+                let invalidStep = null;
+
+                for (const field of requiredFields) {
+                    if (!field.checkValidity()) {
+                        if (!firstInvalidField) {
+                            firstInvalidField = field;
+                            const stepContainer = field.closest('.step-content');
+                            if (stepContainer) {
+                                invalidStep = parseInt(stepContainer.dataset.step, 10);
+                            }
+                        }
+                    }
+                }
+
+                if (firstInvalidField) {
+                    // Navigate to the step with the invalid field
+                    if (!Number.isNaN(invalidStep) && invalidStep !== currentStep) {
+                        goToStep(invalidStep);
+                    }
+                    // Let browser show default HTML5 validation message
+                    setTimeout(() => {
+                        firstInvalidField.reportValidity();
+                    }, 100);
                     return false;
                 }
+                return true;
             }
-            return true;
-        }
 
-        function validateAllRequiredFields() {
-            const form = document.getElementById('profileForm');
-            if (!form) return true;
-
-            const requiredFields = form.querySelectorAll('[required]');
-            let firstInvalidField = null;
-            let invalidStep = null;
-
-            for (const field of requiredFields) {
-                if (!field.checkValidity()) {
-                    if (!firstInvalidField) {
-                        firstInvalidField = field;
-                        const stepContainer = field.closest('.step-content');
-                        if (stepContainer) {
-                            invalidStep = parseInt(stepContainer.dataset.step, 10);
-                        }
-                    }
+            function showToast(message, type = 'success') {
+                // Create toast container if it doesn't exist
+                let container = document.getElementById('toast-container');
+                if (!container) {
+                    container = document.createElement('div');
+                    container.id = 'toast-container';
+                    container.className = 'fixed top-10 right-10 z-50 space-y-2';
+                    document.body.appendChild(container);
                 }
-            }
 
-            if (firstInvalidField) {
-                // Navigate to the step with the invalid field
-                if (!Number.isNaN(invalidStep) && invalidStep !== currentStep) {
-                    goToStep(invalidStep);
-                }
-                // Let browser show default HTML5 validation message
-                setTimeout(() => {
-                    firstInvalidField.reportValidity();
-                }, 100);
-                return false;
-            }
-            return true;
-        }
+                // Create toast element matching login page style
+                const toast = document.createElement('div');
+                const iconBgColor = type === 'success' ? 'bg-green-200' : 'bg-red-200';
+                const iconSvg = type === 'success'
+                    ? '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>'
+                    : '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>';
 
-        function showToast(message, type = 'success') {
-            // Create toast container if it doesn't exist
-            let container = document.getElementById('toast-container');
-            if (!container) {
-                container = document.createElement('div');
-                container.id = 'toast-container';
-                container.className = 'fixed top-10 right-10 z-50 space-y-2';
-                document.body.appendChild(container);
-            }
-            
-            // Create toast element matching login page style
-            const toast = document.createElement('div');
-            const iconBgColor = type === 'success' ? 'bg-green-200' : 'bg-red-200';
-            const iconSvg = type === 'success' 
-                ? '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>'
-                : '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>';
-            
-            toast.className = 'w-full max-w-sm p-2 pr-5 rounded-lg border shadow-sm text-gray-800 bg-white transform transition-all duration-300 translate-x-full';
-            toast.innerHTML = `
-                <div class="flex items-center space-x-3">
-                    <span class="w-9 h-9 rounded-lg ${iconBgColor} flex items-center justify-center">
-                        ${iconSvg}
-                    </span>
-                    <p class="text-sm font-base text-gray-950">${message}</p>
-                </div>
-            `;
-            
-            container.appendChild(toast);
-            
-            // Animate in
-            requestAnimationFrame(() => {
-                toast.classList.remove('translate-x-full');
-            });
-            
-            // Auto-remove after 5 seconds (5000ms)
-            setTimeout(() => {
-                if (toast && toast.parentNode) {
-                    toast.classList.add('translate-x-full');
-                    // Remove from DOM after slide-out animation (300ms)
-                    setTimeout(() => {
-                        if (toast && toast.parentNode) {
-                            toast.remove();
-                        }
-                    }, 300);
-                }
-            }, 5000);
-        }
+                toast.className = 'w-full max-w-sm p-2 pr-5 rounded-lg border shadow-sm text-gray-800 bg-white transform transition-all duration-300 translate-x-full';
+                toast.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <span class="w-9 h-9 rounded-lg ${iconBgColor} flex items-center justify-center">
+                            ${iconSvg}
+                        </span>
+                        <p class="text-sm font-base text-gray-950">${message}</p>
+                    </div>
+                `;
 
-        async function submitForm(event) {
-            event.preventDefault();
-            event.stopPropagation();
+                container.appendChild(toast);
 
-            if (!validateAllRequiredFields()) return false;
-
-            const form = document.getElementById('profileForm');
-            const submitBtn = document.getElementById('submitBtn');
-            const actionUrl = form.dataset.action;
-            
-            // Show loading state
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Saving...';
-            submitBtn.disabled = true;
-
-            try {
-                const formData = new FormData(form);
-                
-                const response = await fetch(actionUrl, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
+                // Animate in
+                requestAnimationFrame(() => {
+                    toast.classList.remove('translate-x-full');
                 });
 
-                const data = await response.json();
+                // Auto-remove after 5 seconds (5000ms)
+                setTimeout(() => {
+                    if (toast && toast.parentNode) {
+                        toast.classList.add('translate-x-full');
+                        // Remove from DOM after slide-out animation (300ms)
+                        setTimeout(() => {
+                            if (toast && toast.parentNode) {
+                                toast.remove();
+                            }
+                        }, 300);
+                    }
+                }, 5000);
+            }
 
-                if (data.success) {
-                    showToast(data.message || 'Institution details updated successfully!', 'success');
-                    // Reload page after 1.5 seconds to show updated data
-                    setTimeout(() => window.location.reload(), 1500);
-                } else {
-                    showToast(data.message || 'Error updating institution. Please try again.', 'error');
+            async function submitForm(event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                if (!validateAllRequiredFields()) return false;
+
+                const form = document.getElementById('profileForm');
+                const submitBtn = document.getElementById('submitBtn');
+                const actionUrl = form.dataset.action;
+
+                // Show loading state
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Saving...';
+                submitBtn.disabled = true;
+
+                try {
+                    const formData = new FormData(form);
+
+                    const response = await fetch(actionUrl, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        showToast(data.message || 'Institution details updated successfully!', 'success');
+                        // Reload page after 1.5 seconds to show updated data
+                        setTimeout(() => window.location.reload(), 1500);
+                    } else {
+                        showToast(data.message || 'Error updating institution. Please try again.', 'error');
+                    }
+                } catch (error) {
+                    console.error('Form submission error:', error);
+                    showToast('Network error. Please check your connection and try again.', 'error');
+                } finally {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
                 }
-            } catch (error) {
-                console.error('Form submission error:', error);
-                showToast('Network error. Please check your connection and try again.', 'error');
-            } finally {
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
+
+                return false;
             }
 
-            return false;
-        }
+            // Initialize
+            document.addEventListener('DOMContentLoaded', function() {
+                updateNavigationButtons();
+                updateStepBreadcrumb();
+                toggleForeignUniversityField();
+                initializeLogoPreview();
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            updateNavigationButtons();
-            updateStepBreadcrumb();
-            toggleForeignUniversityField();
-            initializeLogoPreview();
-
-            const profileForm = document.getElementById('profileForm');
-            if (profileForm) {
-                profileForm.addEventListener('submit', submitForm);
-            }
-        });
-    </script>
-</body>
+                const profileForm = document.getElementById('profileForm');
+                if (profileForm) {
+                    profileForm.addEventListener('submit', submitForm);
+                }
+            });
+        </script>
+    </body>
 </html>

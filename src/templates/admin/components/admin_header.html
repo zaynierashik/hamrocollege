@@ -3,10 +3,13 @@
 <header class="studio-topbar">
     <div class="studio-topbar-left">
         <!-- Mobile menu toggle -->
-        <button class="studio-sidebar-toggle xl:hidden" type="button"
+        <button
+            class="studio-sidebar-toggle xl:hidden"
+            type="button"
             data-hs-overlay="#application-sidebar-brand"
             aria-controls="application-sidebar-brand"
-            aria-label="Toggle navigation">
+            aria-label="Toggle navigation"
+        >
             <i class="bx bx-menu"></i>
         </button>
 
@@ -15,21 +18,16 @@
             <span>Admin</span>
             <span class="studio-breadcrumb-sep"><i class="bx bx-chevron-right text-sm"></i></span>
             <span class="studio-breadcrumb-current">
-                {% if request.path == '/dashboard/' %}Dashboard
-                {% elif request.path == '/user/' %}Users
-                {% elif request.path == '/institution/' %}Institutions
-                {% elif request.path == '/course/' %}Courses
-                {% elif request.path == '/feedback/' %}Feedback
-                {% elif request.path == '/system-user/' %}System Users
-                {% elif request.path == '/admin-profile/' %}Profile
-                {% else %}Admin Panel{% endif %}
+                {% if request.path == '/dashboard/' %}Dashboard {% elif request.path == '/user/' %}Users {% elif request.path == '/institution/' %}Institutions
+                {% elif request.path == '/course/' %}Courses {% elif request.path == '/feedback/' %}Feedback {% elif request.path == '/system-user/' %}System
+                Users {% elif request.path == '/admin-profile/' %}Profile {% else %}Admin Panel{% endif %}
             </span>
         </nav>
     </div>
 
     <div class="studio-topbar-right">
         <!-- Notification bell -->
-        <button class="studio-icon-btn" style="background-color: #f8fafc;" type="button" title="Notifications">
+        <button class="studio-icon-btn" style="background-color: #f8fafc" type="button" title="Notifications">
             <i class="bx bx-bell"></i>
         </button>
 
@@ -43,12 +41,15 @@
                 <i class="bx bx-chevron-down text-slate-400 text-sm hidden lg:block"></i>
             </button>
 
-            <div class="hs-dropdown-menu studio-dropdown transition-[opacity,margin] hs-dropdown-open:opacity-100 opacity-0 hidden mt-1.5 z-[12]" aria-labelledby="hs-dropdown-custom-icon-trigger">
+            <div
+                class="hs-dropdown-menu studio-dropdown transition-[opacity,margin] hs-dropdown-open:opacity-100 opacity-0 hidden mt-1.5 z-[12]"
+                aria-labelledby="hs-dropdown-custom-icon-trigger"
+            >
                 <a href="{% url 'admin-profile' %}" class="studio-dropdown-item">
                     <i class="bx bx-user text-base"></i>
                     My Profile
                 </a>
-                <hr class="my-1 border-slate-100">
+                <hr class="my-1 border-slate-100" />
                 <a href="{% url 'admin-logout' %}" class="studio-dropdown-item danger">
                     <i class="bx bx-log-out text-base"></i>
                     Sign Out

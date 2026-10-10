@@ -1,11 +1,12 @@
 {% load static %}
 
-<aside id="application-sidebar-brand"
-    class="studio-sidebar hs-overlay hs-overlay-open:translate-x-0 xl:translate-x-0 hidden xl:flex flex-col transition-all duration-300">
-
+<aside
+    id="application-sidebar-brand"
+    class="studio-sidebar hs-overlay hs-overlay-open:translate-x-0 xl:translate-x-0 hidden xl:flex flex-col transition-all duration-300"
+>
     <div class="studio-logo-wrap">
         <a href="{% url 'userpage' %}" class="studio-logo">
-            <img src="{% static 'images/logos/logo.png' %}" alt="Hamrocollege">
+            <img src="{% static 'images/logos/logo.png' %}" alt="Hamrocollege" />
         </a>
     </div>
 
@@ -15,48 +16,45 @@
             <p class="studio-nav-title">Menu</p>
             <ul class="space-y-0.5">
                 <li>
-                    <a href="{% url 'userpage' %}"
-                        class="studio-nav-link {% if request.path == '/userpage/' %}is-active{% endif %}">
+                    <a href="{% url 'userpage' %}" class="studio-nav-link {% if request.path == '/userpage/' %}is-active{% endif %}">
                         <i class="bx bx-grid-alt"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
 
-                 <li>
-                    <a href="{% url 'institutions' %}"
-                        class="studio-nav-link {% if request.path == '/institutions/' %}is-active{% endif %}">
+                <li>
+                    <a href="{% url 'institutions' %}" class="studio-nav-link {% if request.path == '/institutions/' %}is-active{% endif %}">
                         <i class="bx bx-building"></i>
                         <span>Institutions</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{% url 'courses' %}"
-                        class="studio-nav-link {% if request.path == '/courses/' or request.path|slice:':13' == '/edit-course/' %}is-active{% endif %}">
+                    <a
+                        href="{% url 'courses' %}"
+                        class="studio-nav-link {% if request.path == '/courses/' or request.path|slice:':13' == '/edit-course/' %}is-active{% endif %}"
+                    >
                         <i class="bx bx-book-open"></i>
                         <span>Courses</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{% url 'applications' %}"
-                        class="studio-nav-link {% if request.path == '/applications/' %}is-active{% endif %}">
+                    <a href="{% url 'applications' %}" class="studio-nav-link {% if request.path == '/applications/' %}is-active{% endif %}">
                         <i class="bx bx-form"></i>
                         <span>Applications</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{% url 'feedbacks' %}"
-                        class="studio-nav-link {% if request.path == '/feedbacks/' %}is-active{% endif %}">
+                    <a href="{% url 'feedbacks' %}" class="studio-nav-link {% if request.path == '/feedbacks/' %}is-active{% endif %}">
                         <i class="bx bx-comment-detail"></i>
                         <span>Feedback</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{% url 'chat' %}"
-                        class="studio-nav-link {% if request.path == '/chat/' %}is-active{% endif %}">
+                    <a href="{% url 'chat' %}" class="studio-nav-link {% if request.path == '/chat/' %}is-active{% endif %}">
                         <i class="bx bx-robot"></i>
                         <span>HamroBot</span>
                     </a>

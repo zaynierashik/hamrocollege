@@ -1,102 +1,99 @@
 {% load static %}
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Feedback</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}" />
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}" />
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}" />
+        <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet" />
+        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+        <link href="{% static 'css/input.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/output.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet" />
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feedback</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
-    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link href="{% static 'css/input.css' %}" rel="stylesheet">
-    <link href="{% static 'css/output.css' %}" rel="stylesheet">
-    <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
-</head>
+    <body class="bg-slate-50 text-slate-900">
+        <main class="studio-main">
+            <div id="main-wrapper" class="flex">
+                {% include "components/admin_sidebar.html" %}
 
-<body class="bg-slate-50 text-slate-900">
-    <main class="studio-main">
-        <div id="main-wrapper" class="flex">
-            {% include "components/admin_sidebar.html" %}
+                <div class="w-full page-wrapper overflow-hidden xl:pl-[252px]">
+                    {% include "components/admin_header.html" %}
 
-            <div class="w-full page-wrapper overflow-hidden xl:pl-[252px]">
-                {% include "components/admin_header.html" %}
-
-                <main class="h-full overflow-y-auto max-w-full">
-                    <div class="full-container xl:px-6 px-4">
-
-                        <!-- Page header -->
-                        <div class="studio-page-header">
-                            <div>
-                                <h1 class="studio-page-title">Feedback</h1>
+                    <main class="h-full overflow-y-auto max-w-full">
+                        <div class="full-container xl:px-6 px-4">
+                            <!-- Page header -->
+                            <div class="studio-page-header">
+                                <div>
+                                    <h1 class="studio-page-title">Feedback</h1>
+                                </div>
+                                <span class="studio-badge studio-badge-slate"> {{ feedbacks|length }} entries </span>
                             </div>
-                            <span class="studio-badge studio-badge-slate">
-                                {{ feedbacks|length }} entries
-                            </span>
-                        </div>
 
-                        <!-- Table card -->
-                        <div class="studio-card">
-                            <table id="feedback-table" class="studio-table w-full">
-                                <thead>
-                                    <tr>
-                                        <th class="py-3 px-4">S.N.</th>
-                                        <th class="py-3 px-4">User</th>
-                                        <th class="py-3 px-4">Email</th>
-                                        <th class="py-3 px-4">Review</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for feedback in feedbacks %}
-                                    <tr>
-                                        <td class="py-3 px-4 text-slate-600 text-xs">{{ forloop.counter }}</td>
-                                        <td class="py-3 px-4 text-slate-600 text-sm">{{ feedback.user.name }}</td>
-                                        <td class="py-3 px-4 text-slate-600 text-sm">{{ feedback.email }}</td>
-                                        <td class="py-3 px-4">
-                                            <p class="text-slate-600 text-sm leading-relaxed max-w-xs truncate font-medium" title="{{ feedback.review }}">{{ feedback.review }}</p>
-                                        </td>
-                                    </tr>
-                                    {% empty %}
-                                    <tr>
-                                        <td colspan="4" class="py-16 text-center">
-                                            <div class="flex flex-col items-center gap-2 text-slate-400">
-                                                <i class="bx bx-message-square-x text-4xl"></i>
-                                                <p class="text-sm font-medium">No feedback submitted yet</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                            <!-- Table card -->
+                            <div class="studio-card">
+                                <table id="feedback-table" class="studio-table w-full">
+                                    <thead>
+                                        <tr>
+                                            <th class="py-3 px-4">S.N.</th>
+                                            <th class="py-3 px-4">User</th>
+                                            <th class="py-3 px-4">Email</th>
+                                            <th class="py-3 px-4">Review</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for feedback in feedbacks %}
+                                        <tr>
+                                            <td class="py-3 px-4 text-slate-600 text-xs">{{ forloop.counter }}</td>
+                                            <td class="py-3 px-4 text-slate-600 text-sm">{{ feedback.user.name }}</td>
+                                            <td class="py-3 px-4 text-slate-600 text-sm">{{ feedback.email }}</td>
+                                            <td class="py-3 px-4">
+                                                <p class="text-slate-600 text-sm leading-relaxed max-w-xs truncate font-medium" title="{{ feedback.review }}">
+                                                    {{ feedback.review }}
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="4" class="py-16 text-center">
+                                                <div class="flex flex-col items-center gap-2 text-slate-400">
+                                                    <i class="bx bx-message-square-x text-4xl"></i>
+                                                    <p class="text-sm font-medium">No feedback submitted yet</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                </main>
+                    </main>
+                </div>
             </div>
-        </div>
-    </main>
+        </main>
 
-    <script src="{% static 'js/dashboard.js' %}"></script>
-    <script src="{% static 'js/sidebarmenu.js' %}"></script>
-    <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
-    <script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %}"></script>
-    <script src="{% static 'libs/@preline/dropdown/index.js' %}"></script>
-    <script src="{% static 'libs/@preline/overlay/index.js' %}"></script>
-    <script src="{% static 'js/shadcn-table.js' %}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            new ShadcnTable({
-                tableSelector: '#feedback-table',
-                pageSize: 10,
-                searchPlaceholder: 'Search feedback by user, email or review...'
+        <script src="{% static 'js/dashboard.js' %}"></script>
+        <script src="{% static 'js/sidebarmenu.js' %}"></script>
+        <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
+        <script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %}"></script>
+        <script src="{% static 'libs/@preline/dropdown/index.js' %}"></script>
+        <script src="{% static 'libs/@preline/overlay/index.js' %}"></script>
+        <script src="{% static 'js/shadcn-table.js' %}"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                new ShadcnTable({
+                    tableSelector: "#feedback-table",
+                    pageSize: 10,
+                    searchPlaceholder: "Search feedback by user, email or review...",
+                });
             });
-        });
-    </script>
-</body>
-
+        </script>
+    </body>
 </html>

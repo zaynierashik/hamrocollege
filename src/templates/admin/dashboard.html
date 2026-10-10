@@ -1,160 +1,163 @@
 {% load static %}
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin Dashboard</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}" />
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}" />
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}" />
+        <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet" />
+        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+        <link href="{% static 'css/input.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/output.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet" />
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
-    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link href="{% static 'css/input.css' %}" rel="stylesheet">
-    <link href="{% static 'css/output.css' %}" rel="stylesheet">
-    <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
-</head>
+    <body class="bg-slate-50 text-slate-900">
+        <main class="studio-main">
+            <div id="main-wrapper" class="flex">
+                {% include "components/admin_sidebar.html" %}
 
-<body class="bg-slate-50 text-slate-900">
-<main class="studio-main">
-    <div id="main-wrapper" class="flex">
-        {% include "components/admin_sidebar.html" %}
+                <div class="w-full page-wrapper overflow-hidden xl:pl-[252px]">
+                    {% include "components/admin_header.html" %}
 
-        <div class="w-full page-wrapper overflow-hidden xl:pl-[252px]">
-            {% include "components/admin_header.html" %}
-
-            <main class="h-full overflow-y-auto max-w-full">
-                <div class="full-container xl:px-6 px-4">
-
-                    <!-- Page header -->
-                    <div class="studio-page-header">
-                        <div>
-                            <h1 class="studio-page-title">
-                                <span id="greeting">Good morning</span>, {{ admin.name|default:'Admin' }}
-                            </h1>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="studio-badge studio-badge-slate" id="current-date">—</span>
-                        </div>
-                    </div>
-
-                    <!-- Stat cards -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                        <div class="studio-stat-card">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="studio-stat-icon indigo"><i class="bx bx-group"></i></div>
-                                <span class="studio-badge studio-badge-indigo">Live</span>
-                            </div>
-                            <p class="text-2xl font-bold text-slate-900 tracking-tight" id="metricUsers">—</p>
-                            <p class="text-sm text-slate-500 mt-1 font-medium">Total Platform Users</p>
-                            <p class="text-xs text-slate-400 mt-1">Registered across all provinces</p>
-                        </div>
-
-                        <div class="studio-stat-card">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="studio-stat-icon emerald"><i class="bx bx-buildings"></i></div>
-                                <span class="studio-badge studio-badge-success">Verified</span>
-                            </div>
-                            <p class="text-2xl font-bold text-slate-900 tracking-tight" id="metricApproved">—</p>
-                            <p class="text-sm text-slate-500 mt-1 font-medium">Approved Institutions</p>
-                            <p class="text-xs text-slate-400 mt-1">Active in the platform catalog</p>
-                        </div>
-                    </div>
-
-                    <!-- Charts row -->
-                    <div class="grid grid-cols-1 xl:grid-cols-5 gap-4 mb-6">
-                        <div class="studio-chart-card xl:col-span-2">
-                            <div class="studio-chart-header">
+                    <main class="h-full overflow-y-auto max-w-full">
+                        <div class="full-container xl:px-6 px-4">
+                            <!-- Page header -->
+                            <div class="studio-page-header">
                                 <div>
-                                    <h2 class="studio-card-title">User Distribution</h2>
-                                    <p class="studio-card-subtitle">Users by province</p>
+                                    <h1 class="studio-page-title"><span id="greeting">Good morning</span>, {{ admin.name|default:'Admin' }}</h1>
                                 </div>
-                                <span class="studio-chart-tag">Weekly</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="studio-badge studio-badge-slate" id="current-date">—</span>
+                                </div>
                             </div>
-                            <div id="userChart" class="min-h-[300px]"></div>
-                        </div>
 
-                        <div class="studio-chart-card xl:col-span-2">
-                            <div class="studio-chart-header">
-                                <div>
-                                    <h2 class="studio-card-title">Institution Review Trend</h2>
-                                    <p class="studio-card-subtitle">Approved / Pending / Rejected</p>
+                            <!-- Stat cards -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                                <div class="studio-stat-card">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="studio-stat-icon indigo">
+                                            <i class="bx bx-group"></i>
+                                        </div>
+                                        <span class="studio-badge studio-badge-indigo">Live</span>
+                                    </div>
+                                    <p class="text-2xl font-bold text-slate-900 tracking-tight" id="metricUsers">—</p>
+                                    <p class="text-sm text-slate-500 mt-1 font-medium">Total Platform Users</p>
+                                    <p class="text-xs text-slate-400 mt-1">Registered across all provinces</p>
                                 </div>
-                                <span class="studio-chart-tag">Status Mix</span>
-                            </div>
-                            <div id="institutionChart" class="min-h-[300px]"></div>
-                        </div>
-                    </div>
 
-                    <!-- Bottom row -->
-                        <div class="studio-chart-card xl:col-span-2">
-                            <div class="studio-chart-header">
-                                <div>
-                                    <h2 class="studio-card-title">Province Highlights</h2>
-                                    <p class="studio-card-subtitle">Top performing regions</p>
+                                <div class="studio-stat-card">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="studio-stat-icon emerald">
+                                            <i class="bx bx-buildings"></i>
+                                        </div>
+                                        <span class="studio-badge studio-badge-success">Verified</span>
+                                    </div>
+                                    <p class="text-2xl font-bold text-slate-900 tracking-tight" id="metricApproved">—</p>
+                                    <p class="text-sm text-slate-500 mt-1 font-medium">Approved Institutions</p>
+                                    <p class="text-xs text-slate-400 mt-1">Active in the platform catalog</p>
                                 </div>
-                                <span class="studio-chart-tag">Top 4</span>
                             </div>
-                            <div id="topProvinceList" class="space-y-4 pt-2"></div>
+
+                            <!-- Charts row -->
+                            <div class="grid grid-cols-1 xl:grid-cols-5 gap-4 mb-6">
+                                <div class="studio-chart-card xl:col-span-2">
+                                    <div class="studio-chart-header">
+                                        <div>
+                                            <h2 class="studio-card-title">User Distribution</h2>
+                                            <p class="studio-card-subtitle">Users by province</p>
+                                        </div>
+                                        <span class="studio-chart-tag">Weekly</span>
+                                    </div>
+                                    <div id="userChart" class="min-h-[300px]"></div>
+                                </div>
+
+                                <div class="studio-chart-card xl:col-span-2">
+                                    <div class="studio-chart-header">
+                                        <div>
+                                            <h2 class="studio-card-title">Institution Review Trend</h2>
+                                            <p class="studio-card-subtitle">Approved / Pending / Rejected</p>
+                                        </div>
+                                        <span class="studio-chart-tag">Status Mix</span>
+                                    </div>
+                                    <div id="institutionChart" class="min-h-[300px]"></div>
+                                </div>
+                            </div>
+
+                            <!-- Bottom row -->
+                            <div class="studio-chart-card xl:col-span-2">
+                                <div class="studio-chart-header">
+                                    <div>
+                                        <h2 class="studio-card-title">Province Highlights</h2>
+                                        <p class="studio-card-subtitle">Top performing regions</p>
+                                    </div>
+                                    <span class="studio-chart-tag">Top 4</span>
+                                </div>
+                                <div id="topProvinceList" class="space-y-4 pt-2"></div>
+                            </div>
                         </div>
+                    </main>
                 </div>
-            </main>
-        </div>
-    </div>
-</main>
+            </div>
+        </main>
 
-<script>
-    // Greeting
-    const hour = new Date().getHours();
-    document.getElementById('greeting').textContent =
-        hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+        <script>
+            // Greeting
+            const hour = new Date().getHours();
+            document.getElementById("greeting").textContent = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
 
-    // Date
-    document.getElementById('current-date').textContent =
-        new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+            // Date
+            document.getElementById("current-date").textContent = new Date().toLocaleDateString("en-US", {
+                weekday: "short",
+                month: "short",
+                day: "numeric",
+            });
 
-    function numberFormat(value) {
-        return new Intl.NumberFormat().format(value || 0);
-    }
+            function numberFormat(value) {
+                return new Intl.NumberFormat().format(value || 0);
+            }
 
-    function statusCount(data, key) {
-        const item = data.find(entry => entry.status === key);
-        return item ? item.count : 0;
-    }
+            function statusCount(data, key) {
+                const item = data.find((entry) => entry.status === key);
+                return item ? item.count : 0;
+            }
 
-    const chartDefaults = {
-        toolbar: { show: false },
-        fontFamily: 'Inter, sans-serif',
-        animations: { enabled: true, speed: 600 }
-    };
+            const chartDefaults = {
+                toolbar: { show: false },
+                fontFamily: "Inter, sans-serif",
+                animations: { enabled: true, speed: 600 },
+            };
 
-    // User distribution chart
-    fetch('/api/user-distribution/')
-        .then(r => r.json())
-        .then(data => {
-            const provinces = data.map(i => i.province || 'Unknown');
-            const counts = data.map(i => i.count || 0);
-            const total = counts.reduce((s, c) => s + c, 0);
+            // User distribution chart
+            fetch("/api/user-distribution/")
+                .then((r) => r.json())
+                .then((data) => {
+                    const provinces = data.map((i) => i.province || "Unknown");
+                    const counts = data.map((i) => i.count || 0);
+                    const total = counts.reduce((s, c) => s + c, 0);
 
-            document.getElementById('metricUsers').textContent = numberFormat(total);
+                    document.getElementById("metricUsers").textContent = numberFormat(total);
 
-            // Province list
-            const sorted = [...data].sort((a, b) => (b.count || 0) - (a.count || 0)).slice(0, 4);
-            document.getElementById('topProvinceList').innerHTML = sorted.map((item, idx) => {
-                const val = item.count || 0;
-                const pct = total > 0 ? Math.round((val / total) * 100) : 0;
-                const label = (item.province || 'Unknown').replaceAll('_', ' ');
-                const colors = ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981'];
-                return `
+                    // Province list
+                    const sorted = [...data].sort((a, b) => (b.count || 0) - (a.count || 0)).slice(0, 4);
+                    document.getElementById("topProvinceList").innerHTML = sorted
+                        .map((item, idx) => {
+                            const val = item.count || 0;
+                            const pct = total > 0 ? Math.round((val / total) * 100) : 0;
+                            const label = (item.province || "Unknown").replaceAll("_", " ");
+                            const colors = ["#6366f1", "#8b5cf6", "#06b6d4", "#10b981"];
+                            return `
                     <div>
                         <div class="flex items-center justify-between text-sm mb-1.5">
                             <div class="flex items-center gap-2">
-                                <span class="w-5 h-5 rounded-xs flex items-center justify-center text-xs font-bold text-white" style="background:${colors[idx]}">${idx+1}</span>
+                                <span class="w-5 h-5 rounded-xs flex items-center justify-center text-xs font-bold text-white" style="background:${colors[idx]}">${idx + 1}</span>
                                 <span class="font-medium text-slate-700">${label}</span>
                             </div>
                             <span class="text-slate-500 text-xs font-medium">${numberFormat(val)} users · ${pct}%</span>
@@ -163,74 +166,157 @@
                             <div class="studio-progress-fill" style="width:${pct}%; background:${colors[idx]}"></div>
                         </div>
                     </div>`;
-            }).join('');
+                        })
+                        .join("");
 
-            new ApexCharts(document.querySelector('#userChart'), {
-                chart: { ...chartDefaults, type: 'bar', height: 290 },
-                series: [{ name: 'Users', data: counts }],
-                xaxis: { categories: provinces.map(p => p.replaceAll('_', ' ')), labels: { style: { colors: '#64748b', fontFamily: 'Inter,sans-serif', fontSize: '12px' } } },
-                yaxis: { labels: { style: { colors: '#64748b', fontFamily: 'Inter,sans-serif', fontSize: '12px' }, formatter: v => Math.round(v) }, min: 0, forceNiceScale: true },
-                colors: ['#6366f1'],
-                plotOptions: { bar: { borderRadius: 6, columnWidth: '55%' } },
-                dataLabels: { enabled: false },
-                grid: { borderColor: '#f1f5f9', strokeDashArray: 4 },
-                fill: { type: 'gradient', gradient: { shade: 'light', type: 'vertical', shadeIntensity: 0.2, gradientToColors: ['#8b5cf6'], stops: [0, 100] } }
-            }).render();
-        });
+                    new ApexCharts(document.querySelector("#userChart"), {
+                        chart: { ...chartDefaults, type: "bar", height: 290 },
+                        series: [{ name: "Users", data: counts }],
+                        xaxis: {
+                            categories: provinces.map((p) => p.replaceAll("_", " ")),
+                            labels: {
+                                style: {
+                                    colors: "#64748b",
+                                    fontFamily: "Inter,sans-serif",
+                                    fontSize: "12px",
+                                },
+                            },
+                        },
+                        yaxis: {
+                            labels: {
+                                style: {
+                                    colors: "#64748b",
+                                    fontFamily: "Inter,sans-serif",
+                                    fontSize: "12px",
+                                },
+                                formatter: (v) => Math.round(v),
+                            },
+                            min: 0,
+                            forceNiceScale: true,
+                        },
+                        colors: ["#6366f1"],
+                        plotOptions: { bar: { borderRadius: 6, columnWidth: "55%" } },
+                        dataLabels: { enabled: false },
+                        grid: { borderColor: "#f1f5f9", strokeDashArray: 4 },
+                        fill: {
+                            type: "gradient",
+                            gradient: {
+                                shade: "light",
+                                type: "vertical",
+                                shadeIntensity: 0.2,
+                                gradientToColors: ["#8b5cf6"],
+                                stops: [0, 100],
+                            },
+                        },
+                    }).render();
+                });
 
-    // Institution status chart
-    fetch('/api/institution-status/')
-        .then(r => r.json())
-        .then(data => {
-            const approved = statusCount(data, 'approved');
-            const rejected = statusCount(data, 'rejected');
-            const pending = statusCount(data, 'not_decided');
+            // Institution status chart
+            fetch("/api/institution-status/")
+                .then((r) => r.json())
+                .then((data) => {
+                    const approved = statusCount(data, "approved");
+                    const rejected = statusCount(data, "rejected");
+                    const pending = statusCount(data, "not_decided");
 
-            document.getElementById('metricApproved').textContent = numberFormat(approved);
+                    document.getElementById("metricApproved").textContent = numberFormat(approved);
 
-            new ApexCharts(document.querySelector('#institutionChart'), {
-                chart: { ...chartDefaults, type: 'bar', stacked: true, height: 290 },
-                series: [
-                    { name: 'Approved', data: [approved] },
-                    { name: 'Pending', data: [pending] },
-                    { name: 'Rejected', data: [rejected] }
-                ],
-                xaxis: { categories: ['Institution Verification'], labels: { style: { colors: '#64748b', fontFamily: 'Inter,sans-serif', fontSize: '12px' } } },
-                yaxis: { labels: { style: { colors: '#64748b', fontFamily: 'Inter,sans-serif', fontSize: '12px' }, formatter: v => Math.round(v) }, min: 0, forceNiceScale: true },
-                colors: ['#10b981', '#f59e0b', '#ef4444'],
-                legend: { position: 'top', labels: { colors: '#374151' }, fontFamily: 'Inter,sans-serif', fontSize: '12px' },
-                plotOptions: { bar: { borderRadius: 6, columnWidth: '45%' } },
-                dataLabels: { enabled: false },
-                grid: { borderColor: '#f1f5f9', strokeDashArray: 4 }
-            }).render();
-        });
+                    new ApexCharts(document.querySelector("#institutionChart"), {
+                        chart: {
+                            ...chartDefaults,
+                            type: "bar",
+                            stacked: true,
+                            height: 290,
+                        },
+                        series: [
+                            { name: "Approved", data: [approved] },
+                            { name: "Pending", data: [pending] },
+                            { name: "Rejected", data: [rejected] },
+                        ],
+                        xaxis: {
+                            categories: ["Institution Verification"],
+                            labels: {
+                                style: {
+                                    colors: "#64748b",
+                                    fontFamily: "Inter,sans-serif",
+                                    fontSize: "12px",
+                                },
+                            },
+                        },
+                        yaxis: {
+                            labels: {
+                                style: {
+                                    colors: "#64748b",
+                                    fontFamily: "Inter,sans-serif",
+                                    fontSize: "12px",
+                                },
+                                formatter: (v) => Math.round(v),
+                            },
+                            min: 0,
+                            forceNiceScale: true,
+                        },
+                        colors: ["#10b981", "#f59e0b", "#ef4444"],
+                        legend: {
+                            position: "top",
+                            labels: { colors: "#374151" },
+                            fontFamily: "Inter,sans-serif",
+                            fontSize: "12px",
+                        },
+                        plotOptions: { bar: { borderRadius: 6, columnWidth: "45%" } },
+                        dataLabels: { enabled: false },
+                        grid: { borderColor: "#f1f5f9", strokeDashArray: 4 },
+                    }).render();
+                });
 
-    // Feedback chart
-    fetch('/api/feedback-status/')
-        .then(r => r.json())
-        .then(data => {
-            const shown = statusCount(data, 'show');
-            const hidden = statusCount(data, 'hide');
-            document.getElementById('metricVisibleFeedback').textContent = numberFormat(shown);
+            // Feedback chart
+            fetch("/api/feedback-status/")
+                .then((r) => r.json())
+                .then((data) => {
+                    const shown = statusCount(data, "show");
+                    const hidden = statusCount(data, "hide");
+                    document.getElementById("metricVisibleFeedback").textContent = numberFormat(shown);
 
-            new ApexCharts(document.querySelector('#feedbackChart'), {
-                chart: { ...chartDefaults, type: 'donut', height: 240 },
-                series: [shown, hidden],
-                labels: ['Shown', 'Hidden'],
-                colors: ['#6366f1', '#e2e8f0'],
-                legend: { position: 'bottom', labels: { colors: '#374151' }, fontFamily: 'Inter,sans-serif', fontSize: '12px' },
-                dataLabels: { enabled: true, style: { fontFamily: 'Inter,sans-serif' } },
-                stroke: { colors: ['#ffffff'], width: 3 },
-                plotOptions: { pie: { donut: { size: '65%', labels: { show: true, total: { show: true, label: 'Total', color: '#64748b', fontFamily: 'Inter,sans-serif' } } } } }
-            }).render();
-        });
-</script>
+                    new ApexCharts(document.querySelector("#feedbackChart"), {
+                        chart: { ...chartDefaults, type: "donut", height: 240 },
+                        series: [shown, hidden],
+                        labels: ["Shown", "Hidden"],
+                        colors: ["#6366f1", "#e2e8f0"],
+                        legend: {
+                            position: "bottom",
+                            labels: { colors: "#374151" },
+                            fontFamily: "Inter,sans-serif",
+                            fontSize: "12px",
+                        },
+                        dataLabels: {
+                            enabled: true,
+                            style: { fontFamily: "Inter,sans-serif" },
+                        },
+                        stroke: { colors: ["#ffffff"], width: 3 },
+                        plotOptions: {
+                            pie: {
+                                donut: {
+                                    size: "65%",
+                                    labels: {
+                                        show: true,
+                                        total: {
+                                            show: true,
+                                            label: "Total",
+                                            color: "#64748b",
+                                            fontFamily: "Inter,sans-serif",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    }).render();
+                });
+        </script>
 
-<script src="{% static 'js/dashboard.js' %}"></script>
-<script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
-<script src="{% static 'js/sidebarmenu.js' %}"></script>
-<script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
-<script src="{% static 'libs/@preline/dropdown/index.js' %}"></script>
-<script src="{% static 'libs/@preline/overlay/index.js' %}"></script>
-</body>
+        <script src="{% static 'js/dashboard.js' %}"></script>
+        <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
+        <script src="{% static 'js/sidebarmenu.js' %}"></script>
+        <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
+        <script src="{% static 'libs/@preline/dropdown/index.js' %}"></script>
+        <script src="{% static 'libs/@preline/overlay/index.js' %}"></script>
+    </body>
 </html>

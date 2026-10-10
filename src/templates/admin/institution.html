@@ -1,190 +1,215 @@
 {% load static %}
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Institutions</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}" />
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}" />
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}" />
+        <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet" />
+        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+        <link href="{% static 'css/input.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/output.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet" />
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Institutions</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
-    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link href="{% static 'css/input.css' %}" rel="stylesheet">
-    <link href="{% static 'css/output.css' %}" rel="stylesheet">
-    <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
-</head>
+    <body class="bg-slate-50 text-slate-900">
+        <main class="studio-main">
+            <div id="main-wrapper" class="flex">
+                {% include "components/admin_sidebar.html" %}
 
-<body class="bg-slate-50 text-slate-900">
-<main class="studio-main">
-    <div id="main-wrapper" class="flex">
-        {% include "components/admin_sidebar.html" %}
+                <div class="w-full page-wrapper overflow-hidden xl:pl-[252px]">
+                    {% include "components/admin_header.html" %}
 
-        <div class="w-full page-wrapper overflow-hidden xl:pl-[252px]">
-            {% include "components/admin_header.html" %}
+                    <main class="h-full overflow-y-auto max-w-full">
+                        <div class="full-container xl:px-6 px-4">
+                            <!-- Page header -->
+                            <div class="studio-page-header">
+                                <div>
+                                    <h1 class="studio-page-title">Institutions</h1>
+                                </div>
+                                <span class="studio-badge studio-badge-slate"> {{ institutions|length }} total </span>
+                            </div>
 
-            <main class="h-full overflow-y-auto max-w-full">
-                <div class="full-container xl:px-6 px-4">
-
-                    <!-- Page header -->
-                    <div class="studio-page-header">
-                        <div>
-                            <h1 class="studio-page-title">Institutions</h1>
-                        </div>
-                        <span class="studio-badge studio-badge-slate">
-                            {{ institutions|length }} total
-                        </span>
-                    </div>
-
-                    <!-- Table card -->
-                    <div class="studio-card">
-                        <table id="institutions-table" class="studio-table w-full">
-                            <thead>
-                                <tr>
-                                    <th class="py-3 px-4">S.N.</th>
-                                    <th class="py-3 px-4">Institution Admin</th>
-                                    <th class="py-3 px-4">Institution</th>
-                                    <th class="py-3 px-4">Email</th>
-                                    <th class="py-3 px-4"></th>
-                                    <th class="py-3 px-4"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for institution in institutions %}
-                                <tr>
-                                    <td class="py-3 px-4 text-slate-600 text-xs font-medium">{{ forloop.counter }}</td>
-                                    <td class="py-3 px-4 text-sm text-slate-600">{{ institution.name }}</td>
-                                    <td class="py-3 px-4 text-sm">
-                                        <span class="font-medium text-slate-700">{{ institution.institution }}</span>
-                                    </td>
-                                    <td class="py-3 px-4 text-sm text-slate-600">{{ institution.email }}</td>
-                                    <td class="py-3 px-4">
-                                        {% if admin and admin.role == "admin" %}
-                                            <select name="status"
-                                                class="status-dropdown status-dropdown-styled text-xs font-semibold cursor-pointer border focus:outline-none
-                                                    {% if institution.status == 'approved' %}bg-emerald-50 text-emerald-700 border-emerald-200
-                                                    {% elif institution.status == 'rejected' %}bg-rose-50 text-rose-700 border-rose-200
-                                                    {% else %}bg-amber-50 text-amber-700 border-amber-200{% endif %}"
-                                                data-institution-id="{{ institution.id }}">
-                                                <option value="not_decided" {% if institution.status == 'not_decided' %}selected{% endif %} {% if institution.status != 'not_decided' %}disabled{% endif %}>Pending</option>
-                                                <option value="approved" {% if institution.status == 'approved' %}selected{% endif %}>Approved</option>
-                                                <option value="rejected" {% if institution.status == 'rejected' %}selected{% endif %}>Rejected</option>
-                                            </select>
-                                        {% else %}
-                                            {% if institution.status == 'approved' %}
+                            <!-- Table card -->
+                            <div class="studio-card">
+                                <table id="institutions-table" class="studio-table w-full">
+                                    <thead>
+                                        <tr>
+                                            <th class="py-3 px-4">S.N.</th>
+                                            <th class="py-3 px-4">Institution Admin</th>
+                                            <th class="py-3 px-4">Institution</th>
+                                            <th class="py-3 px-4">Email</th>
+                                            <th class="py-3 px-4"></th>
+                                            <th class="py-3 px-4"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for institution in institutions %}
+                                        <tr>
+                                            <td class="py-3 px-4 text-slate-600 text-xs font-medium">{{ forloop.counter }}</td>
+                                            <td class="py-3 px-4 text-sm text-slate-600">{{ institution.name }}</td>
+                                            <td class="py-3 px-4 text-sm">
+                                                <span class="font-medium text-slate-700">{{ institution.institution }}</span>
+                                            </td>
+                                            <td class="py-3 px-4 text-sm text-slate-600">{{ institution.email }}</td>
+                                            <td class="py-3 px-4">
+                                                {% if admin and admin.role == "admin" %}
+                                                <select
+                                                    name="status"
+                                                    class="status-dropdown status-dropdown-styled text-xs font-semibold cursor-pointer border focus:outline-none {% if institution.status == 'approved' %}bg-emerald-50 text-emerald-700 border-emerald-200 {% elif institution.status == 'rejected' %}bg-rose-50 text-rose-700 border-rose-200 {% else %}bg-amber-50 text-amber-700 border-amber-200{% endif %}"
+                                                    data-institution-id="{{ institution.id }}"
+                                                >
+                                                    <option
+                                                        value="not_decided"
+                                                        {%
+                                                        if
+                                                        institution.status=""
+                                                        ="not_decided"
+                                                        %}selected{%
+                                                        endif
+                                                        %}
+                                                        {%
+                                                        if
+                                                        institution.status
+                                                        !="not_decided"
+                                                        %}disabled{%
+                                                        endif
+                                                        %}
+                                                    >
+                                                        Pending
+                                                    </option>
+                                                    <option value="approved" {% if institution.status="" ="approved" %}selected{% endif %}>Approved</option>
+                                                    <option value="rejected" {% if institution.status="" ="rejected" %}selected{% endif %}>Rejected</option>
+                                                </select>
+                                                {% else %} {% if institution.status == 'approved' %}
                                                 <span class="studio-badge studio-badge-success"><i class="bx bx-check-circle text-xs"></i>Approved</span>
-                                            {% elif institution.status == 'rejected' %}
+                                                {% elif institution.status == 'rejected' %}
                                                 <span class="studio-badge studio-badge-danger"><i class="bx bx-x-circle text-xs"></i>Rejected</span>
-                                            {% else %}
+                                                {% else %}
                                                 <span class="studio-badge studio-badge-warning"><i class="bx bx-time text-xs"></i>Pending</span>
-                                            {% endif %}
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                    <a href="{% url 'institution-details' institution.managed_institution.id %}"
-                                        target="_blank"
-                                        class="studio-icon-btn w-8 h-8 rounded-lg text-sm"
-                                        title="View institution">
-                                            <i class="bx bx-link-external"></i>
-                                        </a>
-
-                                        </td>
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="5" class="py-16 text-center">
-                                        <div class="flex flex-col items-center gap-2 text-slate-600">
-                                            <i class="bx bx-buildings text-4xl"></i>
-                                            <p class="text-sm font-medium">No institutions registered yet</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-
+                                                {% endif %} {% endif %}
+                                            </td>
+                                            <td>
+                                                <a
+                                                    href="{% url 'institution-details' institution.managed_institution.id %}"
+                                                    target="_blank"
+                                                    class="studio-icon-btn w-8 h-8 rounded-lg text-sm"
+                                                    title="View institution"
+                                                >
+                                                    <i class="bx bx-link-external"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="5" class="py-16 text-center">
+                                                <div class="flex flex-col items-center gap-2 text-slate-600">
+                                                    <i class="bx bx-buildings text-4xl"></i>
+                                                    <p class="text-sm font-medium">No institutions registered yet</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </main>
                 </div>
-            </main>
-        </div>
-    </div>
-</main>
+            </div>
+        </main>
 
-<!-- Toast notifications -->
-<div id="toast-container" class="fixed top-5 right-5 z-50 space-y-2 hidden"></div>
+        <!-- Toast notifications -->
+        <div id="toast-container" class="fixed top-5 right-5 z-50 space-y-2 hidden"></div>
 
-<script>
-    function showToast(message, type = 'success') {
-        const typeMap = {
-            success: 'studio-toast-success',
-            error: 'studio-toast-error',
-            info: 'studio-toast-info'
-        };
-        const icons = { success: 'bx-check-circle', error: 'bx-x-circle', info: 'bx-info-circle' };
-        const toast = document.createElement('div');
-        toast.className = `studio-toast ${typeMap[type] || typeMap.success}`;
-        toast.innerHTML = `<i class="bx ${icons[type] || icons.success} text-lg"></i><span>${message}</span>`;
-        const container = document.getElementById('toast-container');
-        container.classList.remove('hidden');
-        container.appendChild(toast);
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            toast.style.transition = 'opacity 0.4s ease';
-            setTimeout(() => { toast.remove(); if (!container.children.length) container.classList.add('hidden'); }, 400);
-        }, 3000);
-    }
+        <script>
+            function showToast(message, type = "success") {
+                const typeMap = {
+                    success: "studio-toast-success",
+                    error: "studio-toast-error",
+                    info: "studio-toast-info",
+                };
+                const icons = {
+                    success: "bx-check-circle",
+                    error: "bx-x-circle",
+                    info: "bx-info-circle",
+                };
+                const toast = document.createElement("div");
+                toast.className = `studio-toast ${typeMap[type] || typeMap.success}`;
+                toast.innerHTML = `<i class="bx ${icons[type] || icons.success} text-lg"></i><span>${message}</span>`;
+                const container = document.getElementById("toast-container");
+                container.classList.remove("hidden");
+                container.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = "0";
+                    toast.style.transition = "opacity 0.4s ease";
+                    setTimeout(() => {
+                        toast.remove();
+                        if (!container.children.length) container.classList.add("hidden");
+                    }, 400);
+                }, 3000);
+            }
 
-    $(document).ready(function () {
-        $(document).on('change', '.status-dropdown', function () {
-            const institutionId = $(this).data('institution-id');
-            const newStatus = $(this).val();
-            const $dropdown = $(this);
+            $(document).ready(function () {
+                $(document).on("change", ".status-dropdown", function () {
+                    const institutionId = $(this).data("institution-id");
+                    const newStatus = $(this).val();
+                    const $dropdown = $(this);
 
-            $.ajax({
-                url: '/update-status/' + institutionId + '/',
-                type: 'POST',
-                data: { 'status': newStatus, 'csrfmiddlewaretoken': '{{ csrf_token }}' },
-                success: function (response) {
-                    if (response.success) {
-                        showToast(response.message, 'success');
-                        $dropdown.find('option[value="not_decided"]').attr('disabled', true);
-                        // Update dropdown styling
-                        $dropdown.removeClass('bg-emerald-50 text-emerald-700 border-emerald-200 bg-rose-50 text-rose-700 border-rose-200 bg-amber-50 text-amber-700 border-amber-200');
-                        if (newStatus === 'approved') {
-                            $dropdown.addClass('bg-emerald-50 text-emerald-700 border-emerald-200');
-                        } else if (newStatus === 'rejected') {
-                            $dropdown.addClass('bg-rose-50 text-rose-700 border-rose-200');
-                        }
-                    } else {
-                        showToast(response.message, 'error');
-                    }
-                },
-                error: function () { showToast('Error updating status.', 'error'); }
+                    $.ajax({
+                        url: "/update-status/" + institutionId + "/",
+                        type: "POST",
+                        data: {
+                            status: newStatus,
+                            csrfmiddlewaretoken: "{{ csrf_token }}",
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                showToast(response.message, "success");
+                                $dropdown.find('option[value="not_decided"]').attr("disabled", true);
+                                // Update dropdown styling
+                                $dropdown.removeClass(
+                                    "bg-emerald-50 text-emerald-700 border-emerald-200 bg-rose-50 text-rose-700 border-rose-200 bg-amber-50 text-amber-700 border-amber-200",
+                                );
+                                if (newStatus === "approved") {
+                                    $dropdown.addClass("bg-emerald-50 text-emerald-700 border-emerald-200");
+                                } else if (newStatus === "rejected") {
+                                    $dropdown.addClass("bg-rose-50 text-rose-700 border-rose-200");
+                                }
+                            } else {
+                                showToast(response.message, "error");
+                            }
+                        },
+                        error: function () {
+                            showToast("Error updating status.", "error");
+                        },
+                    });
+                });
             });
-        });
-    });
-</script>
+        </script>
 
-<script src="{% static 'js/dashboard.js' %}"></script>
-<script src="{% static 'js/sidebarmenu.js' %}"></script>
-<script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
-<script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %}"></script>
-<script src="{% static 'libs/@preline/dropdown/index.js' %}"></script>
-<script src="{% static 'libs/@preline/overlay/index.js' %}"></script>
-<script src="{% static 'js/shadcn-table.js' %}"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        new ShadcnTable({
-            tableSelector: '#institutions-table',
-            pageSize: 10,
-            searchPlaceholder: 'Search institutions by name, admin or email...'
-        });
-    });
-</script>
-</body>
+        <script src="{% static 'js/dashboard.js' %}"></script>
+        <script src="{% static 'js/sidebarmenu.js' %}"></script>
+        <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
+        <script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %}"></script>
+        <script src="{% static 'libs/@preline/dropdown/index.js' %}"></script>
+        <script src="{% static 'libs/@preline/overlay/index.js' %}"></script>
+        <script src="{% static 'js/shadcn-table.js' %}"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                new ShadcnTable({
+                    tableSelector: "#institutions-table",
+                    pageSize: 10,
+                    searchPlaceholder: "Search institutions by name, admin or email...",
+                });
+            });
+        </script>
+    </body>
 </html>
