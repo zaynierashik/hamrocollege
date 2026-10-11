@@ -1,14 +1,21 @@
 {% load static %}
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Institution Profile</title>
-        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}" />
-        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}" />
-        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}" />
+        <link rel="apple-touch-icon"
+              sizes="180x180"
+              href="{% static 'favicon/apple-touch-icon.png' %}" />
+        <link rel="icon"
+              type="image/png"
+              sizes="32x32"
+              href="{% static 'favicon/favicon-32x32.png' %}" />
+        <link rel="icon"
+              type="image/png"
+              sizes="16x16"
+              href="{% static 'favicon/favicon-16x16.png' %}" />
         <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}" />
         <link href="{% static 'css/input.css' %}" rel="stylesheet" />
         <link href="{% static 'css/output.css' %}" rel="stylesheet" />
@@ -190,17 +197,17 @@
         </style>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet" />
-        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap"
+              rel="stylesheet" />
+        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+              rel="stylesheet" />
     </head>
     <body class="bg-slate-50 text-slate-900 font-sans">
         <main class="studio-main">
             <div id="main-wrapper" class="flex">
                 {% include "components/institution_sidebar.html" %}
-
                 <div class="w-full page-wrapper overflow-hidden xl:pl-[250px]">
                     {% include "components/institution_header.html" %}
-
                     <main class="h-full overflow-y-auto max-w-full pb-6">
                         <div class="container full-container xl:px-5 px-4">
                             <section class="studio-content-wrap">
@@ -210,36 +217,35 @@
                                         <p class="studio-subtitle">Complete your institution profile step by step</p>
                                     </div>
                                 </div>
-
                                 <!-- Institution Profile Content -->
                                 <div class="profile-form-wrap">
                                     <!-- Profile Form -->
-                                    <form
-                                        id="profileForm"
-                                        data-action="{% if admin_institution %}{% url 'update-institution' admin_institution.id %}{% else %}{% url 'add-institution' %}{% endif %}"
-                                    >
+                                    <form id="profileForm"
+                                          data-action="{% if admin_institution %}{% url 'update-institution' admin_institution.id %}{% else %}{% url 'add-institution' %}{% endif %}">
                                         {% csrf_token %}
-
                                         <nav class="step-breadcrumb" aria-label="Profile steps">
-                                            <button type="button" class="step-breadcrumb-item is-active" data-step-link="1" onclick="goToStep(1)">
-                                                Basic Information
-                                            </button>
+                                            <button type="button"
+                                                    class="step-breadcrumb-item is-active"
+                                                    data-step-link="1"
+                                                    onclick="goToStep(1)">Basic Information</button>
                                             <span class="step-breadcrumb-separator"><i class="bx bx-chevron-right"></i></span>
-                                            <button type="button" class="step-breadcrumb-item" data-step-link="2" onclick="goToStep(2)">
-                                                Contact Information
-                                            </button>
+                                            <button type="button"
+                                                    class="step-breadcrumb-item"
+                                                    data-step-link="2"
+                                                    onclick="goToStep(2)">Contact Information</button>
                                             <span class="step-breadcrumb-separator"><i class="bx bx-chevron-right"></i></span>
-                                            <button type="button" class="step-breadcrumb-item" data-step-link="3" onclick="goToStep(3)">Description</button>
+                                            <button type="button"
+                                                    class="step-breadcrumb-item"
+                                                    data-step-link="3"
+                                                    onclick="goToStep(3)">Description</button>
                                         </nav>
-
                                         <!-- Step 1: Basic Information -->
                                         <div class="step-content active" data-step="1">
                                             <div>
                                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                     <div>
-                                                        <label for="logo" class="text-sm font-medium text-gray-700"
-                                                            >Logo <span class="text-red-500">*</span></label
-                                                        >
+                                                        <label for="logo"
+                                                               class="text-sm font-medium text-gray-700">Logo <span class="text-red-500">*</span></label>
                                                         <div class="logo-upload-field mt-1">
                                                             <div class="logo-upload-layout">
                                                                 <div class="logo-upload-main">
@@ -249,258 +255,165 @@
                                                                         </span>
                                                                         <span>
                                                                             <span class="logo-upload-title">Choose institution logo</span>
-                                                                            <span class="logo-upload-help"
-                                                                                >PNG, JPG, JPEG or WEBP. Recommended square image.</span
-                                                                            >
+                                                                            <span class="logo-upload-help">PNG, JPG, JPEG or WEBP. Recommended square image.</span>
                                                                         </span>
                                                                     </label>
                                                                 </div>
-                                                                <div id="logo-preview-wrap" class="logo-preview-wrap" aria-live="polite">
-                                                                    <img id="logo-preview-image" class="logo-preview-image" alt="Logo preview" />
+                                                                <div id="logo-preview-wrap"
+                                                                     class="logo-preview-wrap"
+                                                                     aria-live="polite">
+                                                                    <img id="logo-preview-image"
+                                                                         class="logo-preview-image"
+                                                                         alt="Logo preview" />
                                                                 </div>
                                                             </div>
-                                                            <input
-                                                                type="file"
-                                                                name="file-upload"
-                                                                id="logo"
-                                                                accept="image/*"
-                                                                class="sr-only"
-                                                                onchange="updateLogoFileName(this)"
-                                                                {%
-                                                                if
-                                                                not
-                                                                admin_institution
-                                                                or
-                                                                not
-                                                                admin_institution.logo
-                                                                %}required{%
-                                                                endif
-                                                                %}
-                                                            />
-                                                            <span id="logo-file-name" class="logo-file-name">No file selected</span>
+                                                            <input type="file"
+                                                                   name="file-upload"
+                                                                   id="logo"
+                                                                   accept="image/*"
+                                                                   class="sr-only"
+                                                                   onchange="updateLogoFileName(this)"
+                                                                   {% if not admin_institution or not admin_institution.logo %}required{% endif %} />
+                                                            <span id="logo-file-name"
+                                                                  class="logo-file-name">No file selected</span>
                                                         </div>
                                                     </div>
-
                                                     <div>
-                                                        <label for="name" class="text-sm font-medium text-gray-700"
-                                                            >Institution Name <span class="text-red-500">*</span></label
-                                                        >
-                                                        <input
-                                                            type="text"
-                                                            name="name"
-                                                            id="name"
-                                                            value="{% if form_data %}{{ form_data.name }}{% elif admin_institution %}{{ admin_institution.name }}{% endif %}"
-                                                            class="studio-input mt-1"
-                                                            required
-                                                        />
+                                                        <label for="name" class="text-sm font-medium text-gray-700">Institution Name <span class="text-red-500">*</span></label>
+                                                        <input type="text"
+                                                               name="name"
+                                                               id="name"
+                                                               value="{% if form_data %}{{ form_data.name }}{% elif admin_institution %}{{ admin_institution.name }}{% endif %}"
+                                                               class="studio-input mt-1"
+                                                               required />
                                                     </div>
-
                                                     <div>
-                                                        <label for="affiliation" class="text-sm font-medium text-gray-700"
-                                                            >Affiliation <span class="text-red-500">*</span></label
-                                                        >
-                                                        <select
-                                                            name="affiliation"
-                                                            id="affiliation"
-                                                            class="studio-select mt-1"
-                                                            onchange="toggleForeignUniversityField()"
-                                                            required
-                                                        >
+                                                        <label for="affiliation"
+                                                               class="text-sm font-medium text-gray-700">Affiliation <span class="text-red-500">*</span></label>
+                                                        <select name="affiliation"
+                                                                id="affiliation"
+                                                                class="studio-select mt-1"
+                                                                onchange="toggleForeignUniversityField()"
+                                                                required>
                                                             <option value="">Choose affiliation</option>
                                                             {% for affiliation in affiliation_choices %}
-                                                            <option
-                                                                value="{{ affiliation.0 }}"
-                                                                {%
-                                                                if
-                                                                form_data
-                                                                and
-                                                                form_data.affiliation=""
-                                                                ="affiliation.0"
-                                                                %}selected{%
-                                                                elif
-                                                                admin_institution
-                                                                and
-                                                                admin_institution.affiliation=""
-                                                                ="affiliation.0"
-                                                                %}selected{%
-                                                                endif
-                                                                %}
-                                                            >
-                                                                {{ affiliation.1 }}
-                                                            </option>
+                                                                <option value="{{ affiliation.0 }}"
+                                                                        {% if form_data and form_data.affiliation="" ="affiliation.0" %}selected{% elif admin_institution and admin_institution.affiliation="" ="affiliation.0" %}selected{% endif %}>
+                                                                    {{ affiliation.1 }}
+                                                                </option>
                                                             {% endfor %}
                                                         </select>
                                                     </div>
-
                                                     <div id="foreign-university-field" class="hidden md:col-span-3">
-                                                        <label for="foreign_university_name" class="text-sm font-medium text-gray-700"
-                                                            >Foreign University Name</label
-                                                        >
-                                                        <input
-                                                            type="text"
-                                                            name="foreign_university_name"
-                                                            id="foreign_university_name"
-                                                            value="{% if form_data %}{{ form_data.foreign_university_name }}{% elif admin_institution %}{{ admin_institution.Foreign_University_Name }}{% endif %}"
-                                                            class="studio-input mt-1"
-                                                        />
+                                                        <label for="foreign_university_name"
+                                                               class="text-sm font-medium text-gray-700">Foreign University Name</label>
+                                                        <input type="text"
+                                                               name="foreign_university_name"
+                                                               id="foreign_university_name"
+                                                               value="{% if form_data %}{{ form_data.foreign_university_name }}{% elif admin_institution %}{{ admin_institution.Foreign_University_Name }}{% endif %}"
+                                                               class="studio-input mt-1" />
                                                     </div>
-
                                                     <div class="md:col-span-3">
-                                                        <label for="province" class="text-sm font-medium text-gray-700"
-                                                            >Province <span class="text-red-500">*</span></label
-                                                        >
-                                                        <select name="province" id="province" class="studio-select mt-1" required>
+                                                        <label for="province"
+                                                               class="text-sm font-medium text-gray-700">Province <span class="text-red-500">*</span></label>
+                                                        <select name="province"
+                                                                id="province"
+                                                                class="studio-select mt-1"
+                                                                required>
                                                             <option value="">Choose province</option>
                                                             {% for province in provinces %}
-                                                            <option
-                                                                value="{{ province.0 }}"
-                                                                {%
-                                                                if
-                                                                form_data
-                                                                and
-                                                                form_data.province=""
-                                                                ="province.0"
-                                                                %}selected{%
-                                                                elif
-                                                                admin_institution
-                                                                and
-                                                                admin_institution.province=""
-                                                                ="province.0"
-                                                                %}selected{%
-                                                                endif
-                                                                %}
-                                                            >
-                                                                {{ province.1 }}
-                                                            </option>
+                                                                <option value="{{ province.0 }}"
+                                                                        {% if form_data and form_data.province="" ="province.0" %}selected{% elif admin_institution and admin_institution.province="" ="province.0" %}selected{% endif %}>
+                                                                    {{ province.1 }}
+                                                                </option>
                                                             {% endfor %}
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
                                         <!-- Step 2: Contact Information -->
                                         <div class="step-content" data-step="2">
                                             <div>
                                                 <div class="grid grid-cols-2 gap-4">
                                                     <div>
-                                                        <label for="email" class="text-sm font-medium text-gray-700"
-                                                            >Email <span class="text-red-500">*</span></label
-                                                        >
-                                                        <input
-                                                            type="email"
-                                                            name="email"
-                                                            id="email"
-                                                            value="{% if form_data %}{{ form_data.email }}{% elif admin_institution %}{{ admin_institution.email }}{% else %}{{ institution.email }}{% endif %}"
-                                                            class="studio-input mt-1"
-                                                            required
-                                                        />
+                                                        <label for="email"
+                                                               class="text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
+                                                        <input type="email"
+                                                               name="email"
+                                                               id="email"
+                                                               value="{% if form_data %}{{ form_data.email }}{% elif admin_institution %}{{ admin_institution.email }}{% else %}{{ institution.email }}{% endif %}"
+                                                               class="studio-input mt-1"
+                                                               required />
                                                     </div>
-
                                                     <div>
-                                                        <label for="phone" class="text-sm font-medium text-gray-700"
-                                                            >Phone <span class="text-red-500">*</span></label
-                                                        >
-                                                        <input
-                                                            type="tel"
-                                                            name="phone"
-                                                            id="phone"
-                                                            value="{% if form_data %}{{ form_data.phone }}{% elif admin_institution %}{{ admin_institution.phone }}{% endif %}"
-                                                            class="studio-input mt-1"
-                                                            required
-                                                        />
+                                                        <label for="phone"
+                                                               class="text-sm font-medium text-gray-700">Phone <span class="text-red-500">*</span></label>
+                                                        <input type="tel"
+                                                               name="phone"
+                                                               id="phone"
+                                                               value="{% if form_data %}{{ form_data.phone }}{% elif admin_institution %}{{ admin_institution.phone }}{% endif %}"
+                                                               class="studio-input mt-1"
+                                                               required />
                                                     </div>
-
                                                     <div class="col-span-2">
-                                                        <label for="website" class="text-sm font-medium text-gray-700">Website</label>
-                                                        <input
-                                                            type="url"
-                                                            name="website"
-                                                            id="website"
-                                                            value="{% if form_data %}{{ form_data.website }}{% elif admin_institution %}{{ admin_institution.website }}{% endif %}"
-                                                            class="studio-input mt-1"
-                                                        />
+                                                        <label for="website"
+                                                               class="text-sm font-medium text-gray-700">Website</label>
+                                                        <input type="url"
+                                                               name="website"
+                                                               id="website"
+                                                               value="{% if form_data %}{{ form_data.website }}{% elif admin_institution %}{{ admin_institution.website }}{% endif %}"
+                                                               class="studio-input mt-1" />
                                                     </div>
-
                                                     <div class="col-span-2">
-                                                        <label for="address" class="text-sm font-medium text-gray-700"
-                                                            >Address <span class="text-red-500">*</span></label
-                                                        >
+                                                        <label for="address"
+                                                               class="text-sm font-medium text-gray-700">Address <span class="text-red-500">*</span></label>
                                                         <textarea name="address" id="address" rows="3" class="studio-textarea mt-1" required>
-{% if form_data %}{{ form_data.address }}{% elif admin_institution %}{{ admin_institution.address }}{% endif %}</textarea
-                                                        >
+{% if form_data %}{{ form_data.address }}{% elif admin_institution %}{{ admin_institution.address }}{% endif %}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
                                         <!-- Step 3: Description -->
                                         <div class="step-content" data-step="3">
                                             <div>
                                                 <div class="space-y-4">
                                                     <div>
-                                                        <label for="overview" class="text-sm font-medium text-gray-700"
-                                                            >About Institution <span class="text-red-500">*</span></label
-                                                        >
-                                                        <textarea
-                                                            name="overview"
-                                                            id="overview"
-                                                            rows="4"
-                                                            class="studio-textarea mt-1"
-                                                            placeholder="Tell us about your institution..."
-                                                            required
-                                                        >
-{% if form_data %}{{ form_data.overview }}{% elif admin_institution %}{{ admin_institution.overview }}{% endif %}</textarea
-                                                        >
+                                                        <label for="overview" class="text-sm font-medium text-gray-700">About Institution <span class="text-red-500">*</span></label>
+                                                        <textarea name="overview" id="overview" rows="4" class="studio-textarea mt-1" placeholder="Tell us about your institution..." required>
+{% if form_data %}{{ form_data.overview }}{% elif admin_institution %}{{ admin_institution.overview }}{% endif %}</textarea>
                                                     </div>
-
                                                     <div>
-                                                        <label for="message" class="text-sm font-medium text-gray-700">Principal Message</label>
-                                                        <textarea
-                                                            name="message"
-                                                            id="message"
-                                                            rows="4"
-                                                            class="studio-textarea mt-1"
-                                                            placeholder="Message from the principal..."
-                                                        >
-{% if form_data %}{{ form_data.message }}{% elif admin_institution %}{{ admin_institution.message }}{% endif %}</textarea
-                                                        >
+                                                        <label for="message"
+                                                               class="text-sm font-medium text-gray-700">Principal Message</label>
+                                                        <textarea name="message" id="message" rows="4" class="studio-textarea mt-1" placeholder="Message from the principal...">
+{% if form_data %}{{ form_data.message }}{% elif admin_institution %}{{ admin_institution.message }}{% endif %}</textarea>
                                                     </div>
-
                                                     <div>
-                                                        <label for="map" class="text-sm font-medium text-gray-700"
-                                                            >Map Location <span class="text-red-500">*</span></label
-                                                        >
-                                                        <textarea
-                                                            name="map"
-                                                            id="map"
-                                                            rows="3"
-                                                            class="studio-textarea mt-1"
-                                                            placeholder="Enter map coordinates or location details"
-                                                            required
-                                                        >
-{% if form_data %}{{ form_data.map }}{% elif admin_institution %}{{ admin_institution.map }}{% endif %}</textarea
-                                                        >
+                                                        <label for="map"
+                                                               class="text-sm font-medium text-gray-700">Map Location <span class="text-red-500">*</span></label>
+                                                        <textarea name="map" id="map" rows="3" class="studio-textarea mt-1" placeholder="Enter map coordinates or location details" required>
+{% if form_data %}{{ form_data.map }}{% elif admin_institution %}{{ admin_institution.map }}{% endif %}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
                                         <!-- Step Navigation -->
                                         <div class="step-navigation">
-                                            <button type="button" id="prevBtn" class="studio-btn-ghost" onclick="changeStep(-1)" style="display: none">
-                                                Previous
-                                            </button>
-                                            <button type="button" id="nextBtn" class="studio-btn-primary" onclick="changeStep(1)">Next</button>
-                                            <button
-                                                type="submit"
-                                                id="submitBtn"
-                                                class="studio-btn-primary"
-                                                style="display: none"
-                                                onclick="return validateAllRequiredFields();"
-                                            >
-                                                Save
-                                            </button>
+                                            <button type="button"
+                                                    id="prevBtn"
+                                                    class="studio-btn-ghost"
+                                                    onclick="changeStep(-1)"
+                                                    style="display: none">Previous</button>
+                                            <button type="button"
+                                                    id="nextBtn"
+                                                    class="studio-btn-primary"
+                                                    onclick="changeStep(1)">Next</button>
+                                            <button type="submit"
+                                                    id="submitBtn"
+                                                    class="studio-btn-primary"
+                                                    style="display: none"
+                                                    onclick="return validateAllRequiredFields();">Save</button>
                                         </div>
                                     </form>
                                 </div>
@@ -510,7 +423,6 @@
                 </div>
             </div>
         </main>
-
         <script>
             let currentStep = 1;
             const totalSteps = 3;

@@ -1,15 +1,15 @@
 {% load static %}
-
 <footer class="w-full mb-7">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="max-w-3xl mx-auto">
             <div class="flex justify-center lg:flex-1 mb-5">
                 <a href="{% url 'index' %}" class="-m-1.5">
                     <span class="sr-only">Hamrocollege</span>
-                    <img src="{% static 'images/logos/logo.png' %}" class="h-10 w-auto block" alt="Hamrocollege Logo" />
+                    <img src="{% static 'images/logos/logo.png' %}"
+                         class="h-10 w-auto block"
+                         alt="Hamrocollege Logo" />
                 </a>
             </div>
-
             <span class="text-sm text-gray-500 text-center block">©<a href="{% url 'index' %}">hamrocollege.</a> 2024. All rights reserved.</span>
         </div>
     </div>

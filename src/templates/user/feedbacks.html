@@ -1,19 +1,28 @@
 {% load static %}
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Feedback</title>
-        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}" />
-        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}" />
-        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}" />
+        <link rel="apple-touch-icon"
+              sizes="180x180"
+              href="{% static 'favicon/apple-touch-icon.png' %}" />
+        <link rel="icon"
+              type="image/png"
+              sizes="32x32"
+              href="{% static 'favicon/favicon-32x32.png' %}" />
+        <link rel="icon"
+              type="image/png"
+              sizes="16x16"
+              href="{% static 'favicon/favicon-16x16.png' %}" />
         <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet" />
-        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap"
+              rel="stylesheet" />
+        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+              rel="stylesheet" />
         <link href="{% static 'css/input.css' %}" rel="stylesheet" />
         <link href="{% static 'css/output.css' %}" rel="stylesheet" />
         <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet" />
@@ -47,17 +56,14 @@
             }
         </style>
     </head>
-
     <body>
         <main>
             <div id="main-wrapper" class="flex">
                 <!-- Sidebar -->
                 {% include "components/user_sidebar.html" %}
-
                 <div class="w-full page-wrapper overflow-hidden">
                     <!-- Header -->
                     {% include "components/user_header.html" %}
-
                     <main class="h-full overflow-y-auto max-w-full">
                         <div class="full-container xl:px-6 px-4">
                             <!-- Page header -->
@@ -65,9 +71,8 @@
                                 <div>
                                     <h1 class="studio-page-title">Feedback</h1>
                                 </div>
-                                <span class="studio-badge studio-badge-slate"> {{ feedbacks|length }} entries </span>
+                                <span class="studio-badge studio-badge-slate">{{ feedbacks|length }} entries</span>
                             </div>
-
                             <!-- Table card -->
                             <div class="studio-card">
                                 <table id="feedback-table" class="studio-table w-full">
@@ -80,94 +85,84 @@
                                     </thead>
                                     <tbody>
                                         {% for feedback in feedbacks %}
-                                        <tr>
-                                            <td class="py-3 px-4 text-slate-600 text-xs">{{ forloop.counter }}</td>
-                                            <td class="py-3 px-4 text-slate-600 text-sm">{{ feedback.created_at }}</td>
-                                            <td class="py-3 px-4 text-slate-600 text-sm">{{ feedback.review }}</td>
-                                        </tr>
+                                            <tr>
+                                                <td class="py-3 px-4 text-slate-600 text-xs">{{ forloop.counter }}</td>
+                                                <td class="py-3 px-4 text-slate-600 text-sm">{{ feedback.created_at }}</td>
+                                                <td class="py-3 px-4 text-slate-600 text-sm">{{ feedback.review }}</td>
+                                            </tr>
                                         {% empty %}
-                                        <tr>
-                                            <td colspan="4" class="py-16 text-center">
-                                                <div class="flex flex-col items-center gap-2 text-slate-400">
-                                                    <i class="bx bx-message-square-x text-4xl"></i>
-                                                    <p class="text-sm font-medium">No feedback submitted yet</p>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td colspan="4" class="py-16 text-center">
+                                                    <div class="flex flex-col items-center gap-2 text-slate-400">
+                                                        <i class="bx bx-message-square-x text-4xl"></i>
+                                                        <p class="text-sm font-medium">No feedback submitted yet</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </main>
-
-                    <button
-                        id="feedback-dialog-open"
-                        type="button"
-                        class="fixed bottom-6 right-6 z-40 flex h-10 w-10 items-center justify-center rounded-xs bg-slate-800 text-white shadow-lg transition hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2"
-                        aria-label="Open feedback form"
-                        aria-controls="feedback-dialog"
-                        aria-expanded="false"
-                    >
+                    <button id="feedback-dialog-open"
+                            type="button"
+                            class="fixed bottom-6 right-6 z-40 flex h-10 w-10 items-center justify-center rounded-xs bg-slate-800 text-white shadow-lg transition hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2"
+                            aria-label="Open feedback form"
+                            aria-controls="feedback-dialog"
+                            aria-expanded="false">
                         <i class="bx bx-comment-detail text-xl" aria-hidden="true"></i>
                     </button>
-
-                    <div
-                        id="feedback-dialog"
-                        class="fixed inset-0 z-50 hidden items-end justify-end p-4 sm:p-6"
-                        role="dialog"
-                        aria-modal="true"
-                        aria-labelledby="feedback-dialog-title"
-                    >
-                        <div class="feedback-dialog-backdrop absolute inset-0" data-feedback-dialog-close></div>
-                        <div
-                            class="feedback-dialog relative max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto rounded-xs bg-white shadow-2xl sm:max-h-[calc(100vh-3rem)]"
-                        >
+                    <div id="feedback-dialog"
+                         class="fixed inset-0 z-50 hidden items-end justify-end p-4 sm:p-6"
+                         role="dialog"
+                         aria-modal="true"
+                         aria-labelledby="feedback-dialog-title">
+                        <div class="feedback-dialog-backdrop absolute inset-0"
+                             data-feedback-dialog-close></div>
+                        <div class="feedback-dialog relative max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto rounded-xs bg-white shadow-2xl sm:max-h-[calc(100vh-3rem)]">
                             <div class="flex items-center justify-between border-b border-slate-200 px-5 py-3">
-                                <h2 id="feedback-dialog-title" class="text-sm font-semibold text-slate-700">Share your feedback</h2>
-
+                                <h2 id="feedback-dialog-title"
+                                    class="text-sm font-semibold text-slate-700">Share your feedback</h2>
                                 <button data-feedback-dialog-close type="button" class="studio-modal-close">
                                     <i class="bx bx-x"></i>
                                 </button>
                             </div>
                             <div class="p-5">
-                                <form action="{% url 'send-feedback' %}" method="POST">
+                                <form action="{% url 'send-feedback' %}" method="post">
                                     {% csrf_token %}
                                     <div class="space-y-4">
                                         <div>
                                             <label for="name" class="studio-label studio-label-required">Name</label>
-                                            <input
-                                                type="text"
-                                                name="name"
-                                                id="name"
-                                                class="studio-input"
-                                                placeholder="John Doe"
-                                                value="{{ user.name }}"
-                                                required
-                                            />
+                                            <input type="text"
+                                                   name="name"
+                                                   id="name"
+                                                   class="studio-input"
+                                                   placeholder="John Doe"
+                                                   value="{{ user.name }}"
+                                                   required />
                                         </div>
-
                                         <div>
                                             <label for="email" class="studio-label studio-label-required">Email</label>
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                id="email"
-                                                class="studio-input"
-                                                placeholder="john@example.com"
-                                                value="{{ user.email }}"
-                                                required
-                                            />
+                                            <input type="email"
+                                                   name="email"
+                                                   id="email"
+                                                   class="studio-input"
+                                                   placeholder="john@example.com"
+                                                   value="{{ user.email }}"
+                                                   required />
                                         </div>
-
                                         <div>
                                             <label for="review" class="studio-label">Review</label>
-                                            <textarea name="review" id="review" rows="5" class="studio-input"></textarea>
+                                            <textarea name="review"
+                                                      id="review"
+                                                      rows="5"
+                                                      class="studio-input"></textarea>
                                         </div>
                                     </div>
-
                                     <div class="mt-5">
-                                        <button type="submit" class="studio-btn studio-btn-primary w-full">Send Feedback</button>
+                                        <button type="submit"
+                                                class="studio-btn studio-btn-primary w-full">Send Feedback</button>
                                     </div>
                                 </form>
                             </div>
@@ -176,7 +171,6 @@
                 </div>
             </div>
         </main>
-
         <script src="{% static 'js/dashboard.js' %}"></script>
         <script src="{% static 'js/sidebarmenu.js' %}"></script>
         <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>

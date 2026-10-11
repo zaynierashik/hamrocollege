@@ -1,32 +1,38 @@
 {% load static %}
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Admin Dashboard</title>
-        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}" />
-        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}" />
-        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}" />
+        <link rel="apple-touch-icon"
+              sizes="180x180"
+              href="{% static 'favicon/apple-touch-icon.png' %}" />
+        <link rel="icon"
+              type="image/png"
+              sizes="32x32"
+              href="{% static 'favicon/favicon-32x32.png' %}" />
+        <link rel="icon"
+              type="image/png"
+              sizes="16x16"
+              href="{% static 'favicon/favicon-16x16.png' %}" />
         <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet" />
-        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap"
+              rel="stylesheet" />
+        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+              rel="stylesheet" />
         <link href="{% static 'css/input.css' %}" rel="stylesheet" />
         <link href="{% static 'css/output.css' %}" rel="stylesheet" />
         <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet" />
     </head>
-
     <body class="bg-slate-50 text-slate-900">
         <main class="studio-main">
             <div id="main-wrapper" class="flex">
                 {% include "components/admin_sidebar.html" %}
-
                 <div class="w-full page-wrapper overflow-hidden xl:pl-[252px]">
                     {% include "components/admin_header.html" %}
-
                     <main class="h-full overflow-y-auto max-w-full">
                         <div class="full-container xl:px-6 px-4">
                             <!-- Page header -->
@@ -38,7 +44,6 @@
                                     <span class="studio-badge studio-badge-slate" id="current-date">—</span>
                                 </div>
                             </div>
-
                             <!-- Stat cards -->
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                                 <div class="studio-stat-card">
@@ -48,11 +53,11 @@
                                         </div>
                                         <span class="studio-badge studio-badge-indigo">Live</span>
                                     </div>
-                                    <p class="text-2xl font-bold text-slate-900 tracking-tight" id="metricUsers">—</p>
+                                    <p class="text-2xl font-bold text-slate-900 tracking-tight"
+                                       id="metricUsers">—</p>
                                     <p class="text-sm text-slate-500 mt-1 font-medium">Total Platform Users</p>
                                     <p class="text-xs text-slate-400 mt-1">Registered across all provinces</p>
                                 </div>
-
                                 <div class="studio-stat-card">
                                     <div class="flex items-center justify-between mb-3">
                                         <div class="studio-stat-icon emerald">
@@ -60,12 +65,12 @@
                                         </div>
                                         <span class="studio-badge studio-badge-success">Verified</span>
                                     </div>
-                                    <p class="text-2xl font-bold text-slate-900 tracking-tight" id="metricApproved">—</p>
+                                    <p class="text-2xl font-bold text-slate-900 tracking-tight"
+                                       id="metricApproved">—</p>
                                     <p class="text-sm text-slate-500 mt-1 font-medium">Approved Institutions</p>
                                     <p class="text-xs text-slate-400 mt-1">Active in the platform catalog</p>
                                 </div>
                             </div>
-
                             <!-- Charts row -->
                             <div class="grid grid-cols-1 xl:grid-cols-5 gap-4 mb-6">
                                 <div class="studio-chart-card xl:col-span-2">
@@ -78,7 +83,6 @@
                                     </div>
                                     <div id="userChart" class="min-h-[300px]"></div>
                                 </div>
-
                                 <div class="studio-chart-card xl:col-span-2">
                                     <div class="studio-chart-header">
                                         <div>
@@ -90,7 +94,6 @@
                                     <div id="institutionChart" class="min-h-[300px]"></div>
                                 </div>
                             </div>
-
                             <!-- Bottom row -->
                             <div class="studio-chart-card xl:col-span-2">
                                 <div class="studio-chart-header">
@@ -107,7 +110,6 @@
                 </div>
             </div>
         </main>
-
         <script>
             // Greeting
             const hour = new Date().getHours();
@@ -311,7 +313,6 @@
                     }).render();
                 });
         </script>
-
         <script src="{% static 'js/dashboard.js' %}"></script>
         <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
         <script src="{% static 'js/sidebarmenu.js' %}"></script>

@@ -1,43 +1,49 @@
 {% load static %}
-
 <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Institution Admin Profile | Hamrocollege</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
-    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/input.css' %}">
-	<link rel="stylesheet" href="{% static 'css/theme.css' %}">
-    <link rel="stylesheet" href="{% static 'css/output.css' %}">
-    <link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
-    <style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Institution Admin Profile | Hamrocollege</title>
+<link rel="apple-touch-icon"
+      sizes="180x180"
+      href="{% static 'favicon/apple-touch-icon.png' %}">
+<link rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="{% static 'favicon/favicon-32x32.png' %}">
+<link rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="{% static 'favicon/favicon-16x16.png' %}">
+<link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap"
+      rel="stylesheet">
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/input.css' %}">
+<link rel="stylesheet" href="{% static 'css/theme.css' %}">
+<link rel="stylesheet" href="{% static 'css/output.css' %}">
+<link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
+<style>
         .info-item {
             transition: all 0.2s ease;
         }
         .info-item:hover {
             background-color: #f9fafb;
         }
-    </style>
+</style>
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans">
-	<main class="studio-main">
-		<div id="main-wrapper" class="flex">
-			<!-- Sidebar -->
-			{% include "components/institution_sidebar.html" %}
-
-			<div class="w-full page-wrapper overflow-hidden xl:pl-[250px]">
+    <main class="studio-main">
+        <div id="main-wrapper" class="flex">
+            <!-- Sidebar -->
+            {% include "components/institution_sidebar.html" %}
+            <div class="w-full page-wrapper overflow-hidden xl:pl-[250px]">
                 <!-- Header -->
                 {% include "components/institution_header.html" %}
-
                 <!-- Main Content -->
                 <main class="studio-content-wrap h-full overflow-y-auto max-w-full pt-[6px]">
                     <div class="container full-container py-6 flex flex-col gap-6">
-                        
                         <!-- Page Title -->
                         <div class="studio-panel-head">
                             <div>
@@ -45,7 +51,6 @@
                                 <p class="studio-subtitle">Manage your personal information</p>
                             </div>
                         </div>
-
                         <!-- Two Column Layout: 25% / 75% -->
                         <div class="flex flex-col lg:flex-row gap-6">
                             <!-- Left Column: Basic Info (25%) -->
@@ -55,24 +60,26 @@
                                         <!-- Avatar -->
                                         <div class="flex justify-center mb-4">
                                             {% if institution.profile_image %}
-                                                <img src="{{ institution.profile_image.url }}" 
-                                                     alt="Profile" 
+                                                <img src="{{ institution.profile_image.url }}"
+                                                     alt="Profile"
                                                      class="w-24 h-24 rounded-full object-cover"
                                                      id="avatarPreview">
                                             {% else %}
-                                                <div class="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center" id="avatarPlaceholder">
+                                                <div class="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center"
+                                                     id="avatarPlaceholder">
                                                     <span class="text-3xl font-bold text-gray-600">{{ institution.name|first|upper }}</span>
                                                 </div>
-                                                <img src="" alt="Profile Preview" class="w-24 h-24 rounded-full object-cover hidden" id="avatarPreview">
+                                                <img src=""
+                                                     alt="Profile Preview"
+                                                     class="w-24 h-24 rounded-full object-cover hidden"
+                                                     id="avatarPreview">
                                             {% endif %}
                                         </div>
-                                        
                                         <!-- Name & Role -->
                                         <div class="text-center mb-6">
                                             <h3 class="text-lg font-semibold text-gray-800">{{ institution.name }}</h3>
                                             <p class="text-sm text-gray-500">Institution Administrator</p>
                                         </div>
-                                        
                                         <!-- Contact Info -->
                                         <div class="space-y-3 pt-4 border-t border-gray-100">
                                             <div class="flex items-start gap-3">
@@ -93,82 +100,76 @@
                                     </div>
                                 </div>
                             </div>
-
                             <!-- Right Column: Edit Form (75%) -->
                             <div class="lg:w-3/4 w-full">
                                 <div class="studio-card h-full w-full">
                                     <div class="studio-card-body p-6 w-full">
-                                        <form id="adminProfileForm" data-action="{% url 'update-institutionadmin-profile' institution.id %}" enctype="multipart/form-data">
+                                        <form id="adminProfileForm"
+                                              data-action="{% url 'update-institutionadmin-profile' institution.id %}"
+                                              enctype="multipart/form-data">
                                             {% csrf_token %}
-                                            
                                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                                 <!-- Name Field -->
                                                 <div>
-                                                    <label for="name" class="text-sm font-medium text-gray-700">Full Name <span class="text-red-500">*</span></label>
-                                                    <input type="text" 
-                                                           value="{{ institution.name }}" 
-                                                           name="name" 
-                                                           id="name" 
+                                                    <label for="name"
+                                                           class="text-sm font-medium text-gray-700">Full Name <span class="text-red-500">*</span></label>
+                                                    <input type="text"
+                                                           value="{{ institution.name }}"
+                                                           name="name"
+                                                           id="name"
                                                            class="studio-input block w-full mt-1"
                                                            placeholder="Enter your full name"
                                                            required>
                                                 </div>
-
                                                 <!-- Email Field -->
                                                 <div>
-                                                    <label for="email" class="text-sm font-medium text-gray-700">Email Address <span class="text-red-500">*</span></label>
-                                                    <input type="email" 
-                                                           value="{{ institution.email }}" 
-                                                           name="email" 
-                                                           id="email" 
+                                                    <label for="email"
+                                                           class="text-sm font-medium text-gray-700">Email Address <span class="text-red-500">*</span></label>
+                                                    <input type="email"
+                                                           value="{{ institution.email }}"
+                                                           name="email"
+                                                           id="email"
                                                            class="studio-input block w-full mt-1"
                                                            placeholder="john@example.com"
                                                            required>
-                                                    <p id="email-error" class="text-xs text-red-500 mt-1 hidden">This email is already registered.</p>
+                                                    <p id="email-error"
+                                                       class="text-xs text-red-500 mt-1 hidden">This email is already registered.</p>
                                                 </div>
-
                                                 <!-- Phone Field -->
                                                 <div>
-                                                    <label for="phone" class="text-sm font-medium text-gray-700">Phone Number <span class="text-red-500">*</span></label>
-                                                    <input type="tel" 
-                                                           value="{{ institution.phone }}" 
-                                                           name="phone" 
-                                                           id="phone" 
+                                                    <label for="phone"
+                                                           class="text-sm font-medium text-gray-700">Phone Number <span class="text-red-500">*</span></label>
+                                                    <input type="tel"
+                                                           value="{{ institution.phone }}"
+                                                           name="phone"
+                                                           id="phone"
                                                            class="studio-input block w-full mt-1"
                                                            placeholder="98XXXXXXXX"
                                                            pattern="[0-9]{10}"
                                                            required>
                                                     <p class="text-xs text-gray-500 mt-1">Phone number should be of 10 digits.</p>
                                                 </div>
-
                                                 <!-- Profile Image Upload -->
                                                 <div>
-                                                    <label for="profile_image" class="text-sm font-medium text-gray-700">Profile Image</label>
-                                                    <input type="file" 
-                                                           name="profile_image" 
-                                                           id="profile_image" 
+                                                    <label for="profile_image"
+                                                           class="text-sm font-medium text-gray-700">Profile Image</label>
+                                                    <input type="file"
+                                                           name="profile_image"
+                                                           id="profile_image"
                                                            class="studio-input block w-full mt-1"
                                                            accept="image/*"
                                                            onchange="previewImage(this)">
                                                     <p class="text-xs text-gray-500 mt-1">Max file size: 2MB (JPG, PNG)</p>
                                                 </div>
                                             </div>
-
                                             <!-- Action Buttons -->
                                             <div class="flex items-center gap-7 mt-8 pt-6 border-t border-gray-100">
-                                                <button type="submit" 
-                                                        id="saveBtn"
-                                                        class="studio-btn-primary text-sm">
-                                                    Save Changes
-                                                </button>
-                                                <button type="button" 
+                                                <button type="submit" id="saveBtn" class="studio-btn-primary text-sm">Save Changes</button>
+                                                <button type="button"
                                                         onclick="resetForm()"
-                                                        class="studio-btn-secondary text-sm">
-                                                    Reset
-                                                </button>
-                                                <a href="{% url 'password-setting' %}" class="studio-btn-secondary text-sm ml-auto">
-                                                    Change Password
-                                                </a>
+                                                        class="studio-btn-secondary text-sm">Reset</button>
+                                                <a href="{% url 'password-setting' %}"
+                                                   class="studio-btn-secondary text-sm ml-auto">Change Password</a>
                                             </div>
                                         </form>
                                     </div>
@@ -180,7 +181,6 @@
             </div>
         </div>
     </main>
-
     <!-- Toast Notifications -->
     <script>
         function previewImage(input) {
@@ -287,14 +287,13 @@
             }
         });
     </script>
-
-	<script src="{% static 'js/script.js' %}"></script>
-	<script src="{% static 'js/sidebarmenu.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/sidebarmenu.js' %}"></script>
     <script src="{% static 'js/dashboard.js' %}"></script>
-	<script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
-	<script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
-	<script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %}"></script>
-	<script src="{% static 'libs/@preline/dropdown/index.js' %}"></script>
-	<script src="{% static 'libs/@preline/overlay/index.js' %}"></script>
+    <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
+    <script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %}"></script>
+    <script src="{% static 'libs/@preline/dropdown/index.js' %}"></script>
+    <script src="{% static 'libs/@preline/overlay/index.js' %}"></script>
 </body>
 </html>

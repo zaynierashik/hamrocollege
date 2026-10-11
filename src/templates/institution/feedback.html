@@ -1,34 +1,41 @@
 {% load static %}
-
 <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hamrocollege</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
-    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link href="{% static 'css/output.css' %}" rel="stylesheet">
-	<link href="{% static 'css/theme.css' %}" rel="stylesheet">
-	<link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hamrocollege</title>
+<link rel="apple-touch-icon"
+      sizes="180x180"
+      href="{% static 'favicon/apple-touch-icon.png' %}">
+<link rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="{% static 'favicon/favicon-32x32.png' %}">
+<link rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="{% static 'favicon/favicon-16x16.png' %}">
+<link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap"
+      rel="stylesheet">
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet">
+<link href="{% static 'css/output.css' %}" rel="stylesheet">
+<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin-studio.css' %}" rel="stylesheet">
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans">
-	<main class="studio-main">
-		<div id="main-wrapper" class="flex">
-			<!-- Sidebar -->
-			{% include "components/institution_sidebar.html" %}
-
-			<div class="w-full page-wrapper overflow-hidden xl:pl-[250px]">
-				<!-- Header -->
-				{% include "components/institution_header.html" %}
-
-				<!-- Main Content -->
-				<main class="h-full overflow-y-auto max-w-full pb-6">
-					<div class="container full-container xl:px-6 px-4">
-						<section class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+    <main class="studio-main">
+        <div id="main-wrapper" class="flex">
+            <!-- Sidebar -->
+            {% include "components/institution_sidebar.html" %}
+            <div class="w-full page-wrapper overflow-hidden xl:pl-[250px]">
+                <!-- Header -->
+                {% include "components/institution_header.html" %}
+                <!-- Main Content -->
+                <main class="h-full overflow-y-auto max-w-full pb-6">
+                    <div class="container full-container xl:px-6 px-4">
+                        <section class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
                             <div class="mb-6">
                                 <h1 class="text-xl font-bold text-slate-900">Feedback</h1>
                                 <p class="text-sm text-slate-500 mt-1">Feedback received from students and users.</p>
@@ -45,39 +52,38 @@
                                     </thead>
                                     <tbody class="divide-y divide-slate-100">
                                         {% for feedback in feedbacks %}
-                                        <tr class="hover:bg-slate-50/50 transition-colors">
-                                            <td class="py-3 px-4 text-slate-500 font-medium">{{ forloop.counter }}</td>
-                                            <td class="py-3 px-4">
-                                                <span class="font-medium text-slate-900">{{ feedback.user.name }}</span>
-                                            </td>
-                                            <td class="py-3 px-4 text-slate-600">{{ feedback.email }}</td>
-                                            <td class="py-3 px-4 text-slate-600 max-w-xs">{{ feedback.review }}</td>
-                                        </tr>
+                                            <tr class="hover:bg-slate-50/50 transition-colors">
+                                                <td class="py-3 px-4 text-slate-500 font-medium">{{ forloop.counter }}</td>
+                                                <td class="py-3 px-4">
+                                                    <span class="font-medium text-slate-900">{{ feedback.user.name }}</span>
+                                                </td>
+                                                <td class="py-3 px-4 text-slate-600">{{ feedback.email }}</td>
+                                                <td class="py-3 px-4 text-slate-600 max-w-xs">{{ feedback.review }}</td>
+                                            </tr>
                                         {% empty %}
-                                        <tr>
-                                            <td colspan="4" class="text-center py-10 text-slate-400">
-                                                <i class="bx bx-message-square-detail text-3xl mb-2 block"></i>
-                                                No feedback submitted yet
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td colspan="4" class="text-center py-10 text-slate-400">
+                                                    <i class="bx bx-message-square-detail text-3xl mb-2 block"></i>
+                                                    No feedback submitted yet
+                                                </td>
+                                            </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
-						</section>
-					</div>
-				</main>
-			</div>
-		</div>
-	</main>
-	
-	<script src="{% static 'libs/jquery/dist/jquery.min.js' %} "></script>
-	<script src="{% static 'libs/simplebar/dist/simplebar.min.js' %} "></script>
-	<script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %} "></script>
-	<script src="{% static 'libs/@preline/dropdown/index.js' %} "></script>
-	<script src="{% static 'libs/@preline/overlay/index.js' %} "></script>
-	<script src="{% static 'js/sidebarmenu.js' %} "></script>
-	<script src="{% static 'libs/apexcharts/dist/apexcharts.min.js' %} "></script>
+                        </section>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </main>
+    <script src="{% static 'libs/jquery/dist/jquery.min.js' %} "></script>
+    <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %} "></script>
+    <script src="{% static 'libs/iconify-icon/dist/iconify-icon.min.js' %} "></script>
+    <script src="{% static 'libs/@preline/dropdown/index.js' %} "></script>
+    <script src="{% static 'libs/@preline/overlay/index.js' %} "></script>
+    <script src="{% static 'js/sidebarmenu.js' %} "></script>
+    <script src="{% static 'libs/apexcharts/dist/apexcharts.min.js' %} "></script>
     <script src="{% static 'js/dashboard.js' %} "></script>
     <script src="{% static 'js/shadcn-table.js' %}"></script>
     <script>

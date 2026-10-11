@@ -1,50 +1,45 @@
 {% load static %}
-
 <header class="studio-topbar">
     <div class="studio-topbar-left">
         <!-- Mobile menu toggle -->
-        <button
-            class="studio-sidebar-toggle xl:hidden"
-            type="button"
-            data-hs-overlay="#application-sidebar-brand"
-            aria-controls="application-sidebar-brand"
-            aria-label="Toggle navigation"
-        >
+        <button class="studio-sidebar-toggle xl:hidden"
+                type="button"
+                data-hs-overlay="#application-sidebar-brand"
+                aria-controls="application-sidebar-brand"
+                aria-label="Toggle navigation">
             <i class="bx bx-menu"></i>
         </button>
-
         <!-- Breadcrumb -->
         <nav class="studio-breadcrumb hidden sm:flex" aria-label="Breadcrumb">
             <span>Admin</span>
             <span class="studio-breadcrumb-sep"><i class="bx bx-chevron-right text-sm"></i></span>
             <span class="studio-breadcrumb-current">
-                {% if request.path == '/dashboard/' %}Dashboard {% elif request.path == '/user/' %}Users {% elif request.path == '/institution/' %}Institutions
-                {% elif request.path == '/course/' %}Courses {% elif request.path == '/feedback/' %}Feedback {% elif request.path == '/system-user/' %}System
-                Users {% elif request.path == '/admin-profile/' %}Profile {% else %}Admin Panel{% endif %}
+                {% if request.path == "/dashboard/" %}Dashboard {% elif request.path == "/user/" %}Users {% elif request.path == "/institution/" %}Institutions
+                {% elif request.path == "/course/" %}Courses {% elif request.path == "/feedback/" %}Feedback {% elif request.path == "/system-user/" %}System
+                    Users {% elif request.path == "/admin-profile/" %}Profile {% else %}Admin Panel{% endif %}
             </span>
         </nav>
     </div>
-
     <div class="studio-topbar-right">
         <!-- Notification bell -->
-        <button class="studio-icon-btn" style="background-color: #f8fafc" type="button" title="Notifications">
+        <button class="studio-icon-btn"
+                style="background-color: #f8fafc"
+                type="button"
+                title="Notifications">
             <i class="bx bx-bell"></i>
         </button>
-
         <!-- Admin dropdown -->
         <div class="hs-dropdown relative inline-flex [--placement:bottom-right]">
-            <button class="hs-dropdown-toggle flex items-center gap-2.5 rounded-1 px-2 py-1.5 hover:bg-slate-100 transition-colors" type="button">
+            <button class="hs-dropdown-toggle flex items-center gap-2.5 rounded-1 px-2 py-1.5 hover:bg-slate-100 transition-colors"
+                    type="button">
                 <div class="hidden lg:block text-left">
                     <p class="text-xs text-slate-500 leading-tight">{{ admin.email|default:'admin@hamrocollege.com' }}</p>
                     <p class="text-sm font-medium text-slate-700 leading-tight">{{ admin.name|default:'System Admin' }}</p>
                 </div>
                 <i class="bx bx-chevron-down text-slate-400 text-sm hidden lg:block"></i>
             </button>
-
-            <div
-                class="hs-dropdown-menu studio-dropdown transition-[opacity,margin] hs-dropdown-open:opacity-100 opacity-0 hidden mt-1.5 z-[12]"
-                aria-labelledby="hs-dropdown-custom-icon-trigger"
-            >
+            <div class="hs-dropdown-menu studio-dropdown transition-[opacity,margin] hs-dropdown-open:opacity-100 opacity-0 hidden mt-1.5 z-[12]"
+                 aria-labelledby="hs-dropdown-custom-icon-trigger">
                 <a href="{% url 'admin-profile' %}" class="studio-dropdown-item">
                     <i class="bx bx-user text-base"></i>
                     My Profile
