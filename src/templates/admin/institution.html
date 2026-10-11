@@ -66,27 +66,9 @@
                                                     class="status-dropdown status-dropdown-styled text-xs font-semibold cursor-pointer border focus:outline-none {% if institution.status == 'approved' %}bg-emerald-50 text-emerald-700 border-emerald-200 {% elif institution.status == 'rejected' %}bg-rose-50 text-rose-700 border-rose-200 {% else %}bg-amber-50 text-amber-700 border-amber-200{% endif %}"
                                                     data-institution-id="{{ institution.id }}"
                                                 >
-                                                    <option
-                                                        value="not_decided"
-                                                        {%
-                                                        if
-                                                        institution.status=""
-                                                        ="not_decided"
-                                                        %}selected{%
-                                                        endif
-                                                        %}
-                                                        {%
-                                                        if
-                                                        institution.status
-                                                        !="not_decided"
-                                                        %}disabled{%
-                                                        endif
-                                                        %}
-                                                    >
-                                                        Pending
-                                                    </option>
-                                                    <option value="approved" {% if institution.status="" ="approved" %}selected{% endif %}>Approved</option>
-                                                    <option value="rejected" {% if institution.status="" ="rejected" %}selected{% endif %}>Rejected</option>
+                                                    <option value="not_decided" {% if institution.status == "not_decided" %}selected{% endif %}{% if institution.status != "not_decided" %}disabled{% endif %}>Pending</option>
+                                                    <option value="approved" {% if institution.status == "approved" %}selected{% endif %}>Approved</option>
+                                                    <option value="rejected" {% if institution.status == "rejected" %}selected{% endif %}>Rejected</option>
                                                 </select>
                                                 {% else %} {% if institution.status == 'approved' %}
                                                 <span class="studio-badge studio-badge-success"><i class="bx bx-check-circle text-xs"></i>Approved</span>

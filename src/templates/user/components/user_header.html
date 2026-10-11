@@ -18,10 +18,23 @@
             <span>User</span>
             <span class="studio-breadcrumb-sep"><i class="bx bx-chevron-right text-sm"></i></span>
             <span class="studio-breadcrumb-current">
-                {% if request.path == '/userpage/' %}Dashboard {% elif request.path == '/institution/' %}Institutions {% elif request.path == '/institution/'
-                %}Institutions {% elif request.path == '/courses/' %}Courses {% elif request.path == '/applications/' %}Applications {% elif request.path ==
-                '/feedbacks/' %}Feedback {% elif request.path == '/chat/' %}HamroBot {% elif request.path == '/profile/' %}Profile {% else %}User Panel{% endif
-                %}
+                {% if request.path == '/userpage/' %}
+                    Dashboard
+                {% elif request.path == '/institution/' %}
+                    Institutions
+                {% elif request.path == '/courses/' %}
+                    Courses
+                {% elif request.path == '/applications/' %}
+                    Applications
+                {% elif request.path == '/feedbacks/' %}
+                    Feedback
+                {% elif request.path == '/chat/' %}
+                    HamroBot
+                {% elif request.path == '/profile/' %}
+                    Profile
+                {% else %}
+                    User Panel
+                {% endif %}
             </span>
         </nav>
     </div>
