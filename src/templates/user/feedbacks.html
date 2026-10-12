@@ -88,7 +88,7 @@
                                             <tr>
                                                 <td class="py-3 px-4 text-slate-600 text-xs">{{ forloop.counter }}</td>
                                                 <td class="py-3 px-4 text-slate-600 text-sm">{{ feedback.created_at }}</td>
-                                                <td class="py-3 px-4 text-slate-600 text-sm">{{ feedback.review }}</td>
+                                                <td class="py-3 px-4 text-slate-600 text-sm font-medium">{{ feedback.review }}</td>
                                             </tr>
                                         {% empty %}
                                             <tr>
@@ -154,15 +154,11 @@
                                         </div>
                                         <div>
                                             <label for="review" class="studio-label">Review</label>
-                                            <textarea name="review"
-                                                      id="review"
-                                                      rows="5"
-                                                      class="studio-input"></textarea>
+                                            <textarea name="review" id="review" rows="5" class="studio-input"></textarea>
                                         </div>
                                     </div>
                                     <div class="mt-5">
-                                        <button type="submit"
-                                                class="studio-btn studio-btn-primary w-full">Send Feedback</button>
+                                        <button type="submit" class="studio-btn studio-btn-primary w-full">Send Feedback</button>
                                     </div>
                                 </form>
                             </div>
